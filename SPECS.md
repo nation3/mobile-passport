@@ -11,6 +11,8 @@ Thanks to those platforms, we can enable citizens to:
 ## Pass template
 
 - Design containing the core elements that make up the pass. Example here:
+![photo_2022-05-04 13 25 44](https://user-images.githubusercontent.com/718208/166680988-e07c7935-d1dd-426c-870d-17e065b3d148.jpeg)
+
 - Contains the following variable items:
   - Passport ID, corresponding to the NFT
   - Passport holder, corresponding to the address owning the passport
