@@ -43,3 +43,7 @@ We should create a `Passes` class with the following methods:
 - `pushNotification({title, content})`: Pushes a notification to all the passes.
 
 It's important to create this abstraction so that we can add new pass platforms in the future. Not everyone is into the Apple or Google ecosystem, so this is important.
+
+## QR codes and signatures
+
+Every pass can have a QR code. This QR code can be very useful so citizens can identify themselves at in-person events. More coming soon...
