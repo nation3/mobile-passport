@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import flag from '../public/flag.svg'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Welcome to <a href="https://nation3.org">Nation3!</a>
+          Get your <a href="https://nation3.org">Nation3</a><br />mobile passport!
         </h1>
 
         <Image src={flag} width={256} height={256} />
@@ -22,32 +23,14 @@ export default function Home() {
         </p>
 
         <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
+          <a href="download-pass" className="card">
+            <h3>Download &rarr;</h3>
+            <p>Download your mobile passport.</p>
           </a>
 
-          <a href="https://nextjs.org/learn" className="card">
+          <a href="https://wiki.nation3.org/token/#nft-passports" className="card">
             <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
+            <p>Learn about Nation3's passport.</p>
           </a>
         </div>
       </main>
