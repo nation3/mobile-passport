@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import Image from 'next/image'
+import flag from '../public/flag.svg'
 
 export default function Home() {
   return (
@@ -10,11 +12,13 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href="https://nation3.org">Nation3!</a>
         </h1>
 
+        <Image src={flag} width={256} height={256} />
+
         <p className="description">
-          Get started by editing <code>pages/index.js</code>
+          Get started by downloading your <code>passport.pass</code> file for Apple Wallet/Google Play.
         </p>
 
         <div className="grid">
@@ -50,12 +54,12 @@ export default function Home() {
 
       <footer>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          href="https://nation3.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
+          Powered by Nation3{' '}
+          <img src="/icon.svg" alt="Nation3" className="logo" />
         </a>
       </footer>
 
@@ -103,7 +107,7 @@ export default function Home() {
         }
 
         .title a {
-          color: #0070f3;
+          color: rgb(105 201 255);
           text-decoration: none;
         }
 
@@ -149,6 +153,7 @@ export default function Home() {
         }
 
         .card {
+          background: #ffffff;
           margin: 1rem;
           flex-basis: 45%;
           padding: 1.5rem;
@@ -163,8 +168,8 @@ export default function Home() {
         .card:hover,
         .card:focus,
         .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
+          color: rgb(105 201 255);
+          border-color: rgb(105 201 255);
         }
 
         .card h3 {
@@ -191,6 +196,10 @@ export default function Home() {
       `}</style>
 
       <style jsx global>{`
+        body {
+          background: rgba(136 241 187 / 0.1);
+        }
+
         html,
         body {
           padding: 0;
