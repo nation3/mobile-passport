@@ -4,10 +4,11 @@ import flag from '../public/flag.svg'
 import Link from 'next/link'
 
 export default function Home() {
+  console.log('/')
   return (
     <div className="container">
       <Head>
-        <title>Create Next App</title>
+        <title>Nation3</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
