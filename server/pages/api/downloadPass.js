@@ -2,9 +2,9 @@
 export default function handler(req, res) {
     console.log('/api/downloadPass')
     
-    const address = "0xabc"; // TODO
+    const address = "0xabc..."; // TODO
 
-    const signature = "0xdef"; // TODO
+    const signature = "0xdef..."; // TODO
 
     // Check that the address has a passport NFT
     // TODO
@@ -17,5 +17,5 @@ export default function handler(req, res) {
 
     // Serve the pass download to the user
     // TODO
-    res.status(200).json({ text: 'TODO: passport.pass' });
+    res.status(200).json({ text: '// TODO: passport.pass' });
 }
