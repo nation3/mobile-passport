@@ -1,1 +1,11 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# Server
+
+Next.js server for REST API.
+
+## Run the development server
+
+```
+npm run dev
+```
+
+http://localhost:3000
