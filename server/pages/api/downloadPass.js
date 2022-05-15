@@ -1,3 +1,5 @@
+import { ApplePass } from "../../interfaces";
+
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req, res) {
     console.log('/api/downloadPass')
