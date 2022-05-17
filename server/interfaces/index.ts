@@ -1,11 +1,11 @@
-export class Pass {
-    
+export interface Pass {
+    // TODO
 }
 
-export class ApplePass extends Pass {
-
+export interface ApplePass extends Pass {
+    // TODO
 }
 
-export class GooglePass extends Pass {
-    
+export interface GooglePass extends Pass {
+    // TODO
 }
