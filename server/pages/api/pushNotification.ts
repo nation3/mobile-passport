@@ -22,8 +22,26 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 // Push notification to all the passes
                 console.log('Pushing notification...')
 
-                const title = 'title...' // TODO
-                const content = 'content...' // TODO
+                const { title } = req.query
+                console.log(`title: "${title}"`)
+                if (!title || (String(title).trim().length == 0)) {
+                    res.status(400).json({ error: 'Missing/empty parameter: title' })
+                    return
+                }
+
+                const { content } = req.query
+                console.log(`content: "${content}"`)
+                if (!content || (String(content).trim().length == 0)) {
+                    res.status(400).json({ error: 'Missing/empty parameter: content' })
+                    return
+                }
+
+                // Remove leading/trailing whitespace
+                const trimmedTitle = String(title).trim()
+                const trimmedContent = String(content).trim()
+
+                // Push notification
+                // TODO
 
                 res.status(response.statusCode).json({ text: '// TODO' })
             }
