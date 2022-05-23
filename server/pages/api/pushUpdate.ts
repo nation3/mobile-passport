@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import basicAuthCheck from "../../utils/basicAuthCheck"
+import { Passes } from "../../utils/Passes"
 
 async function performBasicAuth(req: NextApiRequest, res: NextApiResponse) {
     console.log('performBasicAuth')
@@ -21,9 +22,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             } else {
                 // Push update of new template
                 console.log('Pushing template update...')
-                // TODO
+                
+                const templateFormatVersion: number = 1
+                const updateSent: boolean = Passes.pushUpdate(templateFormatVersion)
 
-                res.status(response.statusCode).json({ text: '// TODO' })
+                res.status(response.statusCode).json({ updateSent: updateSent, templateFormatVersion: templateFormatVersion })
             }
         })
 }
