@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import basicAuthCheck from "../../utils/basicAuthCheck"
+import { Passes } from "../../utils/Passes"
 
 async function performBasicAuth(req: NextApiRequest, res: NextApiResponse) {
     console.log('performBasicAuth')
@@ -41,9 +42,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 const trimmedContent = String(content).trim()
 
                 // Push notification
-                // TODO
+                const notificationSent: boolean = Passes.pushNotification(trimmedTitle, trimmedContent);
+                console.log('notificationSent:', notificationSent)
 
-                res.status(response.statusCode).json({ text: '// TODO' })
+                res.status(response.statusCode).json({ 
+                    notificationSent: notificationSent,
+                    title: trimmedTitle,
+                    content: trimmedContent
+                })
             }
         })
 }
