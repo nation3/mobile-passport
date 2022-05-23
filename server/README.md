@@ -8,6 +8,12 @@ Next.js server for REST API.
 npm install
 ```
 
+## Add the file with local environment variables
+
+```
+cp .env.local.sample .env.local
+```
+
 ## Run the development server
 
 ```
