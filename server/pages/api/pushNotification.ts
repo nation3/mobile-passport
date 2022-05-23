@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import basicAuthCheck from "../../utils/basicAuthCheck"
+import { Passes } from "../../utils/Passes"
 
 async function performBasicAuth(req: NextApiRequest, res: NextApiResponse) {
     console.log('performBasicAuth')
@@ -22,10 +23,33 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 // Push notification to all the passes
                 console.log('Pushing notification...')
 
-                const title = 'title...' // TODO
-                const content = 'content...' // TODO
+                const { title } = req.query
+                console.log(`title: "${title}"`)
+                if (!title || (String(title).trim().length == 0)) {
+                    res.status(400).json({ error: 'Missing/empty parameter: title' })
+                    return
+                }
 
-                res.status(response.statusCode).json({ text: '// TODO' })
+                const { content } = req.query
+                console.log(`content: "${content}"`)
+                if (!content || (String(content).trim().length == 0)) {
+                    res.status(400).json({ error: 'Missing/empty parameter: content' })
+                    return
+                }
+
+                // Remove leading/trailing whitespace
+                const trimmedTitle = String(title).trim()
+                const trimmedContent = String(content).trim()
+
+                // Push notification
+                const notificationSent: boolean = Passes.pushNotification(trimmedTitle, trimmedContent);
+                console.log('notificationSent:', notificationSent)
+
+                res.status(response.statusCode).json({ 
+                    notificationSent: notificationSent,
+                    title: trimmedTitle,
+                    content: trimmedContent
+                })
             }
         })
 }
