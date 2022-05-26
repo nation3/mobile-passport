@@ -1,0 +1,31 @@
+{
+  "organizationName": "Nation3",
+  "passTypeIdentifier": "pass.org.passport.nation3",
+  "description": "Nation3 passports for Nation3 citizens.",
+  "teamIdentifier": "6GU2F645A4",
+  "backgroundColor": "rgb(255,255,255)",
+  "foregroundColor": "rgb(34, 64, 89)",
+  "labelColor": "rgb(115, 149, 178)",
+  "formatVersion": 1,
+  "storeCard": {
+    "headerFields": [
+      { "value": "not yet :)", "label": "Passport ID", "key": "id" }
+    ],
+    "primaryFields": [],
+    "secondaryFields": [
+      {
+        "fieldUUID": "526c80c0-c579-11ec-b5fd-e93a006cb46d",
+        "value": "luisc.eth",
+        "label": "Holder",
+        "key": "holder"
+      }
+    ]
+  },
+  "barcodes": [
+    {
+      "message": "123456789",
+      "format": "PKBarcodeFormatQR",
+      "messageEncoding": "iso-8859-1"
+    }
+  ]
+}

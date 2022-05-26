@@ -5,14 +5,25 @@ import { ApplePass } from "../../interfaces"
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('/api/downloadPass')
     
-    const address = "0xabc..." // TODO
+    const { address } = req.query
+    console.log(`address: "${address}"`)
 
-    const signature = "0xdef..." // TODO
+    // Check that the address is valid
+    // TODO
 
     // Check that the address has a passport NFT
     // TODO
 
+    const { signature } = req.query
+    console.log(`signature: "${signature}"`)
+
     // Check that the signature is valid
+    // TODO
+
+    const { platform } = req.query
+    console.log(`platform: "${platform}"`)
+
+    // Check that the platform is valid
     // TODO
 
     // Populate the pass template

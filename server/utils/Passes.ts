@@ -1,4 +1,18 @@
+import { Platform } from "../interfaces"
+
 export class Passes {
+
+    /**
+     * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
+     */
+    static downloadPass(passportID: number, platform: Platform) {
+        console.log('downloadPass')
+        
+        console.log('passportID:', passportID)
+        console.log('platform:', platform)
+
+        // TODO
+    }
 
     /**
      * Pushes an updated template to all the passes.
