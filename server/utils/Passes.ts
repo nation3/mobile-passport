@@ -1,4 +1,5 @@
 import { Platform } from "../interfaces"
+import { GoogleAuthUtils } from "./GoogleAuthUtils"
 
 export class Passes {
 
@@ -11,7 +12,13 @@ export class Passes {
         console.log('passportID:', passportID)
         console.log('platform:', platform)
 
-        // TODO
+        if (platform == Platform.Google) {
+            console.log('platform == Platform.Google')
+            GoogleAuthUtils.createPassAndToken()
+        } else if (platform == Platform.Apple) {
+            console.log('platform == Platform.Apple')
+            // TODO
+        }
     }
 
     /**
