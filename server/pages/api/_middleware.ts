@@ -6,7 +6,10 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
     const pathName = req.nextUrl.pathname
     console.log('pathName:', pathName)
 
-    if (pathName && pathName.startsWith('/api/push')) {
+    // Perform Basic Auth on these paths:
+    //   /api/pushNotification
+    //   /api/pushUpdate
+    if (pathName.startsWith('/api/push')) {
         const authorizationHeader = req.headers.get('authorization')
         console.log('authorizationHeader:', authorizationHeader)
 
