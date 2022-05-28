@@ -3,15 +3,15 @@ import type { NextFetchEvent, NextRequest } from 'next/server'
 export function middleware(req: NextRequest, event: NextFetchEvent) {
     console.log('middleware')
 
-    const pageName = req.page.name
-    console.log('pageName:', pageName)
+    const pathName = req.nextUrl.pathname
+    console.log('pathName:', pathName)
 
     const authorizationHeader = req.headers.get('authorization')
     console.log('authorizationHeader:', authorizationHeader)
 
     if (!authorizationHeader) {
         // Perform Basic Auth
-        return new Response('401 Unauthorized', {
+        return new Response(`pathName: ${pathName}`, {
             status: 401,
             headers: {
                 'WWW-Authenticate': 'Basic realm="Secure Area"',
