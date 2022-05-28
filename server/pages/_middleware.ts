@@ -6,7 +6,20 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
     const pageName = req.page.name
     console.log('pageName:', pageName)
 
-    return new Response(`pageName: "${pageName}"`)
+    const authorizationHeader = req.headers.get('authorization')
+    console.log('authorizationHeader:', authorizationHeader)
+
+    if (!authorizationHeader) {
+        // Perform Basic Auth
+        return new Response('401 Unauthorized', {
+            status: 401,
+            headers: {
+                'WWW-Authenticate': 'Basic realm="Secure Area"',
+            },
+        })
+    }
+
+    return new Response(`authorizationHeader: "${authorizationHeader}"`)
 
     // if (pageName && pageName.startsWith('/api/push')) {
     //     const authorizationHeader = req.headers.get('authorization')
