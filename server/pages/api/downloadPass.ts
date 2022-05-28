@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { ApplePass } from "../../interfaces"
+import { ApplePass, Platform } from "../../interfaces"
+import { Passes } from "../../utils/Passes"
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    // TODO
+    Passes.downloadPass(123456, Platform.Google)
 
     // Serve the pass download to the user
     // TODO
