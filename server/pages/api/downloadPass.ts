@@ -35,6 +35,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return
     }
     console.log(`recoveredAddress: "${recoveredAddress}"`)
+    if (address != recoveredAddress) {
+        console.error('Invalid signature (address not recovered)')
+        res.status(400).json({ 
+            error: 'Invalid signature (address not recovered)'
+        })
+        return
+    }
 
     const { platform } = req.query
     console.log(`platform: "${platform}"`)
