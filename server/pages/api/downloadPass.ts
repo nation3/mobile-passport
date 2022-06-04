@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ApplePass } from "../../interfaces"
+var Web3 = require('web3')
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,7 +10,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`address: "${address}"`)
 
     // Check that the address is valid
-    // TODO
+    var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+    if (!web3.utils.isAddress(address)) {
+        res.status(400).json({ 
+            error: 'Invalid address'
+        })
+        return
+    }
 
     // Check that the address has a passport NFT
     // TODO
