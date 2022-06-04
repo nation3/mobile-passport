@@ -18,9 +18,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return
     }
 
-    // Check that the address has a passport NFT
-    // TODO
-
     const { signature } = req.query
     console.log(`signature: "${signature}"`)
 
@@ -31,6 +28,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`platform: "${platform}"`)
 
     // Check that the platform is valid
+    // TODO
+
+    // Check that the address has a passport NFT
+    // TODO
+
+    // Lookup ENS name
     // TODO
 
     // Populate the pass template
