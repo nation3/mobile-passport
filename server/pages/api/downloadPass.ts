@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ApplePass } from "../../interfaces"
-var Web3 = require('web3')
+const Web3 = require('web3')
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,8 +10,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`address: "${address}"`)
 
     // Check that the address is valid
-    var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
     if (!web3.utils.isAddress(address)) {
+        console.error('Invalid address')
         res.status(400).json({ 
             error: 'Invalid address'
         })
@@ -22,7 +23,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`signature: "${signature}"`)
 
     // Check that the signature is valid
-    // TODO
+    const signedMessage = 'I am the holder of this Nation3 passport'
+    let recoveredAddress = undefined
+    try {
+        recoveredAddress = web3.eth.accounts.recover(signedMessage, signature);
+    } catch (error: any) {
+        console.error('Invalid signature\n', error)
+        res.status(400).json({ 
+            error: 'Invalid signature'
+        })
+        return
+    }
+    console.log(`recoveredAddress: "${recoveredAddress}"`)
 
     const { platform } = req.query
     console.log(`platform: "${platform}"`)
