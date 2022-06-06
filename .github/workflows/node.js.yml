@@ -31,6 +31,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: server/package-lock.json
-    - run: npm install --include=dev
+    - run: npm install
     - run: npm run build
     - run: npm run lint
