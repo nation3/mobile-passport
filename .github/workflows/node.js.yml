@@ -33,4 +33,4 @@ jobs:
         cache-dependency-path: server/package-lock.json
     - run: npm install --include=dev
     - run: npm run build
-    - run: npm lint
+    - run: npm run lint
