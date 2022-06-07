@@ -38,26 +38,26 @@ export class Passes {
             const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
             console.log('manifestObject:\n', manifestObject)
             const data = new Uint8Array(Buffer.from(JSON.stringify(manifestObject)))
-            // fs.writeFile('manifest.json', data, (err) => {
-            //     if (err) {
-            //         throw err
-            //     }
-            //     console.log('The file has been saved!')
+            fs.writeFile('/tmp/manifest.json', data, (err) => {
+                if (err) {
+                    throw err
+                }
+                console.log('The file has been saved!')
 
-            //     // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
-            //     // pass identifier signing certificate.
-            //     const signature : string = AppleCryptoUtils.createSignature('manifest.json')
-            //     console.log('signature:', signature)
+                // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
+                // pass identifier signing certificate.
+                const signature : string = AppleCryptoUtils.createSignature('/tmp/manifest.json')
+                console.log('signature:', signature)
 
-            //     // Add the signature to the top level of the pass in a file called signature.
-            //     // TODO
+                // Add the signature to the top level of the pass in a file called signature.
+                // TODO
 
-            //     // Zip the resulting directory.
-            //     // TODO
+                // Zip the resulting directory.
+                // TODO
 
-            //     // Change the file extension of the resulting archive from .zip to .pkpass.
-            //     // TODO
-            // })
+                // Change the file extension of the resulting archive from .zip to .pkpass.
+                // TODO
+            })
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
