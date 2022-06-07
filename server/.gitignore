@@ -31,3 +31,4 @@ yarn-error.log*
 
 # cryptography
 passes.key
+manifest.json

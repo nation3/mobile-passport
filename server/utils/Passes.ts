@@ -1,5 +1,6 @@
 import { Platform } from "../interfaces"
 import { AppleCryptoUtils } from "./AppleCryptoUtils"
+import fs from 'fs'
 
 export class Passes {
 
@@ -36,7 +37,13 @@ export class Passes {
             // Write the manifest object to a new file called manifest.json
             const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
             console.log('manifestObject:\n', manifestObject)
-            // TODO
+            const data = new Uint8Array(Buffer.from(JSON.stringify(manifestObject)))
+            fs.writeFile('manifest.json', data, (err) => {
+                if (err) {
+                    throw err
+                }
+                console.log('The file has been saved!');
+            });
 
             // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
             // pass identifier signing certificate.
