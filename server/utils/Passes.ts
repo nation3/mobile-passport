@@ -42,21 +42,22 @@ export class Passes {
                 if (err) {
                     throw err
                 }
-                console.log('The file has been saved!');
-            });
+                console.log('The file has been saved!')
 
-            // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
-            // pass identifier signing certificate.
-            // TODO
+                // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
+                // pass identifier signing certificate.
+                const signature : string = AppleCryptoUtils.createSignature('manifest.json')
+                console.log('signature:', signature)
 
-            // Add the signature to the top level of the pass in a file called signature.
-            // TODO
+                // Add the signature to the top level of the pass in a file called signature.
+                // TODO
 
-            // Zip the resulting directory.
-            // TODO
+                // Zip the resulting directory.
+                // TODO
 
-            // Change the file extension of the resulting archive from .zip to .pkpass.
-            // TODO
+                // Change the file extension of the resulting archive from .zip to .pkpass.
+                // TODO
+            })
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
