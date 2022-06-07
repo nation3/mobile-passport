@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { ApplePass } from "../../interfaces"
+import { ApplePass, Platform } from "../../interfaces"
+import { Passes } from "../../utils/Passes"
 const Web3 = require('web3')
 
 // req = HTTP incoming message, res = HTTP server response
@@ -56,7 +57,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    // TODO
+    Passes.downloadPass(Platform.Apple, 123456, address)
 
     // Serve the pass download to the user
     // TODO
