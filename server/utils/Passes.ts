@@ -17,18 +17,30 @@ export class Passes {
         console.log('holderAddress:', holderAddress)
 
         if (platform == Platform.Apple) {
-            // Load the Apple pass template
-            const templateVersion : number = 1
-
             // Create temporary directory for storing the pass files
             const tmpDirPrefix = path.join(os.tmpdir(), `passport_${holderAddress}_`)
             console.log('tmpDirPrefix:', tmpDirPrefix)
             const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
             console.log('tmpDirPath:', tmpDirPath)
 
-            const passJsonFile : string = `../../template-versions/apple/${templateVersion}/pass.json`
+            // Copy the template files to the temporary directory
+            const templateVersion : number = 1
+            const templateVersionDir : string = `../template-versions/apple/${templateVersion}`
+            console.log('templateVersionDir:', templateVersionDir)
+            const templateFiles : string[] = fs.readdirSync(templateVersionDir)
+            console.log('templateFiles:', templateFiles)
+            templateFiles.forEach(file => {
+                console.log('file:', file)
+                const srcFilePath : string = path.join(templateVersionDir, file)
+                console.log('srcFilePath', srcFilePath)
+                const dstFilePath : string = path.join(tmpDirPath, file)
+                console.log('dstFilePath', dstFilePath)
+                fs.copyFileSync(srcFilePath, dstFilePath)
+            })
+
+            const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
             console.log('passJsonFile:', passJsonFile)
-            const passJson = require(`../../template-versions/apple/${templateVersion}/pass.json`)
+            const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
             console.log('passJson:\n', passJson)
 
             // Set the holder name (ENS name or ETH address)
