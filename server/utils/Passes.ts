@@ -41,7 +41,7 @@ export class Passes {
             const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
             console.log('passJsonFile:', passJsonFile)
             const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
-            console.log('passJson:\n', passJson)
+            console.log('JSON.stringify(passJson):\n', JSON.stringify(passJson))
 
             // Set the holder name (ENS name or ETH address)
             passJson.storeCard.secondaryFields[0].value = holderAddress
@@ -55,8 +55,13 @@ export class Passes {
             // Set the passport type (e.g. "GENESIS")
             // TODO
 
-            // Generate manifest object using the files in the template directory
-            const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersionDir)
+            console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
+
+            // Write the changes to an updated pass.json file
+            fs.writeFileSync(passJsonFile, JSON.stringify(passJson), { flag : 'w' })
+
+            // Using the updated pass.json file, generate a manifest object of all the files in the template directory
+            const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(tmpDirPath)
             console.log('manifestObject:\n', manifestObject)
 
             
