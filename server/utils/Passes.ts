@@ -47,13 +47,13 @@ export class Passes {
                 const templateVersion : number = 1
                 const templateVersionDir : string = `../WRONGtemplate-versions/apple/${templateVersion}`
                 console.log('templateVersionDir:', templateVersionDir)
-                fs.readdir(templateVersionDir, (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files:', files)
-                })
+                // fs.readdir(templateVersionDir, (err, files) => {
+                //     if (err) {
+                //         console.error('err:\n', err)
+                //         throw err
+                //     }
+                //     console.log('files:', files)
+                // })
                 // const templateFiles : string[] = fs.readdirSync(templateVersionDir)
                 // console.log('templateFiles:', templateFiles)
                 // templateFiles.forEach(file => {
