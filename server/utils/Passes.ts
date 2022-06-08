@@ -36,7 +36,7 @@ export class Passes {
                     console.log('srcFilePath', srcFilePath)
                     const dstFilePath : string = path.join(tmpDirPath, file)
                     console.log('dstFilePath', dstFilePath)
-                    // fs.copyFileSync(srcFilePath, dstFilePath)
+                    fs.copyFileSync(srcFilePath, dstFilePath)
                 })
             } catch (err: any) {
                 console.error('err.message:', err.message)
