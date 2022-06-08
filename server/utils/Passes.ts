@@ -32,7 +32,15 @@ export class Passes {
                         console.error('err:\n', err)
                         throw err
                     }
-                    console.log('files:', files)
+                    console.log('files (current):', files)
+                })
+                console.log('files in parent directory:')
+                fs.readdir('../', (err, files) => {
+                    if (err) {
+                        console.error('err:\n', err)
+                        throw err
+                    }
+                    console.log('files (parent):', files)
                 })
 
                 // Copy the template files to the temporary directory
