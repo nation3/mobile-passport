@@ -1,4 +1,5 @@
 import { Platform } from "../interfaces"
+import { AppleCryptoUtils } from "./AppleCryptoUtils"
 
 export class Passes {
 
@@ -32,9 +33,14 @@ export class Passes {
             // Set the passport type (e.g. "GENESIS")
             // TODO
 
+            // Generate manifest object using the files in the template directory
+            const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
+            console.log('manifestObject:\n', manifestObject)
+
             
 
-            return JSON.stringify(passJson)
+
+            return JSON.stringify(manifestObject)
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1

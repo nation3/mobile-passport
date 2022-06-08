@@ -57,9 +57,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    const passJsonStringified : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    const manifest : string = Passes.downloadPass(Platform.Apple, 123456, address)
 
     // Serve the pass download to the user
     // TODO
-    res.status(200).json({ file: `passport_${address}.pkpass`, passJson: passJsonStringified })
+    res.status(200).json({ file: `passport_${address}.pkpass`, manifest: manifest })
 }
