@@ -3,6 +3,7 @@ import { AppleCryptoUtils } from "./AppleCryptoUtils"
 import path from 'path'
 import os from 'os'
 import fs from 'fs'
+import AdmZip from 'adm-zip'
 
 export class Passes {
 
@@ -76,7 +77,18 @@ export class Passes {
             // TODO
 
             // Zip the resulting directory
-            // TODO
+            const zip = new AdmZip()
+            const bundleFiles : string[] = fs.readdirSync(tmpDirPath)
+            console.log('bundleFiles:', bundleFiles)
+            bundleFiles.forEach(file => {
+                console.log('file:', file)
+                const filePath : string = path.join(tmpDirPath, file)
+                console.log('filePath', filePath)
+                zip.addLocalFile(filePath)
+            })
+            const zipFile = path.join(tmpDirPath, `passport_${holderAddress}.zip`)
+            console.log('zipFile:', zipFile)
+            zip.writeZip(zipFile)
 
             // Change the file extension of the resulting archive from .zip to .pkpass
             // TODO
