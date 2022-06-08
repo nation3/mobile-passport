@@ -58,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    Passes.downloadPass(Platform.Apple, 123456, address)
+    // Passes.downloadPass(Platform.Apple, 123456, address)
 
     // Serve the pass download to the user
     // TODO
