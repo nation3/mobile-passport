@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ApplePass } from "../../interfaces"
 const Web3 = require('web3')
-import { writeFile } from 'fs'
+import fs from 'fs'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const data = new Uint8Array(Buffer.from('file data'));
     const filePath = require('os').tmpdir() + '/message.txt'
     console.log('filePath:', filePath)
-    writeFile(require('os').tmpdir() + '/message.txt', data, (err) => {
+    fs.writeFile(require('os').tmpdir() + '/message.txt', data, (err) => {
         if (err) {
             throw err;
         }
