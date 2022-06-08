@@ -65,7 +65,7 @@ export class Passes {
                     console.log('files (public):', files)
                 })
 
-                const templatesDir = path.join(process.cwd(), 'public/template-versions')
+                const templatesDir = path.join(process.cwd(), 'template-versions')
                 console.log('templatesDir:', templatesDir)
                 console.log('files in templatesDir directory:')
                 fs.readdir(templatesDir, (err, files) => {
@@ -79,7 +79,7 @@ export class Passes {
 
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
-                const templateVersionDir : string = path.join(process.cwd(), `public/template-versions/apple/${templateVersion}`)
+                const templateVersionDir : string = path.join(process.cwd(), `template-versions/apple/${templateVersion}`)
                 console.log('templateVersionDir:', templateVersionDir)
                 fs.readdir(templateVersionDir, (err, files) => {
                     if (err) {
