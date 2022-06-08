@@ -26,7 +26,7 @@ export class Passes {
 
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
-                const templateVersionDir : string = `../WRONGtemplate-versions/apple/${templateVersion}`
+                const templateVersionDir : string = `../template-versions/apple/${templateVersion}`
                 console.log('templateVersionDir:', templateVersionDir)
                 fs.readdir(templateVersionDir, (err, files) => {
                     if (err) {
