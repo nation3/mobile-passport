@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ApplePass, Platform } from "../../interfaces"
 import { Passes } from "../../utils/Passes"
-// import os from 'os'
 const Web3 = require('web3')
 
 // req = HTTP incoming message, res = HTTP server response
@@ -58,12 +57,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    // Passes.downloadPass(Platform.Apple, 123456, address)
+    Passes.downloadPass(Platform.Apple, 123456, address)
 
     // Serve the pass download to the user
     // TODO
-    // res.status(200).json({ text: '// TODO: passport.pass' })
-
-    // console.log('os.tmpdir():', os.tmpdir())
-    res.status(200).json({ tmpdir: require('os').tmpdir() })
+    res.status(200).json({ file: '// TODO: passport.pkpass' })
 }

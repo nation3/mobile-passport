@@ -1,4 +1,4 @@
-import crypto, { Hash } from 'crypto'
+import crypto, { Hash, Sign } from 'crypto'
 import fs from 'fs'
 
 export class AppleCryptoUtils {
@@ -7,11 +7,16 @@ export class AppleCryptoUtils {
      * Create a PKCS #7 detached signature for the manifest that uses the private key of the 
      * pass identifier signing certificate.
      */
-    static createSignature() {
+    static createSignature(filePath : string) : string {
         console.log('createSignature')
 
+        console.log(`filePath: "${filePath}"`)
+
+        // // Create a signature for the file's content
+        // const signature : Sign = crypto.createS
+
         // TODO
-        // crypto.createSign
+        return ''
     }
 
     /**
@@ -57,6 +62,8 @@ export class AppleCryptoUtils {
      */
     static calculateSha1Hash(filePath : string) : string {
         console.log('calculateSha1Hash')
+
+        console.log(`filePath: "${filePath}"`)
 
         // Read the file content
         const fileBuffer : Buffer = fs.readFileSync(filePath)
