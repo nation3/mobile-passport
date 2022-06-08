@@ -17,58 +17,52 @@ export class Passes {
         console.log('holderAddress:', holderAddress)
 
         if (platform == Platform.Apple) {
-            try {
-                // Create temporary directory for storing the pass files
-                const tmpDirPrefix = path.join(os.tmpdir(), `passport_${holderAddress}_`)
-                console.log('tmpDirPrefix:', tmpDirPrefix)
-                const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
-                console.log('tmpDirPath:', tmpDirPath)
+            // Create temporary directory for storing the pass files
+            const tmpDirPrefix = path.join(os.tmpdir(), `passport_${holderAddress}_`)
+            console.log('tmpDirPrefix:', tmpDirPrefix)
+            const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
+            console.log('tmpDirPath:', tmpDirPath)
 
-                // Copy the template files to the temporary directory
-                const templateVersion : number = 1
-                const templateVersionDir : string = path.join(process.cwd(), `template-versions/apple/${templateVersion}`)
-                console.log('templateVersionDir:', templateVersionDir)
-                const templateFiles : string[] = fs.readdirSync(templateVersionDir)
-                console.log('templateFiles:', templateFiles)
-                templateFiles.forEach(file => {
-                    console.log('file:', file)
-                    const srcFilePath : string = path.join(templateVersionDir, file)
-                    console.log('srcFilePath', srcFilePath)
-                    const dstFilePath : string = path.join(tmpDirPath, file)
-                    console.log('dstFilePath', dstFilePath)
-                    fs.copyFileSync(srcFilePath, dstFilePath)
-                })
-            } catch (err: any) {
-                console.error('err.message:', err.message)
-                throw err
-            }
+            // Copy the template files to the temporary directory
+            const templateVersion : number = 1
+            const templateVersionDir : string = path.join(process.cwd(), `template-versions/apple/${templateVersion}`)
+            console.log('templateVersionDir:', templateVersionDir)
+            const templateFiles : string[] = fs.readdirSync(templateVersionDir)
+            console.log('templateFiles:', templateFiles)
+            templateFiles.forEach(file => {
+                console.log('file:', file)
+                const srcFilePath : string = path.join(templateVersionDir, file)
+                console.log('srcFilePath', srcFilePath)
+                const dstFilePath : string = path.join(tmpDirPath, file)
+                console.log('dstFilePath', dstFilePath)
+                fs.copyFileSync(srcFilePath, dstFilePath)
+            })
 
-            // const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
-            // console.log('passJsonFile:', passJsonFile)
-            // const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
-            // console.log('passJson:\n', passJson)
+            const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
+            console.log('passJsonFile:', passJsonFile)
+            const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
+            console.log('passJson:\n', passJson)
 
-            // // Set the holder name (ENS name or ETH address)
-            // passJson.storeCard.secondaryFields[0].value = holderAddress
+            // Set the holder name (ENS name or ETH address)
+            passJson.storeCard.secondaryFields[0].value = holderAddress
 
-            // // Set the passport issue date
-            // // TODO
+            // Set the passport issue date
+            // TODO
 
-            // // Set the passport number
-            // passJson.storeCard.headerFields[0].value = passportID
+            // Set the passport number
+            passJson.storeCard.headerFields[0].value = passportID
 
-            // // Set the passport type (e.g. "GENESIS")
-            // // TODO
+            // Set the passport type (e.g. "GENESIS")
+            // TODO
 
-            // // // Generate manifest object using the files in the template directory
-            // // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
-            // // console.log('manifestObject:\n', manifestObject)
+            // // Generate manifest object using the files in the template directory
+            // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
+            // console.log('manifestObject:\n', manifestObject)
 
             
 
 
-            // return JSON.stringify(passJson)
-            return JSON.stringify({})
+            return JSON.stringify(passJson)
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
