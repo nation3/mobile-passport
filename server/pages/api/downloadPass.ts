@@ -59,11 +59,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Populate the pass template
     const file : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    console.log('file:', file)
 
-    // Serve the pass download to the user
-    res.setHeader('Content-Disposition', `attachment;filename=passport_${address}.pkpass`)
-    res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-    res.setHeader('Content-Length', fs.statSync(file).size)
-    const readStream = fs.createReadStream(file)
-    readStream.pipe(res)
+    try {
+        // Serve the pass download to the user
+        res.setHeader('Content-Disposition', `attachment;filename=passport_${address}.pkpass`)
+        res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+        res.setHeader('Content-Length', fs.statSync(file).size)
+        const readStream = fs.createReadStream(file)
+        readStream.pipe(res)
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
 }
