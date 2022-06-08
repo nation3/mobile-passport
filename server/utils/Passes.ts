@@ -35,29 +35,29 @@ export class Passes {
                 console.log('srcFilePath', srcFilePath)
                 const dstFilePath : string = path.join(tmpDirPath, file)
                 console.log('dstFilePath', dstFilePath)
-                fs.copyFileSync(srcFilePath, dstFilePath)
+                // fs.copyFileSync(srcFilePath, dstFilePath)
             })
 
-            const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
-            console.log('passJsonFile:', passJsonFile)
-            const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
-            console.log('passJson:\n', passJson)
+            // const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
+            // console.log('passJsonFile:', passJsonFile)
+            // const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
+            // console.log('passJson:\n', passJson)
 
-            // Set the holder name (ENS name or ETH address)
-            passJson.storeCard.secondaryFields[0].value = holderAddress
+            // // Set the holder name (ENS name or ETH address)
+            // passJson.storeCard.secondaryFields[0].value = holderAddress
 
-            // Set the passport issue date
-            // TODO
+            // // Set the passport issue date
+            // // TODO
 
-            // Set the passport number
-            passJson.storeCard.headerFields[0].value = passportID
+            // // Set the passport number
+            // passJson.storeCard.headerFields[0].value = passportID
 
-            // Set the passport type (e.g. "GENESIS")
-            // TODO
+            // // Set the passport type (e.g. "GENESIS")
+            // // TODO
 
-            // // Generate manifest object using the files in the template directory
-            // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
-            // console.log('manifestObject:\n', manifestObject)
+            // // // Generate manifest object using the files in the template directory
+            // // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
+            // // console.log('manifestObject:\n', manifestObject)
 
             
 
