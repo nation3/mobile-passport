@@ -54,9 +54,18 @@ export class Passes {
                     console.log('files (.next):', files)
                 })
 
+                console.log('files in ./public/template-versions directory:')
+                fs.readdir('./public/template-versions', (err, files) => {
+                    if (err) {
+                        console.error('err:\n', err)
+                        throw err
+                    }
+                    console.log('files (./public/template-versions):', files)
+                })
+
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
-                const templateVersionDir : string = `./template-versions/apple/${templateVersion}`
+                const templateVersionDir : string = `./public/template-versions/apple/${templateVersion}`
                 console.log('templateVersionDir:', templateVersionDir)
                 // fs.readdir(templateVersionDir, (err, files) => {
                 //     if (err) {
