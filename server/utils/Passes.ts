@@ -24,80 +24,20 @@ export class Passes {
                 const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
                 console.log('tmpDirPath:', tmpDirPath)
 
-                console.log('process.cwd():', process.cwd())
-                console.log('path.basename(process.cwd()):', path.basename(process.cwd()))
-                
-                console.log('files in parent directory:')
-                fs.readdir('../', (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (parent):', files)
-                })
-
-                console.log('files in current directory:')
-                fs.readdir('./', (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (current):', files)
-                })
-                
-                console.log('files in .next directory:')
-                fs.readdir('.next', (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (.next):', files)
-                })
-
-                const publicDir = path.join(process.cwd(), 'public')
-                console.log('publicDir:', publicDir)
-                console.log('files in public directory:')
-                fs.readdir(publicDir, (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (public):', files)
-                })
-
-                const templatesDir = path.join(process.cwd(), 'template-versions')
-                console.log('templatesDir:', templatesDir)
-                console.log('files in templatesDir directory:')
-                fs.readdir(templatesDir, (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (templatesDir):', files)
-                })
-
-
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
                 const templateVersionDir : string = path.join(process.cwd(), `template-versions/apple/${templateVersion}`)
                 console.log('templateVersionDir:', templateVersionDir)
-                fs.readdir(templateVersionDir, (err, files) => {
-                    if (err) {
-                        console.error('err:\n', err)
-                        throw err
-                    }
-                    console.log('files (templateVersionDir):', files)
+                const templateFiles : string[] = fs.readdirSync(templateVersionDir)
+                console.log('templateFiles:', templateFiles)
+                templateFiles.forEach(file => {
+                    console.log('file:', file)
+                    const srcFilePath : string = path.join(templateVersionDir, file)
+                    console.log('srcFilePath', srcFilePath)
+                    const dstFilePath : string = path.join(tmpDirPath, file)
+                    console.log('dstFilePath', dstFilePath)
+                    // fs.copyFileSync(srcFilePath, dstFilePath)
                 })
-                // const templateFiles : string[] = fs.readdirSync(templateVersionDir)
-                // console.log('templateFiles:', templateFiles)
-                // templateFiles.forEach(file => {
-                //     console.log('file:', file)
-                //     const srcFilePath : string = path.join(templateVersionDir, file)
-                //     console.log('srcFilePath', srcFilePath)
-                //     const dstFilePath : string = path.join(tmpDirPath, file)
-                //     console.log('dstFilePath', dstFilePath)
-                //     // fs.copyFileSync(srcFilePath, dstFilePath)
-                // })
             } catch (err: any) {
                 console.error('err.message:', err.message)
                 throw err
