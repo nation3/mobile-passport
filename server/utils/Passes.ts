@@ -65,6 +65,18 @@ export class Passes {
                     console.log('files (public):', files)
                 })
 
+                const templatesDir = path.join(process.cwd(), 'public/template-versions')
+                console.log('templatesDir:', publicDir)
+                console.log('files in templatesDir directory:')
+                fs.readdir(templatesDir, (err, files) => {
+                    if (err) {
+                        console.error('err:\n', err)
+                        throw err
+                    }
+                    console.log('files (templatesDir):', files)
+                })
+
+
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
                 const templateVersionDir : string = `./public/template-versions/apple/${templateVersion}`
