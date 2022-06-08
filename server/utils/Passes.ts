@@ -54,13 +54,15 @@ export class Passes {
                     console.log('files (.next):', files)
                 })
 
-                console.log('files in ./public/template-versions directory:')
-                fs.readdir('./public/template-versions', (err, files) => {
+                const publicDir = path.join(process.cwd(), 'public')
+                console.log('publicDir:', publicDir)
+                console.log('files in public directory:')
+                fs.readdir(publicDir, (err, files) => {
                     if (err) {
                         console.error('err:\n', err)
                         throw err
                     }
-                    console.log('files (./public/template-versions):', files)
+                    console.log('files (public):', files)
                 })
 
                 // Copy the template files to the temporary directory
