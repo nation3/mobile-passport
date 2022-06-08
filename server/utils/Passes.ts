@@ -86,14 +86,16 @@ export class Passes {
                 console.log('filePath', filePath)
                 zip.addLocalFile(filePath)
             })
-            const zipFile = path.join(tmpDirPath, `passport_${holderAddress}.zip`)
+            const zipFile : string = path.join(tmpDirPath, `passport_${holderAddress}.zip`)
             console.log('zipFile:', zipFile)
             zip.writeZip(zipFile)
 
             // Change the file extension of the resulting archive from .zip to .pkpass
-            // TODO
+            const pkPassFile : string = zipFile.replace('.zip', '.pkpass')
+            console.log('pkPassFile:', pkPassFile)
+            fs.renameSync(zipFile, pkPassFile)
 
-            return JSON.stringify(manifestObject)
+            return pkPassFile
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
