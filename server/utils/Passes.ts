@@ -26,6 +26,16 @@ export class Passes {
 
                 console.log('process.cwd():', process.cwd())
                 console.log('path.basename(process.cwd()):', path.basename(process.cwd()))
+                
+                console.log('files in parent directory:')
+                fs.readdir('../', (err, files) => {
+                    if (err) {
+                        console.error('err:\n', err)
+                        throw err
+                    }
+                    console.log('files (parent):', files)
+                })
+
                 console.log('files in current directory:')
                 fs.readdir('./', (err, files) => {
                     if (err) {
@@ -34,13 +44,14 @@ export class Passes {
                     }
                     console.log('files (current):', files)
                 })
-                console.log('files in parent directory:')
-                fs.readdir('../', (err, files) => {
+                
+                console.log('files in .next directory:')
+                fs.readdir('.next', (err, files) => {
                     if (err) {
                         console.error('err:\n', err)
                         throw err
                     }
-                    console.log('files (parent):', files)
+                    console.log('files (.next):', files)
                 })
 
                 // Copy the template files to the temporary directory
