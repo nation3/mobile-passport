@@ -1,5 +1,8 @@
 import { Platform } from "../interfaces"
 import { AppleCryptoUtils } from "./AppleCryptoUtils"
+import path from 'path'
+import os from 'os'
+import fs from 'fs'
 
 export class Passes {
 
@@ -16,6 +19,13 @@ export class Passes {
         if (platform == Platform.Apple) {
             // Load the Apple pass template
             const templateVersion : number = 1
+
+            // Create temporary directory for storing the pass files
+            const tmpDirPrefix = path.join(os.tmpdir(), `passport_${holderAddress}_`)
+            console.log('tmpDirPrefix:', tmpDirPrefix)
+            const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
+            console.log('tmpDirPath:', tmpDirPath)
+
             const passJsonFile : string = `../../template-versions/apple/${templateVersion}/pass.json`
             console.log('passJsonFile:', passJsonFile)
             const passJson = require(`../../template-versions/apple/${templateVersion}/pass.json`)
@@ -33,14 +43,14 @@ export class Passes {
             // Set the passport type (e.g. "GENESIS")
             // TODO
 
-            // Generate manifest object using the files in the template directory
-            const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
-            console.log('manifestObject:\n', manifestObject)
+            // // Generate manifest object using the files in the template directory
+            // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
+            // console.log('manifestObject:\n', manifestObject)
 
             
 
 
-            return JSON.stringify(manifestObject)
+            return JSON.stringify(passJson)
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
