@@ -23,20 +23,20 @@ export class Passes {
             const tmpDirPath : string = fs.mkdtempSync(tmpDirPrefix)
             console.log('tmpDirPath:', tmpDirPath)
 
-            // Copy the template files to the temporary directory
-            const templateVersion : number = 1
-            const templateVersionDir : string = `../template-versions/apple/${templateVersion}`
-            console.log('templateVersionDir:', templateVersionDir)
-            const templateFiles : string[] = fs.readdirSync(templateVersionDir)
-            console.log('templateFiles:', templateFiles)
-            templateFiles.forEach(file => {
-                console.log('file:', file)
-                const srcFilePath : string = path.join(templateVersionDir, file)
-                console.log('srcFilePath', srcFilePath)
-                const dstFilePath : string = path.join(tmpDirPath, file)
-                console.log('dstFilePath', dstFilePath)
-                // fs.copyFileSync(srcFilePath, dstFilePath)
-            })
+            // // Copy the template files to the temporary directory
+            // const templateVersion : number = 1
+            // const templateVersionDir : string = `../template-versions/apple/${templateVersion}`
+            // console.log('templateVersionDir:', templateVersionDir)
+            // const templateFiles : string[] = fs.readdirSync(templateVersionDir)
+            // console.log('templateFiles:', templateFiles)
+            // templateFiles.forEach(file => {
+            //     console.log('file:', file)
+            //     const srcFilePath : string = path.join(templateVersionDir, file)
+            //     console.log('srcFilePath', srcFilePath)
+            //     const dstFilePath : string = path.join(tmpDirPath, file)
+            //     console.log('dstFilePath', dstFilePath)
+            //     // fs.copyFileSync(srcFilePath, dstFilePath)
+            // })
 
             // const passJsonFile : string = path.join(tmpDirPath, 'pass.json')
             // console.log('passJsonFile:', passJsonFile)
@@ -63,7 +63,7 @@ export class Passes {
 
 
             // return JSON.stringify(passJson)
-            return JSON.stringify({ tmp: 'tmp'})
+            return JSON.stringify({})
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1

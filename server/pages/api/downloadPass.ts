@@ -57,13 +57,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    try {
-        const pass : string = Passes.downloadPass(Platform.Apple, 123456, address)
-    } catch (err) {
-        throw err
-    }
+    const pass : string = Passes.downloadPass(Platform.Apple, 123456, address)
 
     // Serve the pass download to the user
     // TODO
-    res.status(200).json({ file: `passport_${address}.pkpass`, pass: {} })
+    res.status(200).json({ file: `passport_${address}.pkpass`, pass: pass })
 }
