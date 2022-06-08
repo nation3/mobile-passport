@@ -57,7 +57,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    const pass : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    try {
+        const pass : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    } catch (err) {
+        throw err
+    }
 
     // Serve the pass download to the user
     // TODO
