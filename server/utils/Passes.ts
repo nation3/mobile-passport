@@ -64,10 +64,12 @@ export class Passes {
             const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(tmpDirPath)
             console.log('manifestObject:\n', manifestObject)
 
-            
+            // Write the manifest object to a new file
+            const manifestFile : string = path.join(tmpDirPath, 'manifest.json')
+            fs.writeFileSync(manifestFile, JSON.stringify(manifestObject))
 
 
-            return JSON.stringify(passJson)
+            return JSON.stringify(manifestObject)
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
