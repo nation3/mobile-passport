@@ -20,6 +20,18 @@ export class Passes {
             const passJson = require(`../../template-versions/apple/${templateVersion}/pass.json`)
             console.log('passJson:\n', passJson)
 
+            // Set the holder name (ENS name or ETH address)
+            passJson.storeCard.secondaryFields[0].value = holderAddress
+
+            // Set the passport issue date
+            // TODO
+
+            // Set the passport number
+            passJson.storeCard.headerFields[0].value = passportID
+
+            // Set the passport type (e.g. "GENESIS")
+            // TODO
+
             
 
             return JSON.stringify(passJson)
