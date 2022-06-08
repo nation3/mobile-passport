@@ -26,10 +26,10 @@ export class Passes {
 
                 // Copy the template files to the temporary directory
                 const templateVersion : number = 1
-                const templateVersionDir : string = `../WRONGtemplate-versions/apple/${templateVersion}`
+                const templateVersionDir : string = `../template-versions/apple/${templateVersion}`
                 console.log('templateVersionDir:', templateVersionDir)
                 const templateFiles : string[] = fs.readdirSync(templateVersionDir)
-                // console.log('templateFiles:', templateFiles)
+                console.log('templateFiles:', templateFiles)
                 // templateFiles.forEach(file => {
                 //     console.log('file:', file)
                 //     const srcFilePath : string = path.join(templateVersionDir, file)
