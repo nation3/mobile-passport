@@ -65,5 +65,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Serve the pass download to the user
     // TODO
-    res.status(200).json({ file: `passport_${address}.pkpass`, pass: pass })
+    res.status(200).json({ file: `passport_${address}.pkpass`, pass: {} })
 }
