@@ -1,5 +1,6 @@
 import crypto, { Hash, Sign } from 'crypto'
 import fs from 'fs'
+import path from 'path'
 
 export class AppleCryptoUtils {
 
@@ -26,16 +27,16 @@ export class AppleCryptoUtils {
      *   "zh-Hans.lproj\/pass.strings" : "b0b4499ba7369e4cc15bad45c251e7b9bbcad6a4",
      * }
      */
-    static generateManifestObject(templateVersion : number) : JSON {
+    static generateManifestObject(templateVersionDir : string) : JSON {
         console.log('generateManifestObject')
 
         const manifest : any = {
-            'icon.png': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/icon.png`),
-            'icon@2x.png': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/icon@2x.png`),
-            'logo.png': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/logo.png`),
-            'logo@2x.png': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/logo@2x.png`),
-            'pass.json': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/pass.json`),
-            'strip.png': this.calculateSha1Hash(`../template-versions/apple/${templateVersion}/strip.png`),
+            'icon.png': this.calculateSha1Hash(path.join(templateVersionDir, 'icon.png')),
+            'icon@2x.png': this.calculateSha1Hash(path.join(templateVersionDir, 'icon@2x.png')),
+            'logo.png': this.calculateSha1Hash(path.join(templateVersionDir, 'logo.png')),
+            'logo@2x.png': this.calculateSha1Hash(path.join(templateVersionDir, 'logo@2x.png')),
+            'pass.json': this.calculateSha1Hash(path.join(templateVersionDir, 'pass.json')),
+            'strip.png': this.calculateSha1Hash(path.join(templateVersionDir, 'strip.png'))
         }
 
         return <JSON>manifest

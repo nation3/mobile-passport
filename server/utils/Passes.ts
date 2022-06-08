@@ -55,9 +55,9 @@ export class Passes {
             // Set the passport type (e.g. "GENESIS")
             // TODO
 
-            // // Generate manifest object using the files in the template directory
-            // const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersion)
-            // console.log('manifestObject:\n', manifestObject)
+            // Generate manifest object using the files in the template directory
+            const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(templateVersionDir)
+            console.log('manifestObject:\n', manifestObject)
 
             
 
