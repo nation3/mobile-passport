@@ -64,10 +64,22 @@ export class Passes {
             const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(tmpDirPath)
             console.log('manifestObject:\n', manifestObject)
 
-            // Write the manifest object to a new file
+            // Write the manifest object to a new file called manifest.json
             const manifestFile : string = path.join(tmpDirPath, 'manifest.json')
             fs.writeFileSync(manifestFile, JSON.stringify(manifestObject))
 
+            // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
+            // pass identifier signing certificate.
+            // TODO
+
+            // Add the signature to the top level of the pass in a file called signature
+            // TODO
+
+            // Zip the resulting directory
+            // TODO
+
+            // Change the file extension of the resulting archive from .zip to .pkpass
+            // TODO
 
             return JSON.stringify(manifestObject)
         } else if (platform == Platform.Google) {
