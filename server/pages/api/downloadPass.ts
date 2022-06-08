@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { ApplePass } from "../../interfaces"
+import { ApplePass, Platform } from "../../interfaces"
+import { Passes } from "../../utils/Passes"
 const Web3 = require('web3')
+import fs from 'fs'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -56,9 +58,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    // TODO
+    const filePath : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    console.log('filePath:', filePath)
 
-    // Serve the pass download to the user
-    // TODO
-    res.status(200).json({ text: '// TODO: passport.pass' })
+    try {
+        // Serve the pass download to the user
+        const fileName = `passport_${address}.pkpass`
+        console.log('fileName:', fileName)
+        res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+        res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+        res.setHeader('Content-Length', fs.statSync(filePath).size)
+        const readStream = fs.createReadStream(filePath)
+        readStream.pipe(res)
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
 }
