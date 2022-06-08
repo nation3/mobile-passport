@@ -62,7 +62,8 @@ export class Passes {
             
 
 
-            return JSON.stringify(passJson)
+            // return JSON.stringify(passJson)
+            return JSON.stringify({ tmp: 'tmp' })
         } else if (platform == Platform.Google) {
             // Load the Android pass template
             const templateVersion : number = 1
