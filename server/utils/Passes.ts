@@ -5,13 +5,32 @@ export class Passes {
     /**
      * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
      */
-    static downloadPass(passportID: number, platform: Platform) {
+    static downloadPass(platform: Platform, passportID: number, holderAddress : any) : string {
         console.log('downloadPass')
         
-        console.log('passportID:', passportID)
         console.log('platform:', platform)
+        console.log('passportID:', passportID)
+        console.log('holderAddress:', holderAddress)
 
-        // TODO
+        if (platform == Platform.Apple) {
+            // Load the Apple pass template
+            const templateVersion : number = 1
+            const passJsonFile : string = `../../template-versions/apple/${templateVersion}/pass.json`
+            console.log('passJsonFile:', passJsonFile)
+            const passJson = require(`../../template-versions/apple/${templateVersion}/pass.json`)
+            console.log('passJson:\n', passJson)
+
+            
+
+            return JSON.stringify(passJson)
+        } else if (platform == Platform.Google) {
+            // Load the Android pass template
+            const templateVersion : number = 1
+            // TODO
+
+            return ''
+        }
+        return ''
     }
 
     /**
