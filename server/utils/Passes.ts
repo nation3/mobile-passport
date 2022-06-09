@@ -69,12 +69,13 @@ export class Passes {
             const manifestFile : string = path.join(tmpDirPath, 'manifest.json')
             fs.writeFileSync(manifestFile, JSON.stringify(manifestObject))
 
-            // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
+            // Create a PKCS#7 detached signature for the manifest that uses the private key of the 
             // pass identifier signing certificate.
-            // TODO
+            const signature : string = AppleCryptoUtils.createSignature(path.join(tmpDirPath, 'manifest.json'))
+            console.log('signature:', signature)
 
-            // Add the signature to the top level of the pass in a file called signature
-            // TODO
+            // Add the signature to the top level of the pass bundle in a file called signature
+            fs.writeFileSync(path.join(tmpDirPath, 'signature'), signature)
 
             // Zip the resulting directory
             const zip = new AdmZip()
