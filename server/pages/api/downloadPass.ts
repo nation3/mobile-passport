@@ -58,7 +58,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
-    const filePath : string = Passes.downloadPass(Platform.Apple, 123456, address)
+    const passportID : string = "123456"
+    const filePath : string = Passes.downloadPass(Platform.Apple, passportID, address)
     console.log('filePath:', filePath)
 
     try {

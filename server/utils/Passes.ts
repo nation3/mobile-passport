@@ -11,7 +11,7 @@ export class Passes {
     /**
      * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
      */
-    static downloadPass(platform: Platform, passportID: number, holderAddress : any) : string {
+    static downloadPass(platform: Platform, passportID: string, holderAddress : any) : string {
         console.log('downloadPass')
         
         console.log('platform:', platform)
@@ -52,6 +52,7 @@ export class Passes {
             // TODO
 
             // Set the passport number
+            passJson.serialNumber = passportID
             passJson.storeCard.headerFields[0].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
