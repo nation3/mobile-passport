@@ -46,7 +46,8 @@ export class Passes {
             console.log('JSON.stringify(passJson):\n', JSON.stringify(passJson))
 
             // Set the holder name (ENS name or ETH address)
-            passJson.storeCard.secondaryFields[0].value = holderAddress
+            const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
+            passJson.storeCard.secondaryFields[0].value = holderAddressShortform
 
             // Set the passport issue date
             // TODO
