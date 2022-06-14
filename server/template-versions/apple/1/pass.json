@@ -41,5 +41,12 @@
       "format": "PKBarcodeFormatQR",
       "messageEncoding": "iso-8859-1"
     }
+  ],
+  "backFields" : [
+    {
+        "key" : "about",
+        "label" : "About Nation3 Genesis Passports",
+        "value" : "Nation3 is a sovereign cloud nation. We are building a community of like-minded people creating a nation on the cloud. Only 420 Nation3 Genesis Passports will ever exist, and they mark a unique collective of the first ever Nation3 citizens."
+    }
   ]
 }
