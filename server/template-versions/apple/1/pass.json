@@ -24,7 +24,7 @@
   },
   "barcodes": [
     {
-      "message": "123456789",
+      "message": "https://nation3.org",
       "format": "PKBarcodeFormatQR",
       "messageEncoding": "iso-8859-1"
     }
