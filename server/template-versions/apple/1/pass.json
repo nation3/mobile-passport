@@ -10,15 +10,28 @@
   "formatVersion": 1,
   "storeCard": {
     "headerFields": [
-      { "value": "not yet :)", "label": "Passport ID", "key": "id" }
+      {
+        "key": "id",
+        "value": "not yet :)",
+        "label": "Passport ID"
+      }
     ],
     "primaryFields": [],
     "secondaryFields": [
       {
-        "fieldUUID": "526c80c0-c579-11ec-b5fd-e93a006cb46d",
-        "value": "luisc.eth",
+        "key": "holder",
         "label": "Holder",
-        "key": "holder"
+        "value": "luisc.eth"
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "value": "GENESIS"
+      },
+      {
+        "key": "issueDate",
+        "label": "Issue Date",
+        "value": "30/5/2022"
       }
     ]
   },

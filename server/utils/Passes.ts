@@ -59,6 +59,9 @@ export class Passes {
             // Set the passport type (e.g. "GENESIS")
             // TODO
 
+            // Set the issue date
+            // TODO
+
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
 
             // Write the changes to an updated pass.json file
