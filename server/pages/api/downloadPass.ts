@@ -59,7 +59,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         console.error('catch')
         console.error(error)
         res.status(400).json({ 
-            error: error.message
+            error: 'Passport ID not found for address'
         })
         return
     })
