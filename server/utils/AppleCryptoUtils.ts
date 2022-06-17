@@ -1,7 +1,41 @@
-import crypto, { Hash, Sign } from 'crypto'
 import fs from 'fs'
 import path from 'path'
+import crypto from 'crypto'
+import forge from 'node-forge'
 
+const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(
+    process.env.APPLE_CA_CERTIFICATE_PEM ||
+    `-----BEGIN CERTIFICATE-----
+    MIIEVTCCAz2gAwIBAgIUE9x3lVJx5T3GMujM/+Uh88zFztIwDQYJKoZIhvcNAQEL
+    BQAwYjELMAkGA1UEBhMCVVMxEzARBgNVBAoTCkFwcGxlIEluYy4xJjAkBgNVBAsT
+    HUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRYwFAYDVQQDEw1BcHBsZSBS
+    b290IENBMB4XDTIwMTIxNjE5MzYwNFoXDTMwMTIxMDAwMDAwMFowdTFEMEIGA1UE
+    Aww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNh
+    dGlvbiBBdXRob3JpdHkxCzAJBgNVBAsMAkc0MRMwEQYDVQQKDApBcHBsZSBJbmMu
+    MQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANAf
+    eKp6JzKwRl/nF3bYoJ0OKY6tPTKlxGs3yeRBkWq3eXFdDDQEYHX3rkOPR8SGHgjo
+    v9Y5Ui8eZ/xx8YJtPH4GUnadLLzVQ+mxtLxAOnhRXVGhJeG+bJGdayFZGEHVD41t
+    QSo5SiHgkJ9OE0/QjJoyuNdqkh4laqQyziIZhQVg3AJK8lrrd3kCfcCXVGySjnYB
+    5kaP5eYq+6KwrRitbTOFOCOL6oqW7Z+uZk+jDEAnbZXQYojZQykn/e2kv1MukBVl
+    PNkuYmQzHWxq3Y4hqqRfFcYw7V/mjDaSlLfcOQIA+2SM1AyB8j/VNJeHdSbCb64D
+    YyEMe9QbsWLFApy9/a8CAwEAAaOB7zCB7DASBgNVHRMBAf8ECDAGAQH/AgEAMB8G
+    A1UdIwQYMBaAFCvQaUeUdgn+9GuNLkCm90dNfwheMEQGCCsGAQUFBwEBBDgwNjA0
+    BggrBgEFBQcwAYYoaHR0cDovL29jc3AuYXBwbGUuY29tL29jc3AwMy1hcHBsZXJv
+    b3RjYTAuBgNVHR8EJzAlMCOgIaAfhh1odHRwOi8vY3JsLmFwcGxlLmNvbS9yb290
+    LmNybDAdBgNVHQ4EFgQUW9n6HeeaGgujmXYiUIY+kchbd6gwDgYDVR0PAQH/BAQD
+    AgEGMBAGCiqGSIb3Y2QGAgEEAgUAMA0GCSqGSIb3DQEBCwUAA4IBAQA/Vj2e5bbD
+    eeZFIGi9v3OLLBKeAuOugCKMBB7DUshwgKj7zqew1UJEggOCTwb8O0kU+9h0UoWv
+    p50h5wESA5/NQFjQAde/MoMrU1goPO6cn1R2PWQnxn6NHThNLa6B5rmluJyJlPef
+    x4elUWY0GzlxOSTjh2fvpbFoe4zuPfeutnvi0v/fYcZqdUmVIkSoBPyUuAsuORFJ
+    EtHlgepZAE9bPFo22noicwkJac3AfOriJP6YRLj477JxPxpd1F1+M02cHSS+APCQ
+    A1iZQT0xWmJArzmoUUOSqwSonMJNsUvSq3xKX+udO7xPiEAGE/+QF4oIRynoYpgp
+    pU8RBWk6z/Kf
+    -----END CERTIFICATE-----`
+)
+
+/**
+ * Utility class based on https://developer.apple.com/documentation/walletpasses/building_a_pass
+ */
 export class AppleCryptoUtils {
 
     /**
@@ -55,7 +89,7 @@ export class AppleCryptoUtils {
         console.log('fileBuffer:', fileBuffer)
 
         // Create a SHA-1 hash
-        const hash : Hash = crypto.createHash('sha1')
+        const hash : crypto.Hash = crypto.createHash('sha1')
         console.log('hash:', hash)
 
         // Update the hash content with the Buffer data
@@ -66,5 +100,62 @@ export class AppleCryptoUtils {
         console.log('hexDigest:', hexDigest)
 
         return hexDigest
+    }
+
+    /**
+     * Create a PKCS#7 detached signature for the manifest that uses the private key of the 
+     * pass identifier signing certificate.
+     * 
+     * @see https://www.npmjs.com/package/node-forge#user-content-pkcs7
+     */
+     static createSignature(manifestJsonStringified : string) : Buffer {
+        console.log('createSignature')
+
+        console.log('manifestJsonStringified:', manifestJsonStringified)
+
+        // Load the certificate in PEM format
+        const certificatePem : string = String(process.env.APPLE_CERTIFICATE_PEM)
+        console.log('certificatePem:', certificatePem)
+
+        // Convert a Forge certificate from PEM
+        const certificate : forge.pki.Certificate = forge.pki.certificateFromPem(certificatePem)
+        console.log('certificate:\n', certificate)
+
+        console.log('APPLE_CA_CERTIFICATE:\n', APPLE_CA_CERTIFICATE)
+
+        // Create detached PKCS#7 signed data
+        const p7 : forge.pkcs7.PkcsSignedData = forge.pkcs7.createSignedData()
+        console.log('p7:\n', p7)
+        p7.content = manifestJsonStringified
+        p7.addCertificate(certificate)
+        p7.addCertificate(APPLE_CA_CERTIFICATE)
+        p7.addSigner({
+            key: String(process.env.APPLE_CERTIFICATE_KEY),
+            certificate: certificate,
+            digestAlgorithm: forge.pki.oids.sha256, // Signature Algorithm: sha256WithRSAEncryption
+            authenticatedAttributes: [
+                {
+                    type: forge.pki.oids.contentType,
+                    value: forge.pki.oids.data
+                },
+                {
+                    type: forge.pki.oids.messageDigest
+                    // `value` will be auto-populated at signing time
+                },
+                {
+                    type: forge.pki.oids.signingTime
+                    // `value` will be auto-populated at signing time
+                }
+            ]
+        })
+        p7.sign({ detached: true })
+
+        // Convert to DER format
+        const derBytes : forge.Bytes = forge.asn1.toDer(p7.toAsn1()).getBytes()
+
+        // Convert to Buffer
+        const derBuffer : Buffer = Buffer.from(derBytes, 'binary')
+
+        return derBuffer
     }
 }

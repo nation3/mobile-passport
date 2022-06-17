@@ -1,6 +1,7 @@
 {
   "organizationName": "Nation3",
   "passTypeIdentifier": "pass.org.passport.nation3",
+  "serialNumber": "not yet :)",
   "description": "Nation3 passports for Nation3 citizens.",
   "teamIdentifier": "6GU2F645A4",
   "backgroundColor": "rgb(255,255,255)",
@@ -9,23 +10,43 @@
   "formatVersion": 1,
   "storeCard": {
     "headerFields": [
-      { "value": "not yet :)", "label": "Passport ID", "key": "id" }
+      {
+        "key": "id",
+        "value": "not yet :)",
+        "label": "Passport ID"
+      }
     ],
     "primaryFields": [],
     "secondaryFields": [
       {
-        "fieldUUID": "526c80c0-c579-11ec-b5fd-e93a006cb46d",
-        "value": "luisc.eth",
+        "key": "holder",
         "label": "Holder",
-        "key": "holder"
+        "value": "luisc.eth"
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "value": "GENESIS"
+      },
+      {
+        "key": "issueDate",
+        "label": "Issue Date",
+        "value": "30/5/2022"
       }
     ]
   },
   "barcodes": [
     {
-      "message": "123456789",
+      "message": "https://nation3.org",
       "format": "PKBarcodeFormatQR",
       "messageEncoding": "iso-8859-1"
+    }
+  ],
+  "backFields" : [
+    {
+        "key" : "about",
+        "label" : "About Nation3 Genesis Passports",
+        "value" : "Nation3 is a sovereign cloud nation. We are building a community of like-minded people creating a nation on the cloud. Only 420 Nation3 Genesis Passports will ever exist, and they mark a unique collective of the first ever Nation3 citizens."
     }
   ]
 }

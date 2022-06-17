@@ -4,13 +4,14 @@ import path from 'path'
 import os from 'os'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
+import console from "console"
 
 export class Passes {
 
     /**
      * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
      */
-    static downloadPass(platform: Platform, passportID: number, holderAddress : any) : string {
+    static downloadPass(platform: Platform, passportID: string, holderAddress : any) : string {
         console.log('downloadPass')
         
         console.log('platform:', platform)
@@ -45,15 +46,20 @@ export class Passes {
             console.log('JSON.stringify(passJson):\n', JSON.stringify(passJson))
 
             // Set the holder name (ENS name or ETH address)
-            passJson.storeCard.secondaryFields[0].value = holderAddress
+            const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
+            passJson.storeCard.secondaryFields[0].value = holderAddressShortform
 
             // Set the passport issue date
             // TODO
 
             // Set the passport number
+            passJson.serialNumber = passportID
             passJson.storeCard.headerFields[0].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
+            // TODO
+
+            // Set the issue date
             // TODO
 
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
@@ -65,16 +71,21 @@ export class Passes {
             const manifestObject : JSON = AppleCryptoUtils.generateManifestObject(tmpDirPath)
             console.log('manifestObject:\n', manifestObject)
 
+            // Stringify manifest object before storing in JSON file
+            const manifestObjectStringified : string = JSON.stringify(manifestObject)
+            console.log('manifestObjectStringified:', manifestObjectStringified)
+
             // Write the manifest object to a new file called manifest.json
             const manifestFile : string = path.join(tmpDirPath, 'manifest.json')
-            fs.writeFileSync(manifestFile, JSON.stringify(manifestObject))
+            fs.writeFileSync(manifestFile, manifestObjectStringified)
 
-            // Create a PKCS #7 detached signature for the manifest that uses the private key of the 
+            // Create a PKCS#7 detached signature for the manifest that uses the private key of the 
             // pass identifier signing certificate.
-            // TODO
+            const signatureBuffer : Buffer = AppleCryptoUtils.createSignature(manifestObjectStringified)
+            console.log('signatureBuffer:', signatureBuffer)
 
-            // Add the signature to the top level of the pass in a file called signature
-            // TODO
+            // Add the signature to the top level of the pass bundle in a file called signature
+            fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
 
             // Zip the resulting directory
             const zip = new AdmZip()
