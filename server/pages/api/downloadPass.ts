@@ -13,9 +13,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const { address } = req.query
         console.log(`address: "${address}"`)
 
-        // // Instantiate a Web3 object
-        // const infuraEndpointURI = `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
-        // console.log('infuraEndpointURI:', infuraEndpointURI)
+        // Instantiate a Web3 object
+        const infuraEndpointURI = `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
+        console.log('infuraEndpointURI:', infuraEndpointURI)
         // const web3 = new Web3(infuraEndpointURI || "ws://localhost:8546");
 
         // // Check that the address is valid
