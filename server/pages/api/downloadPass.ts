@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             recoveredAddress = web3.eth.accounts.recover(signedMessage, signature);
         } catch (error: any) {
             console.error('Invalid signature:\n', error)
-            throw new Error('Invalid signature')
+            throw new Error('Invalid signature', error)
         }
         console.log(`recoveredAddress: "${recoveredAddress}"`)
         if (address != recoveredAddress) {
@@ -42,28 +42,26 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             throw new Error('Invalid signature (address not recovered)')
         }
 
-        // const { platform } = req.query
-        // console.log(`platform: "${platform}"`)
+        const { platform } = req.query
+        console.log(`platform: "${platform}"`)
 
-        // // Check that the platform is valid
-        // // TODO
+        // Check that the platform is valid
+        // TODO
 
-        // // Check that the address has a passport NFT
-        // const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
-        // const passportIdPromise = PassportIssuerContract.methods.passportId(address).call()
-        // passportIdPromise.catch((error: any) => {
-        //     console.error('catch')
-        //     console.error(error)
-        //     res.status(400).json({ 
-        //         error: 'Passport ID not found for address'
-        //     })
-        //     return
-        // })
-        // passportIdPromise.then((result: any) => {
-        //     console.log('then')
+        // Check that the address has a passport NFT
+        const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
+        const passportIdPromise = PassportIssuerContract.methods.passportId(address).call()
+        passportIdPromise.catch((error: any) => {
+            console.error('passportIdPromise catch error:\n', error)
+            res.status(400).json({
+                error: 'Passport ID not found for address'
+            })
+        })
+        passportIdPromise.then((result: any) => {
+            console.log('passportIdPromise then result:', result)
         
-        //     const passportID : string = result
-        //     console.log('passportID:', passportID)
+            const passportID : string = result
+            console.log('passportID:', passportID)
 
         //     // Lookup ENS name
         //     // TODO
@@ -85,7 +83,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         //         console.error(err)
         //         throw err
         //     }
-        // })
+        })
     } catch (err: any) {
         console.error('/api/downloadPass err:\n', err)
         res.status(400).json({
