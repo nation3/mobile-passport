@@ -52,7 +52,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
         PassportIssuerContract.methods.passportId(address).call()
                 .then((result: any) => {
-                    console.log('passportIdPromise then result:', result)
+                    console.log('then result:', result)
 
                     const passportID : string = result
                     console.log('passportID:', passportID)
@@ -74,7 +74,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     readStream.pipe(res)
                 })
                 .catch((error: any) => {
-                    console.error('passportIdPromise catch error:\n', error)
+                    console.error('catch error:\n', error)
                     res.status(400).json({
                         error: 'Passport ID not found for address'
                     })
