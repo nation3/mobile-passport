@@ -13,7 +13,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const { address } = req.query
         console.log(`address: "${address}"`)
 
-        throw 'error test 😆'
+        throw new Error('error test')
 
         // Instantiate a Web3 object
         const infuraEndpointURI = `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
@@ -98,7 +98,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         //     }
         // })
     } catch (err: any) {
-        console.error('/api/downloadPass error', err)
+        console.error('/api/downloadPass error:\n', err)
         res.status(400).json({ 
             error: err.message
         })
