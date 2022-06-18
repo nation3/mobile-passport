@@ -50,41 +50,36 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
         // Check that the address has a passport NFT
         const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
-        const passportIdPromise = PassportIssuerContract.methods.passportId(address).call()
-        passportIdPromise.catch((error: any) => {
-            console.error('passportIdPromise catch error:\n', error)
-            res.status(400).json({
-                error: 'Passport ID not found for address'
-            })
-            return
-        })
-        passportIdPromise.then((result: any) => {
-            console.log('passportIdPromise then result:', result)
-        
-            const passportID : string = result
-            console.log('passportID:', passportID)
+        PassportIssuerContract.methods.passportId(address).call()
+                .then((result: any) => {
+                    console.log('passportIdPromise then result:', result)
 
-        //     // Lookup ENS name
-        //     // TODO
+                    const passportID : string = result
+                    console.log('passportID:', passportID)
 
-        //     // Populate the pass template
-        //     const filePath : string = Passes.downloadPass(Platform.Apple, passportID, address)
-        //     console.log('filePath:', filePath)
+                    // Lookup ENS name
+                    // TODO
 
-        //     try {
-        //         // Serve the pass download to the user
-        //         const fileName = `passport_${address}.pkpass`
-        //         console.log('fileName:', fileName)
-        //         res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
-        //         res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-        //         res.setHeader('Content-Length', fs.statSync(filePath).size)
-        //         const readStream = fs.createReadStream(filePath)
-        //         readStream.pipe(res)
-        //     } catch (err) {
-        //         console.error(err)
-        //         throw err
-        //     }
-        })
+                    // Populate the pass template
+                    const filePath : string = Passes.downloadPass(Platform.Apple, passportID, address)
+                    console.log('filePath:', filePath)
+
+                    // Serve the pass download to the user
+                    const fileName = `passport_${address}.pkpass`
+                    console.log('fileName:', fileName)
+                    res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                    res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                    res.setHeader('Content-Length', fs.statSync(filePath).size)
+                    const readStream = fs.createReadStream(filePath)
+                    readStream.pipe(res)
+                })
+                .catch((error: any) => {
+                    console.error('passportIdPromise catch error:\n', error)
+                    res.status(400).json({
+                        error: 'Passport ID not found for address'
+                    })
+                    return
+                })
     } catch (err: any) {
         console.error('/api/downloadPass err:\n', err)
         res.status(400).json({
