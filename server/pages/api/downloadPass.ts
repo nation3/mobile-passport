@@ -18,14 +18,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         console.log('infuraEndpointURI:', infuraEndpointURI)
         const web3 = new Web3(infuraEndpointURI || "ws://localhost:8546");
 
-        // // Check that the address is valid
-        // if (!web3.utils.isAddress(address)) {
-        //     console.error('Invalid address')
-        //     res.status(400).json({ 
-        //         error: 'Invalid address'
-        //     })
-        //     return
-        // }
+        // Check that the address is valid
+        if (!web3.utils.isAddress(address)) {
+            console.error('Invalid address:', address)
+            throw new Error('Invalid address')
+        }
 
         // const { signature } = req.query
         // console.log(`signature: "${signature}"`)
