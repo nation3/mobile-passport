@@ -24,29 +24,23 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             throw new Error('Invalid address')
         }
 
-        // const { signature } = req.query
-        // console.log(`signature: "${signature}"`)
+        const { signature } = req.query
+        console.log(`signature: "${signature}"`)
 
-        // // Check that the signature is valid
-        // const signedMessage = 'I am the holder of this Nation3 passport'
-        // let recoveredAddress = undefined
-        // try {
-        //     recoveredAddress = web3.eth.accounts.recover(signedMessage, signature);
-        // } catch (error: any) {
-        //     console.error('Invalid signature\n', error)
-        //     res.status(400).json({ 
-        //         error: 'Invalid signature'
-        //     })
-        //     return
-        // }
-        // console.log(`recoveredAddress: "${recoveredAddress}"`)
-        // if (address != recoveredAddress) {
-        //     console.error('Invalid signature (address not recovered)')
-        //     res.status(400).json({ 
-        //         error: 'Invalid signature (address not recovered)'
-        //     })
-        //     return
-        // }
+        // Check that the signature is valid
+        const signedMessage = 'I am the holder of this Nation3 passport'
+        let recoveredAddress = undefined
+        try {
+            recoveredAddress = web3.eth.accounts.recover(signedMessage, signature);
+        } catch (error: any) {
+            console.error('Invalid signature:\n', error)
+            throw new Error('Invalid signature')
+        }
+        console.log(`recoveredAddress: "${recoveredAddress}"`)
+        if (address != recoveredAddress) {
+            console.error('Invalid signature (address not recovered)')
+            throw new Error('Invalid signature (address not recovered)')
+        }
 
         // const { platform } = req.query
         // console.log(`platform: "${platform}"`)
