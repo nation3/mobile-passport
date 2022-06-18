@@ -56,6 +56,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             res.status(400).json({
                 error: 'Passport ID not found for address'
             })
+            return
         })
         passportIdPromise.then((result: any) => {
             console.log('passportIdPromise then result:', result)
