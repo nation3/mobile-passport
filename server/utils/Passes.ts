@@ -57,7 +57,12 @@ export class Passes {
             passJson.storeCard.headerFields[0].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
-            // TODO
+            const passportNumber : number = Number(passportID)
+            if (passportNumber < 420) {
+                passJson.storeCard.secondaryFields[1].value = 'GENESIS'
+            } else {
+                passJson.storeCard.secondaryFields[1].value = 'REGULAR'
+            }
 
             // Set the issue date
             // TODO
