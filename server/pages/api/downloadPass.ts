@@ -4,6 +4,7 @@ import { Passes } from "../../utils/Passes"
 const Web3 = require('web3')
 import fs from 'fs'
 import PassportIssuer from '../../abis/PassportIssuer.json'
+import Passport from '../../abis/Passport.json'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -57,21 +58,35 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     const passportID : string = result
                     console.log('passportID:', passportID)
 
-                    // Lookup ENS name
-                    // TODO
+                    // Lookup passport issue date
+                    const PassportContract = new web3.eth.Contract(Passport.abi, '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333')
+                    PassportContract.methods.timestampOf(passportID).call()
+                            .then((timestamp: number) => {
+                                console.log('then timestamp:', timestamp)
 
-                    // Populate the pass template
-                    const filePath : string = Passes.downloadPass(Platform.Apple, passportID, address)
-                    console.log('filePath:', filePath)
+                                // Lookup ENS name
+                                // TODO
 
-                    // Serve the pass download to the user
-                    const fileName = `passport_${address}.pkpass`
-                    console.log('fileName:', fileName)
-                    res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
-                    res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                    res.setHeader('Content-Length', fs.statSync(filePath).size)
-                    const readStream = fs.createReadStream(filePath)
-                    readStream.pipe(res)
+                                // Populate the pass template
+                                const filePath : string = Passes.downloadPass(Platform.Apple, passportID, timestamp, address)
+                                console.log('filePath:', filePath)
+
+                                // Serve the pass download to the user
+                                const fileName = `passport_${address}.pkpass`
+                                console.log('fileName:', fileName)
+                                res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                                res.setHeader('Content-Length', fs.statSync(filePath).size)
+                                const readStream = fs.createReadStream(filePath)
+                                readStream.pipe(res)
+                            })
+                            .catch((error: any) => {
+                                console.error('catch error:\n', error)
+                                res.status(500).json({
+                                    error: 'Looking up passport issue date failed'
+                                })
+                                return
+                            })
                 })
                 .catch((error: any) => {
                     console.error('catch error:\n', error)
