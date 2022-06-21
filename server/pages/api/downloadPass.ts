@@ -52,7 +52,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
         // Check that the address has a passport NFT
         const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
-        PassportIssuerContract.methods.passportId('0xd19762943d1028b19626116c6d11482a79b65374').call()
+        PassportIssuerContract.methods.passportId(address).call()
                 .then((result: any) => {
                     console.log('then result:', result)
 
@@ -70,10 +70,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                                 lookupEnsName(address)
                                         .then((result: any) => {
                                             console.log('then result:', result)
-                                            if (result == null) {
-                                                console.warn('ENS name not found for address')
-                                            } else {
+                                            if (result != null) {
                                                 ensName = result
+                                            } else {
+                                                console.warn('ENS name not found for address')
                                             }
                                         })
                                         .catch((error) => {
