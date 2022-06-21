@@ -4,6 +4,7 @@ import { Passes } from "../../utils/Passes"
 const Web3 = require('web3')
 import fs from 'fs'
 import PassportIssuer from '../../abis/PassportIssuer.json'
+import Passport from '../../abis/Passport.json'
 import { ethers } from 'ethers'
 
 // req = HTTP incoming message, res = HTTP server response
@@ -51,44 +52,58 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
         // Check that the address has a passport NFT
         const PassportIssuerContract = new web3.eth.Contract(PassportIssuer.abi, '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC')
-        PassportIssuerContract.methods.passportId(address).call()
+        PassportIssuerContract.methods.passportId('0xd19762943d1028b19626116c6d11482a79b65374').call()
                 .then((result: any) => {
                     console.log('then result:', result)
 
                     const passportID : string = result
                     console.log('passportID:', passportID)
 
-                    // Lookup ENS name
-                    let ensName : string = ''
-                    lookupEnsName(address)
-                            .then((result: any) => {
-                                console.log('then result:', result)
-                                if (result == null) {
-                                    console.warn('ENS name not found for address')
-                                } else {
-                                    ensName = result
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('catch error:', error)
-                            })
-                            .finally(() => {
-                                console.log('finally')
+                    // Lookup passport issue date
+                    const PassportContract = new web3.eth.Contract(Passport.abi, '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333')
+                    PassportContract.methods.timestampOf(passportID).call()
+                            .then((timestamp: number) => {
+                                console.log('then timestamp:', timestamp)
 
-                                console.log('ensName:', ensName)
-                                
-                                // Populate the pass template
-                                const filePath : string = Passes.downloadPass(Platform.Apple, passportID, address, ensName)
-                                console.log('filePath:', filePath)
+                                // Lookup ENS name
+                                let ensName : string = ''
+                                lookupEnsName(address)
+                                        .then((result: any) => {
+                                            console.log('then result:', result)
+                                            if (result == null) {
+                                                console.warn('ENS name not found for address')
+                                            } else {
+                                                ensName = result
+                                            }
+                                        })
+                                        .catch((error) => {
+                                            console.error('catch error:', error)
+                                        })
+                                        .finally(() => {
+                                            console.log('finally')
 
-                                // Serve the pass download to the user
-                                const fileName = `passport_${address}.pkpass`
-                                console.log('fileName:', fileName)
-                                res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
-                                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                                res.setHeader('Content-Length', fs.statSync(filePath).size)
-                                const readStream = fs.createReadStream(filePath)
-                                readStream.pipe(res)
+                                            console.log('ensName:', ensName)
+                                            
+                                            // Populate the pass template
+                                            const filePath : string = Passes.downloadPass(Platform.Apple, passportID, timestamp, address, ensName)
+                                            console.log('filePath:', filePath)
+
+                                            // Serve the pass download to the user
+                                            const fileName = `passport_${address}.pkpass`
+                                            console.log('fileName:', fileName)
+                                            res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                                            res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                                            res.setHeader('Content-Length', fs.statSync(filePath).size)
+                                            const readStream = fs.createReadStream(filePath)
+                                            readStream.pipe(res)
+                                        })
+                            })
+                            .catch((error: any) => {
+                                console.error('catch error:\n', error)
+                                res.status(500).json({
+                                    error: 'Looking up passport issue date failed'
+                                })
+                                return
                             })
                 })
                 .catch((error: any) => {
