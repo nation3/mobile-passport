@@ -11,7 +11,7 @@ export class Passes {
     /**
      * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
      */
-    static downloadPass(platform: Platform, passportID: string, holderAddress : any) : string {
+    static downloadPass(platform: Platform, passportID: string, timestamp: number, holderAddress : any) : string {
         console.log('downloadPass')
         
         console.log('platform:', platform)
@@ -49,9 +49,6 @@ export class Passes {
             const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
             passJson.storeCard.secondaryFields[0].value = holderAddressShortform
 
-            // Set the passport issue date
-            // TODO
-
             // Set the passport number
             passJson.serialNumber = passportID
             passJson.storeCard.headerFields[0].value = passportID
@@ -64,8 +61,11 @@ export class Passes {
                 passJson.storeCard.secondaryFields[1].value = 'REGULAR'
             }
 
-            // Set the issue date
-            // TODO
+            // Set the passport issue date
+            const timestampInMilliseconds : number = timestamp * 1000
+            const timeISOString : string = new Date(timestampInMilliseconds).toISOString().substring(0, 10)
+            console.log('timeISOString:', timeISOString)
+            passJson.storeCard.secondaryFields[2].value = timeISOString
 
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
 
