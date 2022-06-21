@@ -11,12 +11,13 @@ export class Passes {
     /**
      * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
      */
-    static downloadPass(platform: Platform, passportID: string, holderAddress : any) : string {
+    static downloadPass(platform: Platform, passportID: string, holderAddress: any, holderENSName: string) : string {
         console.log('downloadPass')
         
         console.log('platform:', platform)
         console.log('passportID:', passportID)
         console.log('holderAddress:', holderAddress)
+        console.log('holderENSName:', holderENSName)
 
         if (platform == Platform.Apple) {
             // Create temporary directory for storing the pass files
@@ -45,9 +46,13 @@ export class Passes {
             const passJson = JSON.parse(fs.readFileSync(passJsonFile, 'utf-8'))
             console.log('JSON.stringify(passJson):\n', JSON.stringify(passJson))
 
-            // Set the holder name (ENS name or ETH address)
-            const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
-            passJson.storeCard.secondaryFields[0].value = holderAddressShortform
+            // Set the passport holder (ENS name or ETH address)
+            if (holderENSName != '') {
+                passJson.storeCard.secondaryFields[0].value = holderENSName
+            } else {
+                const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
+                passJson.storeCard.secondaryFields[0].value = holderAddressShortform
+            }
 
             // Set the passport issue date
             // TODO
