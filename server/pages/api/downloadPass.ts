@@ -5,6 +5,7 @@ const Web3 = require('web3')
 import fs from 'fs'
 import PassportIssuer from '../../abis/PassportIssuer.json'
 import Passport from '../../abis/Passport.json'
+import { ethers } from 'ethers'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -65,20 +66,38 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                                 console.log('then timestamp:', timestamp)
 
                                 // Lookup ENS name
-                                // TODO
+                                // If something fails during the ENS lookup, use the ETH address as fallback
+                                let ensName : string = ''
+                                lookupEnsName(address)
+                                        .then((result: any) => {
+                                            console.log('then result:', result)
+                                            if (result != null) {
+                                                ensName = result
+                                            } else {
+                                                console.warn('ENS name not found for address')
+                                            }
+                                        })
+                                        .catch((error) => {
+                                            console.error('Failed to get a response from ENS:', error)
+                                        })
+                                        .finally(() => {
+                                            console.log('finally')
 
-                                // Populate the pass template
-                                const filePath : string = Passes.downloadPass(Platform.Apple, passportID, timestamp, address)
-                                console.log('filePath:', filePath)
+                                            console.log('ensName:', ensName)
+                                            
+                                            // Populate the pass template
+                                            const filePath : string = Passes.downloadPass(Platform.Apple, passportID, timestamp, address, ensName)
+                                            console.log('filePath:', filePath)
 
-                                // Serve the pass download to the user
-                                const fileName = `passport_${address}.pkpass`
-                                console.log('fileName:', fileName)
-                                res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
-                                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                                res.setHeader('Content-Length', fs.statSync(filePath).size)
-                                const readStream = fs.createReadStream(filePath)
-                                readStream.pipe(res)
+                                            // Serve the pass download to the user
+                                            const fileName = `passport_${address}.pkpass`
+                                            console.log('fileName:', fileName)
+                                            res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                                            res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                                            res.setHeader('Content-Length', fs.statSync(filePath).size)
+                                            const readStream = fs.createReadStream(filePath)
+                                            readStream.pipe(res)
+                                        })
                             })
                             .catch((error: any) => {
                                 console.error('catch error:\n', error)
@@ -101,4 +120,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             error: err.message
         })
     }
+}
+
+/**
+ * Check if the address reverse-resolves to an ENS name.
+ * 
+ * @param address The Ethereum address
+ * @returns Promise
+ */
+const lookupEnsName = async (address: any): Promise<null | string> => {
+    console.log('lookupEnsName address:', address)
+
+    const infuraProvider = new ethers.providers.InfuraProvider('homestead', process.env.INFURA_ENDPOINT)
+    console.log('infuraProvider:\n', infuraProvider)
+    
+    var ensName = await infuraProvider.lookupAddress(address)
+    console.log('ensName:', ensName)
+
+    return ensName
 }
