@@ -78,7 +78,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                                             }
                                         })
                                         .catch((error) => {
-                                            console.error('catch error:', error)
+                                            console.error('Failed to get a response from ENS:', error)
                                         })
                                         .finally(() => {
                                             console.log('finally')
