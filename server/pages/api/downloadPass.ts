@@ -66,6 +66,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                                 console.log('then timestamp:', timestamp)
 
                                 // Lookup ENS name
+                                // If something fails during the ENS lookup, use the ETH address as fallback
                                 let ensName : string = ''
                                 lookupEnsName(address)
                                         .then((result: any) => {
