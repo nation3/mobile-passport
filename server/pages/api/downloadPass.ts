@@ -127,14 +127,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
  * @param address The Ethereum address
  * @returns Promise
  */
-const lookupEnsName = async (address: any) => {
+const lookupEnsName = async (address: any): Promise<null | string> => {
     console.log('lookupEnsName address:', address)
 
     const infuraProvider = new ethers.providers.InfuraProvider('homestead', process.env.INFURA_ENDPOINT)
     console.log('infuraProvider:\n', infuraProvider)
     
-    var ensPromise = await infuraProvider.lookupAddress(address)
-    console.log('ensPromise:', ensPromise)
+    var ensName = await infuraProvider.lookupAddress(address)
+    console.log('ensName:', ensName)
 
-    return ensPromise
+    return ensName
 }
