@@ -11,27 +11,27 @@
   "storeCard": {
     "headerFields": [
       {
+        "key": "issueDate",
+        "label": "Issue Date",
+        "value": "2022-05-30"
+      },
+      {
         "key": "id",
         "value": "not yet :)",
-        "label": "Passport ID"
+        "label": "Number"
       }
     ],
     "primaryFields": [],
     "secondaryFields": [
       {
         "key": "holder",
-        "label": "Holder",
+        "label": "Citizen Name",
         "value": "luisc.eth"
       },
       {
         "key": "type",
         "label": "Type",
         "value": "GENESIS"
-      },
-      {
-        "key": "issueDate",
-        "label": "Issue Date",
-        "value": "2022-05-30"
       }
     ]
   },

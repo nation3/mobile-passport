@@ -56,7 +56,7 @@ export class Passes {
 
             // Set the passport number
             passJson.serialNumber = passportID
-            passJson.storeCard.headerFields[0].value = passportID
+            passJson.storeCard.headerFields[1].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
             const passportNumber : number = Number(passportID)
@@ -70,7 +70,7 @@ export class Passes {
             const timestampInMilliseconds : number = timestamp * 1000
             const timeISOString : string = new Date(timestampInMilliseconds).toISOString().substring(0, 10)
             console.log('timeISOString:', timeISOString)
-            passJson.storeCard.secondaryFields[2].value = timeISOString
+            passJson.storeCard.headerFields[0].value = timeISOString
 
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
 
