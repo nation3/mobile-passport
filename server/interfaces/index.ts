@@ -1,17 +1,17 @@
 export interface Pass {
-    id: number
-    platform: Platform
+  id: number
+  platform: Platform
 }
 
 export interface ApplePass extends Pass {
-    // TODO
+  // TODO
 }
 
 export interface GooglePass extends Pass {
-    // TODO
+  // TODO
 }
 
 export enum Platform {
-    Apple,
-    Google
+  Apple,
+  Google,
 }
