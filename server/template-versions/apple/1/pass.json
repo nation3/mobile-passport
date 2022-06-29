@@ -20,7 +20,7 @@
     "secondaryFields": [
       {
         "key": "holder",
-        "label": "Citizen Name",
+        "label": "Passport Holder",
         "value": "luisc.eth"
       },
       {
