@@ -76,6 +76,9 @@ export class AppleCryptoUtils {
       "logo@2x.png": this.calculateSha1Hash(
         path.join(templateVersionDir, "logo@2x.png")
       ),
+      "logo@3x.png": this.calculateSha1Hash(
+        path.join(templateVersionDir, "logo@3x.png")
+      ),
       "pass.json": this.calculateSha1Hash(
         path.join(templateVersionDir, "pass.json")
       ),
@@ -84,6 +87,9 @@ export class AppleCryptoUtils {
       ),
       "strip@2x.png": this.calculateSha1Hash(
         path.join(templateVersionDir, "strip@2x.png")
+      ),
+      "strip@3x.png": this.calculateSha1Hash(
+        path.join(templateVersionDir, "strip@3x.png")
       ),
     };
 
