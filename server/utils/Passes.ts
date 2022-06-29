@@ -56,21 +56,21 @@ export class Passes {
 
             // Set the passport number
             passJson.serialNumber = passportID
-            passJson.storeCard.headerFields[1].value = passportID
+            passJson.storeCard.headerFields[0].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
             const passportNumber : number = Number(passportID)
             if (passportNumber < 420) {
-                passJson.storeCard.secondaryFields[1].value = 'GENESIS'
+                passJson.storeCard.secondaryFields[2].value = 'GENESIS'
             } else {
-                passJson.storeCard.secondaryFields[1].value = 'REGULAR'
+                passJson.storeCard.secondaryFields[2].value = 'REGULAR'
             }
 
             // Set the passport issue date
             const timestampInMilliseconds : number = timestamp * 1000
             const timeISOString : string = new Date(timestampInMilliseconds).toISOString().substring(0, 10)
             console.log('timeISOString:', timeISOString)
-            passJson.storeCard.headerFields[0].value = timeISOString
+            passJson.storeCard.secondaryFields[1].value = timeISOString
 
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
 
