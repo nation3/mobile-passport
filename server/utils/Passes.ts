@@ -49,14 +49,17 @@ export class Passes {
             // Set the passport holder (ENS name or ETH address)
             if (holderENSName != '') {
                 passJson.storeCard.secondaryFields[0].value = holderENSName
+                passJson.storeCard.backFields[3].value = holderENSName
             } else {
                 const holderAddressShortform : string = `${holderAddress.substring(0, 6)}...${holderAddress.substring(38, 42)}`
                 passJson.storeCard.secondaryFields[0].value = holderAddressShortform
+                passJson.storeCard.backFields[3].value = holderAddressShortform
             }
 
             // Set the passport number
             passJson.serialNumber = passportID
             passJson.storeCard.headerFields[0].value = passportID
+            passJson.storeCard.backFields[2].value = passportID
 
             // Set the passport type (e.g. "GENESIS")
             const passportNumber : number = Number(passportID)
@@ -71,6 +74,7 @@ export class Passes {
             const timeISOString : string = new Date(timestampInMilliseconds).toISOString().substring(0, 10)
             console.log('timeISOString:', timeISOString)
             passJson.storeCard.secondaryFields[1].value = timeISOString
+            passJson.storeCard.backFields[1].value = timeISOString
 
             console.log('JSON.stringify(passJson) (after field population):\n', JSON.stringify(passJson))
 
