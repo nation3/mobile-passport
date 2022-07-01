@@ -1,15 +1,20 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { Passes } from "../../utils/Passes"
+import { NextApiRequest, NextApiResponse } from 'next'
+import { Passes } from '../../utils/Passes'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    console.log('/api/pushUpdate')
+  console.log('/api/pushUpdate')
 
-    // Push update of new template
-    console.log('Pushing template update...')
-    
-    const templateFormatVersion: number = 1
-    const updateSent: boolean = Passes.pushUpdate(templateFormatVersion)
+  // Push update of new template
+  console.log('Pushing template update...')
 
-    res.status(200).json({updateSent: updateSent, templateFormatVersion: templateFormatVersion })
+  const templateFormatVersion: number = 1
+  const updateSent: boolean = Passes.pushUpdate(templateFormatVersion)
+
+  res
+    .status(200)
+    .json({
+      updateSent: updateSent,
+      templateFormatVersion: templateFormatVersion,
+    })
 }
