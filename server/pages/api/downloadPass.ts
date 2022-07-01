@@ -7,6 +7,10 @@ import PassportIssuer from '../../abis/PassportIssuer.json'
 import Passport from '../../abis/Passport.json'
 import { ethers } from 'ethers'
 
+const { SplitbeeAnalytics } = require('@splitbee/node')
+
+const analytics = new SplitbeeAnalytics(process.env.SPLITBEE_TOKEN)
+
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('/api/downloadPass')
@@ -116,6 +120,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 res.setHeader('Content-Length', fs.statSync(filePath).size)
                 const readStream = fs.createReadStream(filePath)
                 readStream.pipe(res)
+
+                analytics.track({
+                  userId: address,
+                  event: 'Apple Pass download',
+                  data: {
+                    passportID,
+                  },
+                })
               })
           })
           .catch((error: any) => {
