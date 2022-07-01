@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
-import crypto from "crypto";
-import forge from "node-forge";
+import fs from 'fs'
+import path from 'path'
+import crypto from 'crypto'
+import forge from 'node-forge'
 
 const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(
   process.env.APPLE_CA_CERTIFICATE_PEM ||
@@ -31,7 +31,7 @@ const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(
     A1iZQT0xWmJArzmoUUOSqwSonMJNsUvSq3xKX+udO7xPiEAGE/+QF4oIRynoYpgp
     pU8RBWk6z/Kf
     -----END CERTIFICATE-----`
-);
+)
 
 /**
  * Utility class based on https://developer.apple.com/documentation/walletpasses/building_a_pass
@@ -61,65 +61,65 @@ export class AppleCryptoUtils {
    * }
    */
   static generateManifestObject(templateVersionDir: string): JSON {
-    console.log("generateManifestObject");
+    console.log('generateManifestObject')
 
     const manifest: any = {
-      "icon.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "icon.png")
+      'icon.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'icon.png')
       ),
-      "icon@2x.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "icon@2x.png")
+      'icon@2x.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'icon@2x.png')
       ),
-      "logo.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "logo.png")
+      'logo.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'logo.png')
       ),
-      "logo@2x.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "logo@2x.png")
+      'logo@2x.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'logo@2x.png')
       ),
-      "logo@3x.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "logo@3x.png")
+      'logo@3x.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'logo@3x.png')
       ),
-      "pass.json": this.calculateSha1Hash(
-        path.join(templateVersionDir, "pass.json")
+      'pass.json': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'pass.json')
       ),
-      "strip.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "strip.png")
+      'strip.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'strip.png')
       ),
-      "strip@2x.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "strip@2x.png")
+      'strip@2x.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'strip@2x.png')
       ),
-      "strip@3x.png": this.calculateSha1Hash(
-        path.join(templateVersionDir, "strip@3x.png")
+      'strip@3x.png': this.calculateSha1Hash(
+        path.join(templateVersionDir, 'strip@3x.png')
       ),
-    };
+    }
 
-    return <JSON>manifest;
+    return <JSON>manifest
   }
 
   /**
    * Calculates the SHA-1 hash of a file's content.
    */
   static calculateSha1Hash(filePath: string): string {
-    console.log("calculateSha1Hash");
+    console.log('calculateSha1Hash')
 
-    console.log(`filePath: "${filePath}"`);
+    console.log(`filePath: "${filePath}"`)
 
     // Read the file content
-    const fileBuffer: Buffer = fs.readFileSync(filePath);
-    console.log("fileBuffer:", fileBuffer);
+    const fileBuffer: Buffer = fs.readFileSync(filePath)
+    console.log('fileBuffer:', fileBuffer)
 
     // Create a SHA-1 hash
-    const hash: crypto.Hash = crypto.createHash("sha1");
-    console.log("hash:", hash);
+    const hash: crypto.Hash = crypto.createHash('sha1')
+    console.log('hash:', hash)
 
     // Update the hash content with the Buffer data
-    hash.update(fileBuffer);
+    hash.update(fileBuffer)
 
     // Generate hash digest of all the data
-    const hexDigest: string = hash.digest("hex");
-    console.log("hexDigest:", hexDigest);
+    const hexDigest: string = hash.digest('hex')
+    console.log('hexDigest:', hexDigest)
 
-    return hexDigest;
+    return hexDigest
   }
 
   /**
@@ -129,29 +129,29 @@ export class AppleCryptoUtils {
    * @see https://www.npmjs.com/package/node-forge#user-content-pkcs7
    */
   static createSignature(manifestJsonStringified: string): Buffer {
-    console.log("createSignature");
+    console.log('createSignature')
 
-    console.log("manifestJsonStringified:", manifestJsonStringified);
+    console.log('manifestJsonStringified:', manifestJsonStringified)
 
     // Load the certificate in PEM format
     const certificatePem: string = `-----BEGIN CERTIFICATE-----${String(
       process.env.APPLE_CERTIFICATE_PEM
-    )}-----END CERTIFICATE-----`;
-    console.log("certificatePem:", certificatePem);
+    )}-----END CERTIFICATE-----`
+    console.log('certificatePem:', certificatePem)
 
     // Convert a Forge certificate from PEM
     const certificate: forge.pki.Certificate =
-      forge.pki.certificateFromPem(certificatePem);
-    console.log("certificate:\n", certificate);
+      forge.pki.certificateFromPem(certificatePem)
+    console.log('certificate:\n', certificate)
 
-    console.log("APPLE_CA_CERTIFICATE:\n", APPLE_CA_CERTIFICATE);
+    console.log('APPLE_CA_CERTIFICATE:\n', APPLE_CA_CERTIFICATE)
 
     // Create detached PKCS#7 signed data
-    const p7: forge.pkcs7.PkcsSignedData = forge.pkcs7.createSignedData();
-    console.log("p7:\n", p7);
-    p7.content = manifestJsonStringified;
-    p7.addCertificate(certificate);
-    p7.addCertificate(APPLE_CA_CERTIFICATE);
+    const p7: forge.pkcs7.PkcsSignedData = forge.pkcs7.createSignedData()
+    console.log('p7:\n', p7)
+    p7.content = manifestJsonStringified
+    p7.addCertificate(certificate)
+    p7.addCertificate(APPLE_CA_CERTIFICATE)
     p7.addSigner({
       key: `-----BEGIN RSA PRIVATE KEY-----${String(
         process.env.APPLE_CERTIFICATE_KEY
@@ -172,15 +172,15 @@ export class AppleCryptoUtils {
           // `value` will be auto-populated at signing time
         },
       ],
-    });
-    p7.sign({ detached: true });
+    })
+    p7.sign({ detached: true })
 
     // Convert to DER format
-    const derBytes: forge.Bytes = forge.asn1.toDer(p7.toAsn1()).getBytes();
+    const derBytes: forge.Bytes = forge.asn1.toDer(p7.toAsn1()).getBytes()
 
     // Convert to Buffer
-    const derBuffer: Buffer = Buffer.from(derBytes, "binary");
+    const derBuffer: Buffer = Buffer.from(derBytes, 'binary')
 
-    return derBuffer;
+    return derBuffer
   }
 }
