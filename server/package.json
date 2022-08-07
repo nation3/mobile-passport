@@ -12,7 +12,7 @@
     "@types/react": "^18.0.9",
     "adm-zip": "^0.5.9",
     "eslint-config-next": "^12.2.0",
-    "ethers": "^5.6.5",
+    "ethers": "^5.6.9",
     "google-auth-library": "^8.0.2",
     "jsonwebtoken": "^8.5.1",
     "next": "^12.1.6",
