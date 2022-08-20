@@ -12,6 +12,7 @@ export class Passes {
    */
   static downloadPass(
     platform: Platform,
+    templateVersion: number,
     passportID: string,
     timestamp: number,
     holderAddress: any,
@@ -20,6 +21,7 @@ export class Passes {
     console.log('downloadPass')
 
     console.log('platform:', platform)
+    console.log('templateVersion:', templateVersion)
     console.log('passportID:', passportID)
     console.log('holderAddress:', holderAddress)
     console.log('holderENSName:', holderENSName)
@@ -32,7 +34,6 @@ export class Passes {
       console.log('tmpDirPath:', tmpDirPath)
 
       // Copy the template files to the temporary directory
-      const templateVersion: number = 1
       const templateVersionDir: string = path.join(
         process.cwd(),
         `template-versions/apple/${templateVersion}`

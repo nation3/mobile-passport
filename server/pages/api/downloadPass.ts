@@ -96,8 +96,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 console.log('ensName:', ensName)
 
                 // Populate the pass template
+                const templateVersion: number = 2
                 const filePath: string = Passes.downloadPass(
                   Platform.Apple,
+                  templateVersion,
                   passportID,
                   timestamp,
                   address,
@@ -106,7 +108,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 console.log('filePath:', filePath)
 
                 // Serve the pass download to the user
-                const fileName = `passport_${address}.pkpass`
+                const fileName = `passport_${address}_v${templateVersion}.pkpass`
                 console.log('fileName:', fileName)
                 res.setHeader(
                   'Content-Disposition',
