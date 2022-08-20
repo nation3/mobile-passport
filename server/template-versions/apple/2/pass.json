@@ -2,6 +2,8 @@
   "organizationName": "Nation3",
   "passTypeIdentifier": "pass.org.passport.nation3",
   "serialNumber": "not yet :)",
+  "webServiceURL": "<webServiceURL>",
+  "authenticationToken": "<authenticationToken>",
   "description": "Nation3 passports for Nation3 citizens.",
   "teamIdentifier": "6GU2F645A4",
   "backgroundColor": "rgb(255,255,255)",

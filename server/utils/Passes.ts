@@ -73,6 +73,18 @@ export class Passes {
       passJson.storeCard.headerFields[0].value = passportID
       passJson.storeCard.backFields[2].value = passportID
 
+      if ((platform == Platform.Apple) && (templateVersion >= 2)) {
+        // Add a web service to update the pass
+        // https://developer.apple.com/documentation/walletpasses/adding_a_web_service_to_update_passes
+
+        // Set the web service URL
+        // passJson.webServiceURL = 'https://passports.nation3.org/api/apple/v1'
+        passJson.webServiceURL = 'https://mobile-passport-2kybeop3x-aahna-ashina.vercel.app/api/apple/v1'
+
+        // Set the shared secret (authentication token)
+        // TODO
+      }
+
       // Set the passport type (e.g. "GENESIS")
       const passportNumber: number = Number(passportID)
       if (passportNumber < 420) {
