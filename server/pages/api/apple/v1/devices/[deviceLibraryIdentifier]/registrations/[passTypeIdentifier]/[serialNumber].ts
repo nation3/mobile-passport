@@ -10,7 +10,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Expected request method:  POST
   console.log('req.method:', req.method)
 
-  // Extract variables from the request URL
+  // Extract variables from the request query
+  console.log('req.query:', req.query)
   const { deviceLibraryIdentifier, passTypeIdentifier, serialNumber } = req.query
   console.log('deviceLibraryIdentifier:', deviceLibraryIdentifier)
   console.log('passTypeIdentifier:', passTypeIdentifier)
