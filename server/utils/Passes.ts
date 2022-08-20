@@ -5,6 +5,8 @@ import os from 'os'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
+import { ethers } from 'ethers'
+import { SupportedAlgorithm } from 'ethers/lib/utils'
 
 export class Passes {
   /**
@@ -81,8 +83,13 @@ export class Passes {
         // passJson.webServiceURL = 'https://passports.nation3.org/api/apple/v1'
         passJson.webServiceURL = 'https://mobile-passport-2kybeop3x-aahna-ashina.vercel.app/api/apple/v1'
 
-        // Set the shared secret (authentication token)
-        // TODO
+        // Set the shared secret (authentication token) to be used with the web service
+        const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
+        console.log('process.env.APPLE_AUTH_TOKEN_HMAC_SEED:', process.env.APPLE_AUTH_TOKEN_HMAC_SEED)
+        const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(String(process.env.APPLE_AUTH_TOKEN_HMAC_SEED))
+        const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
+        const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
+        passJson.authenticationToken = hmac
       }
 
       // Set the passport type (e.g. "GENESIS")
