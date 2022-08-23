@@ -13,6 +13,10 @@ npm install
 ```
 cp .env.goerli .env
 ```
+or
+```
+cp .env.mainnet .env
+```
 
 ## Run the development server
 

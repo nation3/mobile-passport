@@ -16,7 +16,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`address: "${address}"`)
 
     // Instantiate a Web3 object
-    const infuraEndpointURI = `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
+    console.log('process.env.NEXT_PUBLIC_CHAIN:', process.env.NEXT_PUBLIC_CHAIN)
+    const infuraEndpointURI = `wss://${process.env.NEXT_PUBLIC_CHAIN}.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
     console.log('infuraEndpointURI:', infuraEndpointURI)
     const web3 = new Web3(infuraEndpointURI || 'ws://localhost:8546')
 
