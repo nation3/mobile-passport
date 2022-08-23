@@ -81,7 +81,7 @@ export class Passes {
 
         // Set the web service URL
         // passJson.webServiceURL = 'https://passports.nation3.org/api/apple'
-        passJson.webServiceURL = 'https://mobile-passport-fn2f2r8pc-aahna-ashina.vercel.app/api/apple'
+        passJson.webServiceURL = 'https://mobile-passport-loo7amqkc-aahna-ashina.vercel.app/api/apple'
 
         // Set the shared secret (authentication token) to be used with the web service
         const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
