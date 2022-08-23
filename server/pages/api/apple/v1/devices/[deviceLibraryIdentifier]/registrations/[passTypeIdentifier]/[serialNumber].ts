@@ -25,9 +25,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('passTypeIdentifier:', passTypeIdentifier)
   console.log('serialNumber:', serialNumber)
 
-  // Extract variables from the request header
-  console.log('req.headers:', req.headers)
-  // TODO
+  // Extract authentication token from the "authorization" header
+  // Expected format:
+  //   authorization: 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
+  const authorizationHeader : any = req.headers.authorization
+  console.log('authorizationHeader:', authorizationHeader)
+  const authenticationToken : string = authorizationHeader?.split(' ')[1]
+  console.log('authenticationToken:', authenticationToken)
 
   // Authenticate the request using a shared secret
   // TODO
