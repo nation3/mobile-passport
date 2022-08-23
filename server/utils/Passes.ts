@@ -80,8 +80,8 @@ export class Passes {
         // https://developer.apple.com/documentation/walletpasses/adding_a_web_service_to_update_passes
 
         // Set the web service URL
-        // passJson.webServiceURL = 'https://passports.nation3.org/api/apple'
-        passJson.webServiceURL = 'https://mobile-passport-loo7amqkc-aahna-ashina.vercel.app/api/apple'
+        console.log('process.env.APPLE_WEB_SERVICE_URL:', process.env.APPLE_WEB_SERVICE_URL)
+        passJson.webServiceURL = process.env.APPLE_WEB_SERVICE_URL
 
         // Set the shared secret (authentication token) to be used with the web service
         const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
