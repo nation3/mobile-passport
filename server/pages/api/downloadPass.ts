@@ -52,9 +52,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Check that the address has a passport NFT
+    const passportIssuerAddress : string = (process.env.NEXT_PUBLIC_CHAIN == 'goerli') 
+        ? '0x8c16926819AB30B8b29A8E23F5C230d164337093' 
+        : '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC'
+    console.log('passportIssuerAddress:', passportIssuerAddress)
     const PassportIssuerContract = new web3.eth.Contract(
       PassportIssuer.abi,
-      '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC'
+      passportIssuerAddress
     )
     PassportIssuerContract.methods
       .passportId(address)
