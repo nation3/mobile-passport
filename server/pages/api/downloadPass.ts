@@ -70,9 +70,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         console.log('passportID:', passportID)
 
         // Lookup passport issue date
+        const passportAddress : string = (process.env.NEXT_PUBLIC_CHAIN == 'goerli') 
+            ? '0x51F728c58697aFf9582cFDe3cBD00EC83E9ae7FC' 
+            : '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333'
+        console.log('passportAddress:', passportAddress)
         const PassportContract = new web3.eth.Contract(
           Passport.abi,
-          '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333'
+          passportAddress
         )
         PassportContract.methods
           .timestampOf(passportID)
