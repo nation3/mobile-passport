@@ -12,10 +12,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Expected request method:  POST
   console.log('req.method:', req.method)
   if (req.method != 'POST') {
-    res.status(400).json({
-      statusCode: 400,
-      statusMessage: "Invalid request method: " + req.method
-    })
+    // Throw Error
+    // TODO
   }
 
   // Extract variables from the request query
