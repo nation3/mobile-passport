@@ -11,7 +11,11 @@ npm install
 ## Add the file with local environment variables
 
 ```
-cp .env.local.sample .env.local
+cp .env.local.goerli .env.local
+```
+or
+```
+cp .env.local.mainnet .env.local
 ```
 
 ## Run the development server

@@ -6,6 +6,7 @@ import fs from 'fs'
 import PassportIssuer from '../../abis/PassportIssuer.json'
 import Passport from '../../abis/Passport.json'
 import { ethers } from 'ethers'
+import { config } from '../../utils/Config'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,9 +17,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(`address: "${address}"`)
 
     // Instantiate a Web3 object
-    const infuraEndpointURI = `wss://mainnet.infura.io/ws/v3/${process.env.INFURA_ENDPOINT}`
+    const infuraEndpointURI = `wss://${config.chain}.infura.io/ws/v3/${config.inpuraApiKey}`
     console.log('infuraEndpointURI:', infuraEndpointURI)
-    const web3 = new Web3(infuraEndpointURI || 'ws://localhost:8546')
+    const web3 = new Web3(infuraEndpointURI)
 
     // Check that the address is valid
     if (!web3.utils.isAddress(address)) {
@@ -53,7 +54,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Check that the address has a passport NFT
     const PassportIssuerContract = new web3.eth.Contract(
       PassportIssuer.abi,
-      '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC'
+      config.passportIssuerAddress
     )
     PassportIssuerContract.methods
       .passportId(address)
@@ -67,7 +68,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         // Lookup passport issue date
         const PassportContract = new web3.eth.Contract(
           Passport.abi,
-          '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333'
+          config.passportAddress
         )
         PassportContract.methods
           .timestampOf(passportID)
@@ -151,8 +152,8 @@ const lookupEnsName = async (address: any): Promise<null | string> => {
   console.log('lookupEnsName address:', address)
 
   const infuraProvider = new ethers.providers.InfuraProvider(
-    'homestead',
-    process.env.INFURA_ENDPOINT
+    (config.chain == 'goerli') ? 'goerli' : 'homestead',
+    config.inpuraApiKey
   )
   console.log('infuraProvider:\n', infuraProvider)
 
