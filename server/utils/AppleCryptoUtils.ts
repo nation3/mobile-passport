@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import forge from 'node-forge'
+import { config } from './Config'
 
 const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(
-  process.env.APPLE_CA_CERTIFICATE_PEM ||
     `-----BEGIN CERTIFICATE-----
     MIIEVTCCAz2gAwIBAgIUE9x3lVJx5T3GMujM/+Uh88zFztIwDQYJKoZIhvcNAQEL
     BQAwYjELMAkGA1UEBhMCVVMxEzARBgNVBAoTCkFwcGxlIEluYy4xJjAkBgNVBAsT
@@ -134,9 +134,7 @@ export class AppleCryptoUtils {
     console.log('manifestJsonStringified:', manifestJsonStringified)
 
     // Load the certificate in PEM format
-    const certificatePem: string = `-----BEGIN CERTIFICATE-----${String(
-      process.env.APPLE_CERTIFICATE_PEM
-    )}-----END CERTIFICATE-----`
+    const certificatePem: string = `-----BEGIN CERTIFICATE-----${config.appleCertificatePEM}-----END CERTIFICATE-----`
     console.log('certificatePem:', certificatePem)
 
     // Convert a Forge certificate from PEM
@@ -153,9 +151,7 @@ export class AppleCryptoUtils {
     p7.addCertificate(certificate)
     p7.addCertificate(APPLE_CA_CERTIFICATE)
     p7.addSigner({
-      key: `-----BEGIN RSA PRIVATE KEY-----${String(
-        process.env.APPLE_CERTIFICATE_KEY
-      )}-----END RSA PRIVATE KEY-----`,
+      key: `-----BEGIN RSA PRIVATE KEY-----${config.appleCertificateKey}-----END RSA PRIVATE KEY-----`,
       certificate: certificate,
       digestAlgorithm: forge.pki.oids.sha256, // Signature Algorithm: sha256WithRSAEncryption
       authenticatedAttributes: [
