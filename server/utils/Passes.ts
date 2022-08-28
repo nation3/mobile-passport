@@ -5,6 +5,7 @@ import os from 'os'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
+import { config } from './Config'
 
 export class Passes {
   /**
@@ -110,15 +111,19 @@ export class Passes {
       const manifestFile: string = path.join(tmpDirPath, 'manifest.json')
       fs.writeFileSync(manifestFile, manifestObjectStringified)
 
-      // Create a PKCS#7 detached signature for the manifest that uses the private key of the
-      // pass identifier signing certificate.
-      const signatureBuffer: Buffer = AppleCryptoUtils.createSignature(
-        manifestObjectStringified
-      )
-      console.log('signatureBuffer:', signatureBuffer)
+      const appleCertificatePEMLength : number = config.appleCertificatePEM.length
+      console.log('appleCertificatePEMLength:', appleCertificatePEMLength)
+      if (appleCertificatePEMLength > 100) {
+        // Create a PKCS#7 detached signature for the manifest that uses the private key of the
+        // pass identifier signing certificate.
+        const signatureBuffer: Buffer = AppleCryptoUtils.createSignature(
+          manifestObjectStringified
+        )
+        console.log('signatureBuffer:', signatureBuffer)
 
-      // Add the signature to the top level of the pass bundle in a file called signature
-      fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
+        // Add the signature to the top level of the pass bundle in a file called signature
+        fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
+      }
 
       // Zip the resulting directory
       const zip = new AdmZip()
