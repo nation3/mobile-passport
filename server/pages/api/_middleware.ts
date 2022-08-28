@@ -1,4 +1,5 @@
 import type { NextFetchEvent, NextRequest } from 'next/server'
+import { config } from '../../utils/Config'
 
 export function middleware(req: NextRequest, event: NextFetchEvent) {
   console.log('middleware')
@@ -27,6 +28,9 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
       // Get environment variables
       const basicAuthUsername = String(process.env.BASIC_AUTH_USERNAME)
       const basicAuthPassword = String(process.env.BASIC_AUTH_PASSWORD)
+      // TODO: enable usage of Config.ts in _middleware.ts
+      // const basicAuthUsername = config.basicAuthUsername
+      // const basicAuthPassword = config.basicAuthPassword
 
       // Compare credentials
       if (username !== basicAuthUsername || password !== basicAuthPassword) {
