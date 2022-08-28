@@ -47,5 +47,5 @@ export function middleware(req: NextRequest, _: NextFetchEvent) {
   //   /api/pushNotification
   //   /api/pushUpdate
 export const config = {
-  matcher: '/api/:push*',
+  matcher: ['/api/pushNotification', '/api/pushUpdate'],
 }
