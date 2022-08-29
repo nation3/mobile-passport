@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -35,10 +36,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // TODO
 
   // Register the pass
-  // TODO
-
-  res.status(418).json({
-    statusCode: 418,
-    statusMessage: "I'm a teapot"
-  })
+  supabase
+      .from('registrations')
+      .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber }])
+      .then((result: any) => {
+        console.log('result:', result)
+        res.status(result.status).json({
+          statusText: result.statusText
+        })
+      })
 }
