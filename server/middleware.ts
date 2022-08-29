@@ -9,15 +9,27 @@ export function middleware(req: NextRequest, _: NextFetchEvent) {
   console.log('pathName:', pathName)
 
   const authorizationHeader = req.headers.get('authorization')
-  console.log('authorizationHeader:', authorizationHeader)
 
-  let wrongCredentials: boolean = false
+  let verified = verifyAuth(authorizationHeader)
+  if (!authorizationHeader || !verified) {
+    // Perform Basic Auth
+    req.nextUrl.pathname = `/api/unauthorized`;
+    return NextResponse.rewrite(req.nextUrl);
+  }
+}
+
+const verifyAuth = (authorizationHeader: string | null): boolean => {
   if (authorizationHeader) {
     // Get header value from "Basic <value>"
     const headerValueBase64 = authorizationHeader.split(' ')[1]
 
     // Decode from Base64
-    const headerValue = Buffer.from(headerValueBase64, 'base64').toString()
+    let headerValue
+    try {
+      headerValue = Buffer.from(headerValueBase64, 'base64').toString()
+    } catch(_: any) {
+      return false
+    }
 
     // Extract values from "<username>:<password>"
     const [username, password] = headerValue.split(':')
@@ -30,17 +42,12 @@ export function middleware(req: NextRequest, _: NextFetchEvent) {
     // const basicAuthPassword = authConfig.basicAuthPassword
 
     // Compare credentials
-    if (username !== basicAuthUsername || password !== basicAuthPassword) {
-      wrongCredentials = true
+    if (username === basicAuthUsername || password === basicAuthPassword) {
+      return true
     }
   }
-  console.log('wrongCredentials:', wrongCredentials)
 
-  if (!authorizationHeader || wrongCredentials) {
-    // Perform Basic Auth
-    req.nextUrl.pathname = `/api/unauthorized`;
-    return NextResponse.rewrite(req.nextUrl);
-  }
+  return false
 }
 
 // Perform Basic Auth on these paths:
