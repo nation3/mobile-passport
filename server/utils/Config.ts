@@ -15,6 +15,9 @@ export const config = {
   passportAddress: (getEnvironmentVariable('NEXT_PUBLIC_CHAIN') == 'goerli') ? '0x51F728c58697aFf9582cFDe3cBD00EC83E9ae7FC' : '0x3337dac9f251d4e403d6030e18e3cfb6a2cb1333',
   passportIssuerAddress: (getEnvironmentVariable('NEXT_PUBLIC_CHAIN') == 'goerli') ? '0x8c16926819AB30B8b29A8E23F5C230d164337093' : '0x279c0b6bfCBBA977eaF4ad1B2FFe3C208aa068aC',
   
+  dbSupabaseUrl: getEnvironmentVariable('DB_SUPABASE_URL'),
+  dbSupabaseAnonKey: getEnvironmentVariable('DB_SUPABASE_ANON_KEY'),
+  
   appleCertificatePEM: getEnvironmentVariable('APPLE_CERTIFICATE_PEM'),
   appleCertificateKey: getEnvironmentVariable('APPLE_CERTIFICATE_KEY'),
 
