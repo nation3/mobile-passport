@@ -42,6 +42,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       .then((result: any) => {
         console.log('result:', result)
         res.status(result.status).json({
+          status: result.status,
           statusText: result.statusText
         })
       })
