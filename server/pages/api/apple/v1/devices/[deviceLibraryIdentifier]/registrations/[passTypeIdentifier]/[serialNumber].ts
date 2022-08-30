@@ -34,8 +34,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Authenticate the request using a shared secret
   // TODO
-  
-  console.log('req.body:\n', req.body)
+
+  // Extract push token from the request body (application/json)
+  // Expected format:
+  //   {
+  //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
+  //   }
+  const pushToken : string = req.body.pushToken
+  console.log('pushToken:', pushToken)
 
   // Register the pass
   supabase
