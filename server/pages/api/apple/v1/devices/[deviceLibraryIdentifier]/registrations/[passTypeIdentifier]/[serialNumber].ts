@@ -35,8 +35,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Authenticate the request using a shared secret
   // TODO
 
-  console.log('req:\n', req)
-  console.log('req.body:\n', req.body)
+  console.log('req.headers:\n', req.headers)
 
   // Register the pass
   supabase
