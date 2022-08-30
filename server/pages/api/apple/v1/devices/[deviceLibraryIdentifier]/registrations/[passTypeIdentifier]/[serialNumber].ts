@@ -11,41 +11,47 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('req.url:', req.url)
 
   // Expected request method:  POST
-  console.log('req.method:', req.method)
+  // console.log('req.method:', req.method)
   if (req.method != 'POST') {
     // Throw Error
     // TODO
   }
 
   // Extract variables from the request query
-  console.log('req.query:', req.query)
+  // console.log('req.query:', req.query)
   const { deviceLibraryIdentifier, passTypeIdentifier, serialNumber } = req.query
-  console.log('deviceLibraryIdentifier:', deviceLibraryIdentifier)
-  console.log('passTypeIdentifier:', passTypeIdentifier)
-  console.log('serialNumber:', serialNumber)
+  // console.log('deviceLibraryIdentifier:', deviceLibraryIdentifier)
+  // console.log('passTypeIdentifier:', passTypeIdentifier)
+  // console.log('serialNumber:', serialNumber)
 
   // Extract authentication token from the "authorization" header
   // Expected format:
   //   authorization: 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
   const authorizationHeader : any = req.headers.authorization
-  console.log('authorizationHeader:', authorizationHeader)
+  // console.log('authorizationHeader:', authorizationHeader)
   const authenticationToken : string = authorizationHeader?.split(' ')[1]
-  console.log('authenticationToken:', authenticationToken)
+  // console.log('authenticationToken:', authenticationToken)
 
   // Authenticate the request using a shared secret
   // TODO
 
   console.log('req.headers:\n', req.headers)
+  console.log('req.body:\n', req.body)
+  // console.log('req:\n', req)
 
-  // Register the pass
-  supabase
-      .from('registrations')
-      .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber }])
-      .then((result: any) => {
-        console.log('result:', result)
-        res.status(result.status).json({
-          status: result.status,
-          statusText: result.statusText
-        })
-      })
+  // // Register the pass
+  // supabase
+  //     .from('registrations')
+  //     .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber }])
+  //     .then((result: any) => {
+  //       console.log('result:', result)
+  //       res.status(result.status).json({
+  //         status: result.status,
+  //         statusText: result.statusText
+  //       })
+  //     })
+  res.status(201).json({
+    status: 201,
+    statusText: "Registration Successful"
+  })
 }

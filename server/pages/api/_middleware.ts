@@ -2,13 +2,13 @@ import type { NextFetchEvent, NextRequest } from 'next/server'
 import { config } from '../../utils/Config'
 
 export function middleware(req: NextRequest, event: NextFetchEvent) {
-  console.log('middleware')
+  // console.log('middleware')
 
   const pathName = req.nextUrl.pathname
   console.log('pathName:', pathName)
 
-  console.log('req.method:', req.method)
-  console.log('req.headers:\n', req.headers)
+  // console.log('req.method:', req.method)
+  // console.log('req.headers:\n', req.headers)
   
   // Perform Basic Auth on these paths:
   //   /api/pushNotification
