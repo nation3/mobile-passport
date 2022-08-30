@@ -111,18 +111,14 @@ export class Passes {
       const manifestFile: string = path.join(tmpDirPath, 'manifest.json')
       fs.writeFileSync(manifestFile, manifestObjectStringified)
 
-      const appleCertificatePEMLength : number = config.appleCertificatePEM.length
-      console.log('appleCertificatePEMLength:', appleCertificatePEMLength)
-      if (appleCertificatePEMLength > 100) {
-        // Create a PKCS#7 detached signature for the manifest that uses the private key of the
-        // pass identifier signing certificate.
-        const signatureBuffer: Buffer = AppleCryptoUtils.createSignature(
-          manifestObjectStringified
-        )
+      // Create a PKCS#7 detached signature for the manifest that uses the private key of the
+      // pass identifier signing certificate.
+      const signatureBuffer: Buffer = AppleCryptoUtils.createSignature(
+        manifestObjectStringified
+      )
 
-        // Add the signature to the top level of the pass bundle in a file called signature
-        fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
-      }
+      // Add the signature to the top level of the pass bundle in a file called signature
+      fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
 
       // Zip the resulting directory
       const zip = new AdmZip()
