@@ -7,6 +7,7 @@ import AdmZip from 'adm-zip'
 import console from 'console'
 import { ethers } from 'ethers'
 import { SupportedAlgorithm } from 'ethers/lib/utils'
+import { config } from './Config'
 
 export class Passes {
   /**
@@ -80,13 +81,11 @@ export class Passes {
         // https://developer.apple.com/documentation/walletpasses/adding_a_web_service_to_update_passes
 
         // Set the web service URL
-        console.log('process.env.APPLE_WEB_SERVICE_URL:', process.env.APPLE_WEB_SERVICE_URL)
-        passJson.webServiceURL = process.env.APPLE_WEB_SERVICE_URL
+        passJson.webServiceURL = config.appleWebServiceUrl
 
         // Set the shared secret (authentication token) to be used with the web service
         const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
-        console.log('process.env.APPLE_AUTH_TOKEN_HMAC_SEED:', process.env.APPLE_AUTH_TOKEN_HMAC_SEED)
-        const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(String(process.env.APPLE_AUTH_TOKEN_HMAC_SEED))
+        const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(config.appleAuthTokenHmacSeed)
         const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
         const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
         passJson.authenticationToken = hmac
