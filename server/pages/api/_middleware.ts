@@ -8,6 +8,7 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
   console.log('pathName:', pathName)
 
   console.log('req.method:', req.method)
+  console.log('req:\n', req)
   console.log('req.body:\n', req.body)
   
   // Perform Basic Auth on these paths:
