@@ -5,6 +5,9 @@ import os from 'os'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
+import { ethers } from 'ethers'
+import { SupportedAlgorithm } from 'ethers/lib/utils'
+import { config } from './Config'
 
 export class Passes {
   /**
@@ -12,6 +15,7 @@ export class Passes {
    */
   static downloadPass(
     platform: Platform,
+    templateVersion: number,
     passportID: string,
     timestamp: number,
     holderAddress: any,
@@ -20,6 +24,7 @@ export class Passes {
     console.log('downloadPass')
 
     console.log('platform:', platform)
+    console.log('templateVersion:', templateVersion)
     console.log('passportID:', passportID)
     console.log('holderAddress:', holderAddress)
     console.log('holderENSName:', holderENSName)
@@ -32,7 +37,6 @@ export class Passes {
       console.log('tmpDirPath:', tmpDirPath)
 
       // Copy the template files to the temporary directory
-      const templateVersion: number = 1
       const templateVersionDir: string = path.join(
         process.cwd(),
         `template-versions/apple/${templateVersion}`
@@ -71,6 +75,21 @@ export class Passes {
       passJson.serialNumber = passportID
       passJson.storeCard.headerFields[0].value = passportID
       passJson.storeCard.backFields[2].value = passportID
+
+      if ((platform == Platform.Apple) && (templateVersion >= 2)) {
+        // Add a web service to update the pass
+        // https://developer.apple.com/documentation/walletpasses/adding_a_web_service_to_update_passes
+
+        // Set the web service URL
+        passJson.webServiceURL = config.appleWebServiceUrl
+
+        // Set the shared secret (authentication token) to be used with the web service
+        const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
+        const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(config.appleAuthTokenHmacSeed)
+        const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
+        const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
+        passJson.authenticationToken = hmac
+      }
 
       // Set the passport type (e.g. "GENESIS")
       const passportNumber: number = Number(passportID)

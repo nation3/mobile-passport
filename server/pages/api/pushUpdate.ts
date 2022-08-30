@@ -8,7 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Push update of new template
   console.log('Pushing template update...')
 
-  const templateFormatVersion: number = 1
+  const templateFormatVersion: number = 2
   const updateSent: boolean = Passes.pushUpdate(templateFormatVersion)
 
   res
