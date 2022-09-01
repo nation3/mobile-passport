@@ -26,6 +26,13 @@ npm run dev
 
 http://localhost:3000
 
+## Unit Testing
+
+Run unit tests:
+```
+npm run test
+```
+
 ## Create production build
 
 ```
