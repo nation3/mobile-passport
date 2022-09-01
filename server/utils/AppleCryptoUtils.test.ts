@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './.env.local.goerli' })
 import { describe, expect, test } from '@jest/globals'
 import { AppleCryptoUtils } from './AppleCryptoUtils'
 
