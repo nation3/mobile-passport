@@ -20,6 +20,7 @@ export const config = {
   
   appleAuthTokenHmacSeed: getEnvironmentVariable('APPLE_AUTH_TOKEN_HMAC_SEED'),
   appleWebServiceUrl: getEnvironmentVariable('APPLE_WEB_SERVICE_URL'),
+  appleCACertificatePEM: getEnvironmentVariable('APPLE_CA_CERTIFICATE_PEM'),
   appleCertificatePEM: getEnvironmentVariable('APPLE_CERTIFICATE_PEM'),
   appleCertificateKey: getEnvironmentVariable('APPLE_CERTIFICATE_KEY'),
 
