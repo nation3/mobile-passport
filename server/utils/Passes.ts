@@ -134,7 +134,6 @@ export class Passes {
       const signatureBuffer: Buffer = AppleCryptoUtils.createSignature(
         manifestObjectStringified
       )
-      console.log('signatureBuffer:', signatureBuffer)
 
       // Add the signature to the top level of the pass bundle in a file called signature
       fs.writeFileSync(path.join(tmpDirPath, 'signature'), signatureBuffer)
