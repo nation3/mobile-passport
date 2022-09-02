@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "cy": "cypress open",
+    "cy:headless": "cypress run",
+    "e2e": "start-server-and-test dev http://localhost:3000 cy",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 cy:headless"
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.6",
@@ -28,6 +32,8 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/node-forge": "^1.0.2",
-    "eslint-config-prettier": "^8.5.0"
+    "cypress": "^10.6.0",
+    "eslint-config-prettier": "^8.5.0",
+    "start-server-and-test": "^1.14.0"
   }
 }

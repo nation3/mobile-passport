@@ -26,6 +26,18 @@ npm run dev
 
 http://localhost:3000
 
+## Integration Testing
+
+Run the integration tests:
+```
+npm run cy
+```
+
+Run the integration tests headlessly:
+```
+npm run cy:headless
+```
+
 ## Create production build
 
 ```
