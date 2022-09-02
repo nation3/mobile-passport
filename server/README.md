@@ -8,6 +8,13 @@ Next.js server for REST API.
 npm install
 ```
 
+## Unit Testing
+
+Run unit tests:
+```
+npm run test
+```
+
 ## Add the file with local environment variables
 
 ```
@@ -26,11 +33,16 @@ npm run dev
 
 http://localhost:3000
 
-## Unit Testing
+## Integration Testing
 
-Run unit tests:
+Run the integration tests:
 ```
-npm run test
+npm run cy
+```
+
+Run the integration tests headlessly:
+```
+npm run cy:headless
 ```
 
 ## Create production build

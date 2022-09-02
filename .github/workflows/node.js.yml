@@ -35,3 +35,5 @@ jobs:
     - run: npm run build
     - run: npm run lint
     - run: npm run test
+    - run: cp .env.local.goerli .env.local
+    - run: npm run e2e:headless
