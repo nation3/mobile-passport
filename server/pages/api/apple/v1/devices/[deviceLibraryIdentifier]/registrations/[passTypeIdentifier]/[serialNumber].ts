@@ -14,7 +14,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Expected request method:  POST
     console.log('req.method:', req.method)
     if (req.method != 'POST') {
-      console.error('Wrong request method: ' + req.method)
       throw new Error('Wrong request method: ' + req.method)
     }
 
@@ -32,6 +31,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('authorizationHeader:', authorizationHeader)
     const authenticationToken : string = authorizationHeader?.split(' ')[1]
     console.log('authenticationToken:', authenticationToken)
+    if (!authenticationToken || String(authenticationToken).trim().length == 0) {
+      throw new Error('Missing/empty header: authorization')
+    }
 
     // Authenticate the request using a shared secret
     // TODO
@@ -43,6 +45,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     //   }
     const pushToken : string = req.body.pushToken
     console.log('pushToken:', pushToken)
+    if (!pushToken || String(pushToken).trim().length == 0) {
+      throw new Error('Missing/empty body: pushToken')
+    }
 
     // Register the pass
     supabase
