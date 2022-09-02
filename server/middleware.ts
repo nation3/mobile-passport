@@ -42,7 +42,7 @@ const verifyAuth = (authorizationHeader: string | null): boolean => {
     // const basicAuthPassword = authConfig.basicAuthPassword
 
     // Compare credentials
-    if (username === basicAuthUsername || password === basicAuthPassword) {
+    if (username === basicAuthUsername && password === basicAuthPassword) {
       return true
     }
   }

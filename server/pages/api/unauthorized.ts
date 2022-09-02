@@ -6,5 +6,5 @@ export default function handler(
 ) {
     res.statusCode = 401
     res.setHeader('WWW-authenticate', 'Basic realm="Secure Area"')
-    res.end(`Authentication Required.`)
+    res.end(`Unauthorized - Authentication Required.`)
 }
