@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
-// req = HTTP incoming message, res = HTTP server response
+/**
+ * Register a Pass for Update Notifications. Implementation of 
+ * https://developer.apple.com/documentation/walletpasses/register_a_pass_for_update_notifications
+ */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('[serialNumber].js')
 
@@ -26,7 +29,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Extract authentication token from the "authorization" header
     // Expected format:
-    //   authorization: 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
+    //   'Authorization': 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
     const authorizationHeader : any = req.headers.authorization
     console.log('authorizationHeader:', authorizationHeader)
     const authenticationToken : string = authorizationHeader?.split(' ')[1]
@@ -55,14 +58,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber }])
         .then((result: any) => {
           console.log('result:', result)
-          res.status(result.status).json({
-            status: result.status,
-            statusText: result.statusText
-          })
+          if (result.error) {
+            res.status(401).json({
+              error: result.error.message
+            })
+            return
+          } else {
+            res.status(201).json({
+              message: 'Registration Successful'
+            })
+          }
         })
   } catch (err: any) {
     console.error('[serialNumber].js err:\n', err)
-    res.status(400).json({
+    res.status(401).json({
       error: err.message
     })
   }
