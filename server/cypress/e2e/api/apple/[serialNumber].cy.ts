@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 describe('Register a Pass for Update Notifications', () => {
 
   it('error when wrong request method (GET instead of POST)', () => {
@@ -63,11 +65,27 @@ describe('Register a Pass for Update Notifications', () => {
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(401)
-      expect(JSON.stringify(response.body)).to.contain('duplicate key value violates unique constraint')
+      expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: duplicate key value violates unique constraint')
     })
   })
 
-  // TODO: test success (HTTP 201)
+  it('success when deviceLibraryIdentifier is not already registered', () => {
+    const randomDeviceLibraryIdentifier : string = crypto.randomBytes(32).toString('hex')
+    cy.request({
+      method: 'POST',
+      url: '/api/apple/v1/devices/' + randomDeviceLibraryIdentifier + '/registrations/pass.org.passport.nation3/333',
+      headers: {
+        'Authorization': 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
+      },
+      body: {
+        pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
+      },
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(201)
+      expect(JSON.stringify(response.body)).to.contain('Registration Successful')
+    })
+  })
 })
 
 export {}

@@ -60,7 +60,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           console.log('result:', result)
           if (result.error) {
             res.status(401).json({
-              error: result.error.message
+              error: 'Request Not Authorized: ' + result.error.message
             })
             return
           } else {
