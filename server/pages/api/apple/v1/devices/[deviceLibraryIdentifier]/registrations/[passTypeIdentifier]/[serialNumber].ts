@@ -27,7 +27,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('passTypeIdentifier:', passTypeIdentifier)
     console.log('serialNumber:', serialNumber)
 
-    // Extract authentication token from the "authorization" header
+    // Extract authentication token from the "Authorization" header
     // Expected format:
     //   'Authorization': 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
     const authorizationHeader : any = req.headers.authorization
@@ -35,7 +35,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const authenticationToken : string = authorizationHeader?.split(' ')[1]
     console.log('authenticationToken:', authenticationToken)
     if (!authenticationToken || String(authenticationToken).trim().length == 0) {
-      throw new Error('Missing/empty header: authorization')
+      throw new Error('Missing/empty header: Authorization')
     }
 
     // Authenticate the request using a shared secret
@@ -72,7 +72,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   } catch (err: any) {
     console.error('[serialNumber].js err:\n', err)
     res.status(401).json({
-      error: err.message
+      error: 'Request Not Authorized: ' + err.message
     })
   }
 }

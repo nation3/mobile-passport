@@ -9,7 +9,7 @@ describe('Register a Pass for Update Notifications', () => {
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(401)
-      expect(JSON.stringify(response.body)).to.contain('Wrong request method')
+      expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: Wrong request method')
     })
   })
 
@@ -20,7 +20,7 @@ describe('Register a Pass for Update Notifications', () => {
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(401)
-      expect(JSON.stringify(response.body)).to.contain('Missing/empty header: authorization')
+      expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: Missing/empty header: Authorization')
     })
   })
 
@@ -34,7 +34,7 @@ describe('Register a Pass for Update Notifications', () => {
   //     failOnStatusCode: false
   //   }).then((response) => {
   //     expect(response.status).to.eq(401)
-  //     expect(JSON.stringify(response.body)).to.contain('Invalid header: authorization')
+  //     expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: Invalid header: Authorization')
   //   })
   // })
 
@@ -48,7 +48,7 @@ describe('Register a Pass for Update Notifications', () => {
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(401)
-      expect(JSON.stringify(response.body)).to.contain('Missing/empty body: pushToken')
+      expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: Missing/empty body: pushToken')
     })
   })
 
