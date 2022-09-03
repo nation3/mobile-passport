@@ -1,0 +1,74 @@
+{
+  "organizationName": "Nation3",
+  "passTypeIdentifier": "pass.org.passport.nation3",
+  "serialNumber": "not yet :)",
+  "webServiceURL": "<webServiceURL>",
+  "authenticationToken": "<authenticationToken>",
+  "description": "Nation3 passports for Nation3 citizens.",
+  "teamIdentifier": "6GU2F645A4",
+  "backgroundColor": "rgb(255,255,255)",
+  "foregroundColor": "rgb(34, 64, 89)",
+  "labelColor": "rgb(115, 149, 178)",
+  "formatVersion": 2,
+  "storeCard": {
+    "headerFields": [
+      {
+        "key": "id",
+        "value": "not yet :)",
+        "label": "Number"
+      }
+    ],
+    "primaryFields": [],
+    "secondaryFields": [
+      {
+        "key": "holder",
+        "label": "Passport Holder",
+        "value": "luisc.eth"
+      },
+      {
+        "key": "issueDate",
+        "label": "Issue Date",
+        "value": "2022-05-30"
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "value": "GENESIS"
+      }
+    ],
+    "backFields": [
+      {
+        "key": "backAbout",
+        "label": "About Nation3 Genesis Passports",
+        "value": "Nation3 is a sovereign cloud nation. We are building a community of like-minded people creating a nation on the cloud. Only 420 Nation3 Genesis Passports will ever exist, and they mark a unique collective of the first ever Nation3 citizens."
+      },
+      {
+        "key": "backIssueDate",
+        "label": "Passport Issue Date",
+        "value": "2022-05-30"
+      },
+      {
+        "key": "backId",
+        "value": "not yet :)",
+        "label": "Passport Number"
+      },
+      {
+        "key": "backHolder",
+        "label": "Passport Holder",
+        "value": "luisc.eth"
+      },
+      {
+        "key": "backIssuer",
+        "label": "Passport Issuer",
+        "value": "Nation3"
+      }
+    ]
+  },
+  "barcodes": [
+    {
+      "message": "https://nation3.org",
+      "format": "PKBarcodeFormatQR",
+      "messageEncoding": "iso-8859-1"
+    }
+  ]
+}
