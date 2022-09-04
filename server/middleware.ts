@@ -4,8 +4,8 @@ import { config } from './utils/Config'
 
 export function middleware(req: NextRequest, event: NextFetchEvent) {
   const pathName = req.nextUrl.pathname
-  console.log(`_middleware.ts [${req.method}] ${pathName}`)
-  
+  console.log('pathName:', pathName)
+
   // Perform Basic Auth on these paths:
   //   /api/pushNotification
   //   /api/pushUpdate
