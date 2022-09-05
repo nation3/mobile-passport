@@ -6,7 +6,7 @@ import { supabase } from '../../../../../../../../utils/SupabaseClient'
  * https://developer.apple.com/documentation/walletpasses/register_a_pass_for_update_notifications
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('[serialNumber].js')
+  console.log('[serialNumber].ts')
 
   // Expected URL format:
   //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]/[serialNumber]
@@ -70,7 +70,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           }
         })
   } catch (err: any) {
-    console.error('[serialNumber].js err:\n', err)
+    console.error('[serialNumber].ts err:\n', err)
     res.status(401).json({
       error: 'Request Not Authorized: ' + err.message
     })
