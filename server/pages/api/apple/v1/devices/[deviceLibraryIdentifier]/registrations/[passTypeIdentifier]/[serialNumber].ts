@@ -55,7 +55,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Register the pass
     supabase
         .from('registrations')
-        .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber }])
+        .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber, push_token: pushToken }])
         .then((result: any) => {
           console.log('result:', result)
           if (result.error) {
