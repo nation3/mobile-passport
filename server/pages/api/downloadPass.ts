@@ -97,7 +97,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 console.log('ensName:', ensName)
 
                 // Populate the pass template
-                const templateVersion: number = 2
+                const templateVersion: number = config.appleTemplateVersion
                 const filePath: string = Passes.downloadPass(
                   Platform.Apple,
                   templateVersion,
