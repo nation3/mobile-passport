@@ -7,6 +7,8 @@
     "build": "next build",
     "lint": "next lint",
     "start": "next start",
+    "test": "jest",
+    "test:coverage": "jest --coverage --collectCoverageFrom=./utils/**",
     "cy": "cypress open",
     "cy:headless": "cypress run",
     "e2e": "start-server-and-test dev http://localhost:3000 cy",
@@ -33,7 +35,9 @@
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/node-forge": "^1.0.2",
     "cypress": "^10.6.0",
+    "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
-    "start-server-and-test": "^1.14.0"
+    "start-server-and-test": "^1.14.0",
+    "ts-jest": "^28.0.8"
   }
 }
