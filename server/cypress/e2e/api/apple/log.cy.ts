@@ -28,3 +28,5 @@ describe('Log a Message', () => {
     })
   })
 })
+
+export {}
