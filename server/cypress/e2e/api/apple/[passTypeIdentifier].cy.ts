@@ -14,7 +14,7 @@ describe('Get the List of Updatable Passes', () => {
   it('204 when unknown deviceLibraryIdentifier', () => {
     cy.request({
       method: 'GET',
-      url: '/api/apple/v1/devices/b00e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3',
+      url: '/api/apple/v1/devices/cypress_b00e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3',
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(204)
@@ -24,7 +24,7 @@ describe('Get the List of Updatable Passes', () => {
   it('200 when existing deviceLibraryIdentifier', () => {
     cy.request({
       method: 'GET',
-      url: '/api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3',
+      url: '/api/apple/v1/devices/cypress_b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3',
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(200)

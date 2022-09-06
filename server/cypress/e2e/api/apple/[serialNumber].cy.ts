@@ -55,7 +55,7 @@ describe('Register a Pass for Update Notifications', () => {
   it('error when deviceLibraryIdentifier is already registered', () => {
     cy.request({
       method: 'POST',
-      url: '/api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3/333',
+      url: '/api/apple/v1/devices/cypress_b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3/333',
       headers: {
         'Authorization': 'ApplePass 0x3fbeb3ae33af3fb33f3d33333303d333a333aff33f3133efbc3330333adb333a'
       },
