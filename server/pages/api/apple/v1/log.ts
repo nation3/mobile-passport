@@ -16,9 +16,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error('Wrong request method: ' + req.method)
     }
 
-    // Extract log entries from the request body (application/json)
+    // Display the log entries in the request body (application/json)
     console.log('req.body:', req.body)
-    // TODO
 
     res.status(200).json({
       message: 'OK'
