@@ -9,8 +9,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('[passTypeIdentifier].ts')
 
   // Expected URL format:
-  //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]?passesUpdatedSince=[passesUpdatedSince]
-  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=0
+  //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]
+  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3
   console.log('req.url:', req.url)
 
   try {
@@ -26,15 +26,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('deviceLibraryIdentifier:', deviceLibraryIdentifier)
     console.log('passesUpdatedSince:', passesUpdatedSince)
 
-    // Validate the passesUpdatedSince parameter
-    if (!passesUpdatedSince || String(passesUpdatedSince).trim().length == 0) {
-      throw new Error('Missing/empty parameter: passesUpdatedSince')
-    } 
-
     // Lookup the serial numbers for the given device
     supabase
         .from('registrations')
-        .select('serial_number').eq('device_library_identifier', deviceLibraryIdentifier)
+        .select('serial_number')
+        .eq('device_library_identifier', deviceLibraryIdentifier)
         .then((result: any) => {
           console.log('result:', result)
           if (result.error) {
@@ -57,7 +53,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
               // Return matching passes (serial numbers)
               res.status(200).json({
                 serialNumbers: serialNumbers,
-                lastUpdated: 0 // TODO
+                lastUpdated: 'TODO'
               })
             }
           }

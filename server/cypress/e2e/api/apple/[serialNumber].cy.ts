@@ -70,7 +70,7 @@ describe('Register a Pass for Update Notifications', () => {
   })
 
   it('success when deviceLibraryIdentifier is not already registered', () => {
-    const randomDeviceLibraryIdentifier : string = crypto.randomBytes(32).toString('hex')
+    const randomDeviceLibraryIdentifier : string = 'cypress_' + crypto.randomBytes(16).toString('hex')
     cy.request({
       method: 'POST',
       url: '/api/apple/v1/devices/' + randomDeviceLibraryIdentifier + '/registrations/pass.org.passport.nation3/333',
