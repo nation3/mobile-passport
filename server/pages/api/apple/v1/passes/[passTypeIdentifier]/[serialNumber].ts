@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { Platform } from '../../../../../../interfaces'
+import { config } from '../../../../../../utils/Config'
+import { Passes } from '../../../../../../utils/Passes'
 import { supabase } from '../../../../../../utils/SupabaseClient'
+import fs from 'fs'
 
 /**
  * Send an Updated Pass.  Implementation of 
@@ -40,11 +44,33 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Authenticate the request using a shared secret
     // TODO
 
+    // Populate the pass template
+    const templateVersion: number = config.appleTemplateVersion
+    const passportID: string = String(serialNumber)
+    const timestamp: number = 0 // TODO
+    const address: string = '<address>' // TODO
+    const ensName: string = '<ensName>' // TODO
+    const filePath: string = Passes.downloadPass(
+      Platform.Apple,
+      templateVersion,
+      passportID,
+      timestamp,
+      address,
+      ensName
+    )
+    console.log('filePath:', filePath)
+
     // Return the updated pass
-    // TODO
-    res.status(200).json({
-      message: 'OK'
-    })
+    const fileName = `passport_${address}_v${templateVersion}.pkpass`
+    console.log('fileName:', fileName)
+    res.setHeader(
+      'Content-Disposition',
+      `attachment;filename=${fileName}`
+    )
+    res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+    res.setHeader('Content-Length', fs.statSync(filePath).size)
+    const readStream = fs.createReadStream(filePath)
+    readStream.pipe(res)
   } catch (err: any) {
     console.error('[serialNumber].ts err:\n', err)
     res.status(401).json({
