@@ -19,7 +19,7 @@ export class Passes {
     platform: Platform,
     templateVersion: number,
     passportID: string,
-    timestamp: number,
+    issueDateTimestamp: number,
     holderAddress: any,
     holderENSName: string
   ): string {
@@ -28,6 +28,7 @@ export class Passes {
     console.log('platform:', platform)
     console.log('templateVersion:', templateVersion)
     console.log('passportID:', passportID)
+    console.log('issueDateTimestamp:', issueDateTimestamp)
     console.log('holderAddress:', holderAddress)
     console.log('holderENSName:', holderENSName)
 
@@ -102,13 +103,13 @@ export class Passes {
       }
 
       // Set the passport issue date
-      const timestampInMilliseconds: number = timestamp * 1000
-      const timeISOString: string = new Date(timestampInMilliseconds)
+      const issueDateTimestampInMilliseconds: number = issueDateTimestamp * 1000
+      const issueDateISOString: string = new Date(issueDateTimestampInMilliseconds)
         .toISOString()
         .substring(0, 10)
-      console.log('timeISOString:', timeISOString)
-      passJson.storeCard.secondaryFields[1].value = timeISOString
-      passJson.storeCard.backFields[1].value = timeISOString
+      console.log('issueDateISOString:', issueDateISOString)
+      passJson.storeCard.secondaryFields[1].value = issueDateISOString
+      passJson.storeCard.backFields[1].value = issueDateISOString
 
       console.log(
         'JSON.stringify(passJson) (after field population):\n',
