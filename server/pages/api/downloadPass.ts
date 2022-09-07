@@ -98,7 +98,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
                 // Populate the pass template
                 const templateVersion: number = config.appleTemplateVersion
-                const filePath: string = Passes.downloadPass(
+                const filePath: string = Passes.generatePass(
                   Platform.Apple,
                   templateVersion,
                   passportID,

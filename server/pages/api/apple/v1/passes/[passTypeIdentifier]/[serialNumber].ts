@@ -50,7 +50,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const timestamp: number = 0 // TODO
     const address: string = '<address>' // TODO
     const ensName: string = '<ensName>' // TODO
-    const filePath: string = Passes.downloadPass(
+    const filePath: string = Passes.generatePass(
       Platform.Apple,
       templateVersion,
       passportID,

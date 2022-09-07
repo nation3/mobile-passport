@@ -11,9 +11,11 @@ import { config } from './Config'
 
 export class Passes {
   /**
-   * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
+   * Triggers the generation of a pass file for a given platform (currently Apple or Google).
+   * 
+   * @return The file path to the pass.
    */
-  static downloadPass(
+  static generatePass(
     platform: Platform,
     templateVersion: number,
     passportID: string,
@@ -21,7 +23,7 @@ export class Passes {
     holderAddress: any,
     holderENSName: string
   ): string {
-    console.log('downloadPass')
+    console.log('generatePass')
 
     console.log('platform:', platform)
     console.log('templateVersion:', templateVersion)
