@@ -46,7 +46,9 @@ describe('/api/downloadPass', () => {
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(200)
-      // expect(JSON.stringify(response.body)).to.contain('Invalid signature')
+      expect(response.headers).to.include({
+        'content-type': 'application/vnd.apple.pkpass'
+      })
     })
   })
 })
