@@ -174,12 +174,12 @@ export class Passes {
   /**
    * Pushes an updated template to all the passes.
    */
-  static pushUpdate(templateFormatVersion: number): boolean {
+  static pushUpdate(templateVersion: number): boolean {
     console.log('pushUpdate')
 
-    console.log('templateFormatVersion:', templateFormatVersion)
+    console.log('templateVersion:', templateVersion)
 
-    // Lookup template file matching the templateFormatVersion
+    // Lookup template file matching the templateVersion
     // TODO
 
     // Get the list of registered passes
