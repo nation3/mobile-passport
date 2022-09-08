@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { config } from '../../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
 /**
@@ -57,6 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .from('registrations')
         .insert([{
           device_library_identifier: deviceLibraryIdentifier,
+          template_version: config.appleTemplateVersion,
           serial_number: serialNumber,
           push_token: pushToken
         }])
