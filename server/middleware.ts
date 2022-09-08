@@ -39,7 +39,7 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
     console.log('wrongCredentials:', wrongCredentials)
 
     if (!authorizationHeader || wrongCredentials) {
-      // Perform Basic Auth
+      // Redirect
       req.nextUrl.pathname = '/api/unauthorized'
       return NextResponse.rewrite(req.nextUrl)
     }
