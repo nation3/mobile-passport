@@ -45,13 +45,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // TODO
 
     // Populate the pass template
+    const platform: Platform = Platform.Apple
     const templateVersion: number = config.appleTemplateVersion
     const passportID: string = String(serialNumber)
     const issueDateTimestamp: number = 0 // TODO
     const address: string = '<address>' // TODO
     const ensName: string = '<ensName>' // TODO
     const filePath: string = Passes.generatePass(
-      Platform.Apple,
+      platform,
       templateVersion,
       passportID,
       issueDateTimestamp,

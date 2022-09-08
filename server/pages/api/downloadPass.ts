@@ -7,6 +7,7 @@ import PassportIssuer from '../../abis/PassportIssuer.json'
 import Passport from '../../abis/Passport.json'
 import { ethers } from 'ethers'
 import { config } from '../../utils/Config'
+import { supabase } from '../../utils/SupabaseClient'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -96,10 +97,28 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
                 console.log('ensName:', ensName)
 
-                // Populate the pass template
+                // Store pass details (needed for sending updated passes in the future)
+                const platform: Platform = Platform.Apple
                 const templateVersion: number = config.appleTemplateVersion
+                const download = {
+                  platform: Platform[platform],
+                  template_version: templateVersion,
+                  passport_id: passportID,
+                  issue_date: new Date(timestamp * 1000),
+                  address: address,
+                  ens_name: ensName
+                }
+                console.log('download:\n', download)
+                supabase
+                    .from('downloads')
+                    .insert(download)
+                    .then((result: any) => {
+                      console.log('then result:\n', result)
+                    })
+
+                // Populate the pass template
                 const filePath: string = Passes.generatePass(
-                  Platform.Apple,
+                  platform,
                   templateVersion,
                   passportID,
                   timestamp,
