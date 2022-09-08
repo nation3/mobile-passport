@@ -1,5 +1,6 @@
 import type { NextFetchEvent, NextRequest } from 'next/server'
-import { config } from '../../utils/Config'
+import { NextResponse } from 'next/server'
+import { config } from './utils/Config'
 
 export function middleware(req: NextRequest, event: NextFetchEvent) {
   const pathName = req.nextUrl.pathname
@@ -38,13 +39,9 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
     console.log('wrongCredentials:', wrongCredentials)
 
     if (!authorizationHeader || wrongCredentials) {
-      // Perform Basic Auth
-      return new Response('401 Unauthorized', {
-        status: 401,
-        headers: {
-          'WWW-Authenticate': 'Basic realm="Secure Area"',
-        },
-      })
+      // Redirect
+      req.nextUrl.pathname = '/api/unauthorized'
+      return NextResponse.rewrite(req.nextUrl)
     }
   }
 }
