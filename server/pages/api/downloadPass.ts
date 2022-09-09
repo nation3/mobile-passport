@@ -114,30 +114,35 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     .insert(download)
                     .then((result: any) => {
                       console.log('then result:\n', result)
+                      if (result.error) {
+                        res.status(500).json({
+                          error: 'Internal Server Error: ' + result.error.message
+                        })
+                      } else {
+                        // Populate the pass template
+                        const filePath: string = Passes.generatePass(
+                          platform,
+                          templateVersion,
+                          passportID,
+                          timestamp,
+                          address,
+                          ensName
+                        )
+                        console.log('filePath:', filePath)
+        
+                        // Serve the pass download to the user
+                        const fileName = `passport_${address}_v${templateVersion}.pkpass`
+                        console.log('fileName:', fileName)
+                        res.setHeader(
+                          'Content-Disposition',
+                          `attachment;filename=${fileName}`
+                        )
+                        res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                        res.setHeader('Content-Length', fs.statSync(filePath).size)
+                        const readStream = fs.createReadStream(filePath)
+                        readStream.pipe(res)
+                      }
                     })
-
-                // Populate the pass template
-                const filePath: string = Passes.generatePass(
-                  platform,
-                  templateVersion,
-                  passportID,
-                  timestamp,
-                  address,
-                  ensName
-                )
-                console.log('filePath:', filePath)
-
-                // Serve the pass download to the user
-                const fileName = `passport_${address}_v${templateVersion}.pkpass`
-                console.log('fileName:', fileName)
-                res.setHeader(
-                  'Content-Disposition',
-                  `attachment;filename=${fileName}`
-                )
-                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                res.setHeader('Content-Length', fs.statSync(filePath).size)
-                const readStream = fs.createReadStream(filePath)
-                readStream.pipe(res)
               })
           })
           .catch((error: any) => {

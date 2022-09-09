@@ -44,32 +44,52 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Authenticate the request using a shared secret
     // TODO
 
-    // Populate the pass template
-    const platform: Platform = Platform.Apple
-    const templateVersion: number = config.appleTemplateVersion
-    const passportID: string = String(serialNumber)
-    const issueDateTimestamp: number = 0 // TODO
-    const address: string = '<address>' // TODO
-    const ensName: string = '<ensName>' // TODO
-    const filePath: string = Passes.generatePass(
-      platform,
-      templateVersion,
-      passportID,
-      issueDateTimestamp,
-      address,
-      ensName
-    )
-    console.log('filePath:', filePath)
+    // Lookup the pass details stored in the downloads table when 
+    // the pass for this address was last downloaded.
+    supabase
+        .from('downloads')
+        .select('*')
+        .eq('passport_id', serialNumber)
+        .order('id', { ascending: false })
+        .limit(1)
+        .single()
+        .then((result: any) => {
+          console.log('result:', result)
 
-    // Return the updated pass
-    const fileName = `passport_${address}_v${templateVersion}.pkpass`
-    console.log('fileName:', fileName)
-    res.setHeader('Last-Modified', `v${config.appleTemplateVersion}`)
-    res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
-    res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-    res.setHeader('Content-Length', fs.statSync(filePath).size)
-    const readStream = fs.createReadStream(filePath)
-    readStream.pipe(res)
+          if (result.error) {
+            res.status(500).json({
+              error: 'Internal Server Error: ' + result.error.message
+            })
+          } else {
+            // Populate the pass template
+            const platform: Platform = Platform.Apple
+            const templateVersion: number = config.appleTemplateVersion
+            const passportID: string = String(serialNumber)
+            const issueDate: Date = new Date(result.data['issue_date'])
+            const issueDateTimestamp: number = Math.round(issueDate.getTime() / 1000)
+            const address: string = result.data['address']
+            const ensName: string = result.data['ens_name']
+            const filePath: string = Passes.generatePass(
+              platform,
+              templateVersion,
+              passportID,
+              issueDateTimestamp,
+              address,
+              ensName
+            )
+            console.log('filePath:', filePath)
+      
+            // Return the updated pass
+            const fileName = `passport_${address}_v${templateVersion}.pkpass`
+            console.log('fileName:', fileName)
+            res.setHeader('Last-Modified', `v${templateVersion}`)
+            res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+            res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+            res.setHeader('Content-Length', fs.statSync(filePath).size)
+            const readStream = fs.createReadStream(filePath)
+            readStream.pipe(res)
+          }
+        })
   } catch (err: any) {
     console.error('[serialNumber].ts err:\n', err)
     res.status(401).json({
