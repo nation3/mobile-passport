@@ -64,10 +64,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Return the updated pass
     const fileName = `passport_${address}_v${templateVersion}.pkpass`
     console.log('fileName:', fileName)
-    res.setHeader(
-      'Content-Disposition',
-      `attachment;filename=${fileName}`
-    )
+    res.setHeader('Last-Modified', `v${config.appleTemplateVersion}`)
+    res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
     res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
     res.setHeader('Content-Length', fs.statSync(filePath).size)
     const readStream = fs.createReadStream(filePath)

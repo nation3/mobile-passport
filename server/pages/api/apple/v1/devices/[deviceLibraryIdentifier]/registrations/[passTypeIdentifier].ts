@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { config } from '../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../utils/SupabaseClient'
 
 /**
@@ -9,8 +10,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('[passTypeIdentifier].ts')
 
   // Expected URL format:
-  //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]
-  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3
+  //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]?passesUpdatedSince=[previousLastUpdated]
+  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=v1
   console.log('req.url:', req.url)
 
   try {
@@ -53,7 +54,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
               // Return matching passes (serial numbers)
               res.status(200).json({
                 serialNumbers: serialNumbers,
-                lastUpdated: 'TODO'
+                lastUpdated: `v${config.appleTemplateVersion}`
               })
             }
           }
