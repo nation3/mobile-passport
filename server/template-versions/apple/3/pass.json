@@ -9,7 +9,7 @@
   "backgroundColor": "rgb(255,255,255)",
   "foregroundColor": "rgb(34, 64, 89)",
   "labelColor": "rgb(115, 149, 178)",
-  "formatVersion": 2,
+  "formatVersion": 1,
   "storeCard": {
     "headerFields": [
       {
@@ -61,6 +61,16 @@
         "key": "backIssuer",
         "label": "Passport Issuer",
         "value": "Nation3"
+      },
+      {
+        "key": "backLatestUpdateTitle",
+        "label": "Latest Nation3 Update",
+        "changeMessage": "%@",
+        "value": "..."
+      },
+      {
+        "key": "backLatestUpdateContent",
+        "value": "..."
       }
     ]
   },

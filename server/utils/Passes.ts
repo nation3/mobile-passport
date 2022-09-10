@@ -92,6 +92,12 @@ export class Passes {
         const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
         const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
         passJson.authenticationToken = hmac
+
+        if (templateVersion >= 3) {
+          // Set "Latest Nation3 Update" (title and content)
+          passJson.storeCard.backFields[5].value = 'N3GOV-16: All governance proposals must explain how they help advance the North Star metrics'
+          passJson.storeCard.backFields[6].value = 'This is very self-descriptive, but it\'s a nice add-on to Proposal: Set Nation3\'s North Star metrics. We have seen too many times how DAOs end up with endless bureaucracy because there\'s no room for execution amidst chaos and uncertainty. Therefore having a unified set of metrics to advance, and making all governance proposals adhere to advancing them, makes sense. This is the pull request to the governance proposals repo, and this is the specific change.'
+        }
       }
 
       // Set the passport type (e.g. "GENESIS")
