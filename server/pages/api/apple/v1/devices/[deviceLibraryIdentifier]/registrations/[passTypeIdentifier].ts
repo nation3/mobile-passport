@@ -65,12 +65,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                         error: 'Internal Server Error: ' + latest_updates_result.error.message
                       })
                     } else {
+                      // Return matching passes (serial numbers) and their modification time
                       const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
-                      
-                      // Return matching passes (serial numbers)
                       res.status(200).json({
                         serialNumbers: serialNumbers,
-                        lastUpdated: Math.round(latestUpdateDate.getTime() / 1000)
+                        lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
                       })
                     }
                   })

@@ -76,7 +76,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                   } else {
                     const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
                     const latestUpdateTitle: string = latest_updates_result.data['title']
-                    const latestUpdateContent: string = latest_updates_result.data['content'] + '\r\n\r\n' + config.appleWebServiceUrl 
+                    const latestUpdateContent: string = latest_updates_result.data['content'] + '\r\n\r\nwebServiceURL: ' + config.appleWebServiceUrl
 
                     // Populate the pass template
                     const platform: Platform = Platform.Apple

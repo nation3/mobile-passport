@@ -29,8 +29,8 @@ describe('Get the List of Updatable Passes', () => {
     }).then((response) => {
       expect(response.status).to.eq(200)
       expect(JSON.stringify(response.body)).to.contain('serialNumbers')
-      expect(JSON.stringify(response.body)).to.contain('lastUpdated')
       // TODO: verify serial number value(s)
+      expect(JSON.stringify(response.body)).to.contain('lastUpdated')
     })
   })
 
@@ -42,8 +42,8 @@ describe('Get the List of Updatable Passes', () => {
     }).then((response) => {
       expect(response.status).to.eq(200)
       expect(JSON.stringify(response.body)).to.contain('serialNumbers')
-      expect(JSON.stringify(response.body)).to.contain('lastUpdated')
       // TODO: verify serial number value(s)
+      expect(JSON.stringify(response.body)).to.contain('lastUpdated')
     })
   })
 })
