@@ -134,8 +134,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                                 })
                               } else {
                                 const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
-                                const latestUpdateTitle: string = result.data['title']
-                                const latestUpdateContent: string = result.data['content']
+                                const latestUpdateTitle: string = latest_updates_result.data['title']
+                                const latestUpdateContent: string = latest_updates_result.data['content']
 
                                 // Populate the pass template
                                 const filePath: string = Passes.generatePass(
