@@ -11,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Expected URL format:
   //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]?passesUpdatedSince=[previousLastUpdated]
-  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=v1
+  //   /api/apple/v1/devices/b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=1662541136
   console.log('req.url:', req.url)
 
   try {
@@ -51,11 +51,29 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
               // There are no matching passes
               res.status(204).end()
             } else {
-              // Return matching passes (serial numbers)
-              res.status(200).json({
-                serialNumbers: serialNumbers,
-                lastUpdated: `v${config.appleTemplateVersion}`
-              })
+              // Lookup the latest update and its timestamp
+              supabase
+                  .from('latest_updates')
+                  .select('*')
+                  .order('time', { ascending: false })
+                  .limit(1)
+                  .single()
+                  .then((latest_updates_result: any) => {
+                    console.log('latest_updates_result:', latest_updates_result)
+                    if (latest_updates_result.error) {
+                      res.status(500).json({
+                        error: 'Internal Server Error: ' + latest_updates_result.error.message
+                      })
+                    } else {
+                      const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
+                      
+                      // Return matching passes (serial numbers)
+                      res.status(200).json({
+                        serialNumbers: serialNumbers,
+                        lastUpdated: Math.round(latestUpdateDate.getTime() / 1000)
+                      })
+                    }
+                  })
             }
           }
         })

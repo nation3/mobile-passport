@@ -12,13 +12,17 @@ test('generatePass - Apple v1', () => {
   const issueDateTimestamp: number = 1662541136 // September 7, 2022 8:58:56 AM
   const address: string = '0x394b00B5De4E6f30292aCaC37f810Dd0672E211E'
   const ensName: string = 'vitalik.eth'
+  const latestUpdateTitle: string = 'N3GOV-15: Set Nation3\’s North Star metrics'
+  const latestUpdateContent: string = 'A North Star metric is paramount since it aligns everyone in the nation towards a particular, measurable goal.'
   const filePath: string = Passes.generatePass(
     platform,
     templateVersion,
     passportID,
     issueDateTimestamp,
     address,
-    ensName
+    ensName,
+    latestUpdateTitle,
+    latestUpdateContent
   )
   expect(filePath).toContain('passport_0x394b00B5De4E6f30292aCaC37f810Dd0672E211E.pkpass')
   expect(fs.existsSync(filePath)).toBe(true)
@@ -31,13 +35,17 @@ test('generatePass - Apple v2', () => {
   const issueDateTimestamp: number = 1662541136 // September 7, 2022 8:58:56 AM
   const address: string = '0x394b00B5De4E6f30292aCaC37f810Dd0672E211E'
   const ensName: string = 'vitalik.eth'
+  const latestUpdateTitle: string = 'N3GOV-15: Set Nation3\’s North Star metrics'
+  const latestUpdateContent: string = 'A North Star metric is paramount since it aligns everyone in the nation towards a particular, measurable goal.'
   const filePath: string = Passes.generatePass(
     platform,
     templateVersion,
     passportID,
     issueDateTimestamp,
     address,
-    ensName
+    ensName,
+    latestUpdateTitle,
+    latestUpdateContent
   )
   expect(filePath).toContain('passport_0x394b00B5De4E6f30292aCaC37f810Dd0672E211E.pkpass')
   expect(fs.existsSync(filePath)).toBe(true)

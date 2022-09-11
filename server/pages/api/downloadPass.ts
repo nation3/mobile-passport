@@ -119,28 +119,48 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                           error: 'Internal Server Error: ' + result.error.message
                         })
                       } else {
-                        // Populate the pass template
-                        const filePath: string = Passes.generatePass(
-                          platform,
-                          templateVersion,
-                          passportID,
-                          timestamp,
-                          address,
-                          ensName
-                        )
-                        console.log('filePath:', filePath)
-        
-                        // Serve the pass download to the user
-                        const fileName = `passport_${address}_v${templateVersion}.pkpass`
-                        console.log('fileName:', fileName)
-                        res.setHeader(
-                          'Content-Disposition',
-                          `attachment;filename=${fileName}`
-                        )
-                        res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                        res.setHeader('Content-Length', fs.statSync(filePath).size)
-                        const readStream = fs.createReadStream(filePath)
-                        readStream.pipe(res)
+                        // Lookup the latest update and its timestamp
+                        supabase
+                            .from('latest_updates')
+                            .select('*')
+                            .order('time', { ascending: false })
+                            .limit(1)
+                            .single()
+                            .then((latest_updates_result: any) => {
+                              console.log('latest_updates_result:', latest_updates_result)
+                              if (latest_updates_result.error) {
+                                res.status(500).json({
+                                  error: 'Internal Server Error: ' + latest_updates_result.error.message
+                                })
+                              } else {
+                                const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
+                                const latestUpdateTitle: string = result.data['title']
+                                const latestUpdateContent: string = result.data['content']
+
+                                // Populate the pass template
+                                const filePath: string = Passes.generatePass(
+                                  platform,
+                                  templateVersion,
+                                  passportID,
+                                  timestamp,
+                                  address,
+                                  ensName,
+                                  latestUpdateTitle,
+                                  latestUpdateContent
+                                )
+                                console.log('filePath:', filePath)
+                
+                                // Serve the pass download to the user
+                                const fileName = `passport_${address}_v${templateVersion}.pkpass`
+                                console.log('fileName:', fileName)
+                                res.setHeader('Last-Modified', Math.round(latestUpdateDate.getTime() / 1000))
+                                res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                                res.setHeader('Content-Length', fs.statSync(filePath).size)
+                                const readStream = fs.createReadStream(filePath)
+                                readStream.pipe(res)
+                              }
+                            })
                       }
                     })
               })

@@ -34,10 +34,10 @@ describe('Get the List of Updatable Passes', () => {
     })
   })
 
-  it('200 when existing deviceLibraryIdentifier and passesUpdatedSince=v1', () => {
+  it('200 when existing deviceLibraryIdentifier and passesUpdatedSince=1662541136', () => {
     cy.request({
       method: 'GET',
-      url: '/api/apple/v1/devices/cypress_b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=v1',
+      url: '/api/apple/v1/devices/cypress_b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=1662541136',
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(200)
