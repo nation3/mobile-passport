@@ -65,10 +65,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .then((result: any) => {
           console.log('result:', result)
           if (result.error) {
-            res.status(401).json({
-              error: 'Request Not Authorized: ' + result.error.message
-            })
-            return
+            if (result.error.message.includes('duplicate key value violates unique constraint')) {
+              res.status(200).json({
+                error: 'Serial Number Already Registered for Device'
+              })
+            } else {
+              res.status(500).json({
+                error: 'Internal Server Error: ' + result.error.message
+              })
+            }
           } else {
             res.status(201).json({
               message: 'Registration Successful'
