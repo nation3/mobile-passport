@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: Unit Tests
 
 on:
   push:
@@ -32,10 +29,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: server/package-lock.json
     - run: npm install
-    - run: npm run build
-    - run: npm run lint
+
     - run: npm run test
     - run: npm run test:coverage
     - uses: codecov/codecov-action@v3
-    - run: cp .env.local.goerli .env.local
-    - run: npm run e2e:headless

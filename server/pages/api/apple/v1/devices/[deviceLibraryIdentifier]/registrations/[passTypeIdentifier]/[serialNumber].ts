@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { config } from '../../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
 /**
@@ -6,7 +7,7 @@ import { supabase } from '../../../../../../../../utils/SupabaseClient'
  * https://developer.apple.com/documentation/walletpasses/register_a_pass_for_update_notifications
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('[serialNumber].js')
+  console.log('[serialNumber].ts')
 
   // Expected URL format:
   //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]/[serialNumber]
@@ -55,14 +56,24 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Register the pass
     supabase
         .from('registrations')
-        .insert([{ device_library_identifier: deviceLibraryIdentifier, serial_number: serialNumber, push_token: pushToken }])
+        .insert([{
+          device_library_identifier: deviceLibraryIdentifier,
+          template_version: config.appleTemplateVersion,
+          serial_number: serialNumber,
+          push_token: pushToken
+        }])
         .then((result: any) => {
           console.log('result:', result)
           if (result.error) {
-            res.status(401).json({
-              error: 'Request Not Authorized: ' + result.error.message
-            })
-            return
+            if (result.error.message.includes('duplicate key value violates unique constraint')) {
+              res.status(200).json({
+                error: 'Serial Number Already Registered for Device'
+              })
+            } else {
+              res.status(500).json({
+                error: 'Internal Server Error: ' + result.error.message
+              })
+            }
           } else {
             res.status(201).json({
               message: 'Registration Successful'
@@ -70,7 +81,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           }
         })
   } catch (err: any) {
-    console.error('[serialNumber].js err:\n', err)
+    console.error('[serialNumber].ts err:\n', err)
     res.status(401).json({
       error: 'Request Not Authorized: ' + err.message
     })

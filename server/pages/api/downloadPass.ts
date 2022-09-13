@@ -7,6 +7,7 @@ import PassportIssuer from '../../abis/PassportIssuer.json'
 import Passport from '../../abis/Passport.json'
 import { ethers } from 'ethers'
 import { config } from '../../utils/Config'
+import { supabase } from '../../utils/SupabaseClient'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -96,29 +97,72 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
                 console.log('ensName:', ensName)
 
-                // Populate the pass template
-                const templateVersion: number = 2
-                const filePath: string = Passes.downloadPass(
-                  Platform.Apple,
-                  templateVersion,
-                  passportID,
-                  timestamp,
-                  address,
-                  ensName
-                )
-                console.log('filePath:', filePath)
+                // Store pass details (needed for sending updated passes in the future)
+                const platform: Platform = Platform.Apple
+                const templateVersion: number = config.appleTemplateVersion
+                const download = {
+                  platform: Platform[platform],
+                  template_version: templateVersion,
+                  passport_id: passportID,
+                  issue_date: new Date(timestamp * 1000),
+                  address: address,
+                  ens_name: ensName
+                }
+                console.log('download:\n', download)
+                supabase
+                    .from('downloads')
+                    .insert(download)
+                    .then((result: any) => {
+                      console.log('then result:\n', result)
+                      if (result.error) {
+                        res.status(500).json({
+                          error: 'Internal Server Error: ' + result.error.message
+                        })
+                      } else {
+                        // Lookup the latest update and its timestamp
+                        supabase
+                            .from('latest_updates')
+                            .select('*')
+                            .order('time', { ascending: false })
+                            .limit(1)
+                            .single()
+                            .then((latest_updates_result: any) => {
+                              console.log('latest_updates_result:', latest_updates_result)
+                              if (latest_updates_result.error) {
+                                res.status(500).json({
+                                  error: 'Internal Server Error: ' + latest_updates_result.error.message
+                                })
+                              } else {
+                                const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
+                                const latestUpdateTitle: string = latest_updates_result.data['title']
+                                const latestUpdateContent: string = latest_updates_result.data['content']
 
-                // Serve the pass download to the user
-                const fileName = `passport_${address}_v${templateVersion}.pkpass`
-                console.log('fileName:', fileName)
-                res.setHeader(
-                  'Content-Disposition',
-                  `attachment;filename=${fileName}`
-                )
-                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
-                res.setHeader('Content-Length', fs.statSync(filePath).size)
-                const readStream = fs.createReadStream(filePath)
-                readStream.pipe(res)
+                                // Populate the pass template
+                                const filePath: string = Passes.generatePass(
+                                  platform,
+                                  templateVersion,
+                                  passportID,
+                                  timestamp,
+                                  address,
+                                  ensName,
+                                  latestUpdateTitle,
+                                  latestUpdateContent
+                                )
+                                console.log('filePath:', filePath)
+                
+                                // Serve the pass download to the user
+                                const fileName = `passport_${address}_v${templateVersion}.pkpass`
+                                console.log('fileName:', fileName)
+                                res.setHeader('Last-Modified', Math.round(latestUpdateDate.getTime() / 1000))
+                                res.setHeader('Content-Disposition', `attachment;filename=${fileName}`)
+                                res.setHeader('Content-Type', 'application/vnd.apple.pkpass')
+                                res.setHeader('Content-Length', fs.statSync(filePath).size)
+                                const readStream = fs.createReadStream(filePath)
+                                readStream.pipe(res)
+                              }
+                            })
+                      }
+                    })
               })
           })
           .catch((error: any) => {

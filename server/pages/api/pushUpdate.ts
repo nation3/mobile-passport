@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { config } from '../../utils/Config'
 import { Passes } from '../../utils/Passes'
 
 // req = HTTP incoming message, res = HTTP server response
@@ -8,13 +9,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Push update of new template
   console.log('Pushing template update...')
 
-  const templateFormatVersion: number = 2
-  const updateSent: boolean = Passes.pushUpdate(templateFormatVersion)
+  const templateVersion: number = config.appleTemplateVersion
+  const updateSent: boolean = Passes.pushUpdate(templateVersion)
 
   res
     .status(200)
     .json({
       updateSent: updateSent,
-      templateFormatVersion: templateFormatVersion,
+      templateVersion: templateVersion,
     })
 }
