@@ -5,7 +5,7 @@ import { Passes } from '../../utils/Passes'
 
 // req = HTTP incoming message, res = HTTP server response
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('/admin/pushLastUpdate')
+  console.log('/api/pushLastUpdate')
 
   Passes.notifyPassesAboutLastUpdate(Platform.Apple)
     .then((result: string) => {
