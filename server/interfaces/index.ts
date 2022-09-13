@@ -13,5 +13,5 @@ export interface GooglePass extends Pass {
 
 export enum Platform {
   Apple,
-  Google,
+  Google
 }

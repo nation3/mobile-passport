@@ -11,23 +11,30 @@ import { config } from './Config'
 
 export class Passes {
   /**
-   * Triggers a download of a pass for a given passport ID and platform (currently Apple or Google).
+   * Triggers the generation of a pass file for a given platform (currently Apple or Google).
+   * 
+   * @return The file path to the pass.
    */
-  static downloadPass(
+  static generatePass(
     platform: Platform,
     templateVersion: number,
     passportID: string,
-    timestamp: number,
+    issueDateTimestamp: number,
     holderAddress: any,
-    holderENSName: string
+    holderENSName: string,
+    latestUpdateTitle: string,
+    latestUpdateContent: string
   ): string {
-    console.log('downloadPass')
+    console.log('generatePass')
 
     console.log('platform:', platform)
     console.log('templateVersion:', templateVersion)
     console.log('passportID:', passportID)
+    console.log('issueDateTimestamp:', issueDateTimestamp)
     console.log('holderAddress:', holderAddress)
     console.log('holderENSName:', holderENSName)
+    console.log('latestUpdateTitle:', latestUpdateTitle)
+    console.log('latestUpdateContent:', latestUpdateContent)
 
     if (platform == Platform.Apple) {
       // Create temporary directory for storing the pass files
@@ -89,6 +96,12 @@ export class Passes {
         const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
         const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
         passJson.authenticationToken = hmac
+
+        if (templateVersion >= 3) {
+          // Set "Latest Nation3 Update" (title and content)
+          passJson.storeCard.backFields[5].value = latestUpdateTitle
+          passJson.storeCard.backFields[6].value = latestUpdateContent
+        }
       }
 
       // Set the passport type (e.g. "GENESIS")
@@ -100,13 +113,13 @@ export class Passes {
       }
 
       // Set the passport issue date
-      const timestampInMilliseconds: number = timestamp * 1000
-      const timeISOString: string = new Date(timestampInMilliseconds)
+      const issueDateTimestampInMilliseconds: number = issueDateTimestamp * 1000
+      const issueDateISOString: string = new Date(issueDateTimestampInMilliseconds)
         .toISOString()
         .substring(0, 10)
-      console.log('timeISOString:', timeISOString)
-      passJson.storeCard.secondaryFields[1].value = timeISOString
-      passJson.storeCard.backFields[1].value = timeISOString
+      console.log('issueDateISOString:', issueDateISOString)
+      passJson.storeCard.secondaryFields[1].value = issueDateISOString
+      passJson.storeCard.backFields[1].value = issueDateISOString
 
       console.log(
         'JSON.stringify(passJson) (after field population):\n',
@@ -174,12 +187,12 @@ export class Passes {
   /**
    * Pushes an updated template to all the passes.
    */
-  static pushUpdate(templateFormatVersion: number): boolean {
+  static pushUpdate(templateVersion: number): boolean {
     console.log('pushUpdate')
 
-    console.log('templateFormatVersion:', templateFormatVersion)
+    console.log('templateVersion:', templateVersion)
 
-    // Lookup template file matching the templateFormatVersion
+    // Lookup template file matching the templateVersion
     // TODO
 
     // Get the list of registered passes

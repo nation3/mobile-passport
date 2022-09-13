@@ -64,8 +64,8 @@ describe('Register a Pass for Update Notifications', () => {
       },
       failOnStatusCode: false
     }).then((response) => {
-      expect(response.status).to.eq(401)
-      expect(JSON.stringify(response.body)).to.contain('Request Not Authorized: duplicate key value violates unique constraint')
+      expect(response.status).to.eq(200)
+      expect(JSON.stringify(response.body)).to.contain('Serial Number Already Registered for Device')
     })
   })
 

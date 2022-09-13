@@ -15,6 +15,15 @@ Run unit tests:
 npm run test
 ```
 
+## Code Coverage
+
+[![codecov](https://codecov.io/gh/nation3/mobile-passport/branch/main/graph/badge.svg)](https://codecov.io/gh/nation3/mobile-passport)
+
+Run code coverage:
+```
+npm run test:coverage
+```
+
 ## Add the file with local environment variables
 
 ```
