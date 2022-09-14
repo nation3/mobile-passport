@@ -238,9 +238,6 @@ export class Passes {
       } else if (platform == Platform.Google) {
         // TODO
         throw new Error('Platform not yet implemented: ' + platform)
-      } else {
-        // TODO
-        throw new Error('Platform not yet implemented: ' + platform)
       }
     })
   }
