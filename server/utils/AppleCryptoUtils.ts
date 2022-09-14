@@ -3,6 +3,8 @@ import path from 'path'
 import crypto from 'crypto'
 import forge from 'node-forge'
 import { config } from './Config'
+import { SupportedAlgorithm } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 
 const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(config.appleCACertificatePEM)
 
@@ -151,5 +153,21 @@ export class AppleCryptoUtils {
     const derBuffer: Buffer = Buffer.from(derBytes, 'binary')
 
     return derBuffer
+  }
+
+  /**
+   * When the device requests an updated copy of the pass, the request’s 
+   * header includes this authorization token. The token is used to verify 
+   * that the request is from a valid device and not from an unauthorized source.
+   * 
+   * @param serialNumber The passport ID
+   */
+  static generateAuthenticationToken(serialNumber: string): string {
+    console.log('generateAuthenticationToken')
+    const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
+    const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(config.appleAuthTokenHmacSeed)
+    const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(String(serialNumber))
+    const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
+    return hmac
   }
 }

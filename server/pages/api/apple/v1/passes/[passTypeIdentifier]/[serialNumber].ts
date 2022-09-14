@@ -4,6 +4,7 @@ import { config } from '../../../../../../utils/Config'
 import { Passes } from '../../../../../../utils/Passes'
 import { supabase } from '../../../../../../utils/SupabaseClient'
 import fs from 'fs'
+import { AppleCryptoUtils } from '../../../../../../utils/AppleCryptoUtils'
 
 /**
  * Send an Updated Pass.  Implementation of 
@@ -42,7 +43,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Authenticate the request using a shared secret
-    // TODO
+    const expectedAuthenticationToken: string = AppleCryptoUtils.generateAuthenticationToken(String(serialNumber))
+    console.log('expectedAuthenticationToken:', expectedAuthenticationToken)
+    if (expectedAuthenticationToken != authenticationToken) {
+      throw new Error('Invalid header: Authorization')
+    }
 
     // Lookup the pass details stored in the downloads table when 
     // the pass for this address was last downloaded.
