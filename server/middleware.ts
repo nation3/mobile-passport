@@ -19,6 +19,7 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
       const headerValueBase64 = authorizationHeader.split(' ')[1]
 
       // Decode from Base64
+      const Buffer = require('buffer/').Buffer
       const headerValue = Buffer.from(headerValueBase64, 'base64').toString()
 
       // Extract values from "<username>:<password>"

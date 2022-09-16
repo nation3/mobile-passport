@@ -8,6 +8,8 @@ import console from 'console'
 import { ethers } from 'ethers'
 import { SupportedAlgorithm } from 'ethers/lib/utils'
 import { config } from './Config'
+import apn from 'apn'
+import { supabase } from './SupabaseClient'
 
 export class Passes {
   /**
@@ -185,40 +187,58 @@ export class Passes {
   }
 
   /**
-   * Pushes an updated template to all the passes.
+   * Pushes a notification to all the passes, notiyfing them of an update.
+   * 
+   * Note:  It is assumed that a new update was added to the `last_updates` table 
+   * before calling this function.
+   * 
+   * @platform platform The platform where the notification will be sent
+   * @returns Promise
    */
-  static pushUpdate(templateVersion: number): boolean {
-    console.log('pushUpdate')
-
-    console.log('templateVersion:', templateVersion)
-
-    // Lookup template file matching the templateVersion
-    // TODO
-
-    // Get the list of registered passes
-    // TODO
-
-    // For each registered pass, push the template update
-    // TODO
-
-    return true
-  }
-
-  /**
-   * Pushes a notification to all the passes
-   */
-  static pushNotification(title: string, content: string): boolean {
-    console.log('pushNotification')
-
-    console.log(`title: "${title}"`)
-    console.log(`content: "${content}"`)
-
-    // Get the list of registered passes
-    // TODO
-
-    // For each registered pass, push the notification
-    // TODO
-
-    return true
+  static async notifyPassesAboutLastUpdate(platform: Platform): Promise<string> {
+    console.log('notifyPassesAboutLastUpdate')
+    
+    return new Promise<string>((resolve, reject) => {
+      if (platform == Platform.Apple) {
+        // Lookup the push tokens of registered passes
+        supabase
+            .from('distinct_push_token')
+            .select()
+            .then((result: any) => {
+              console.log('supabase then result\n', result)
+              if (result.error) {
+                reject(result.error.message)
+              } else {
+                result.data.map((pushTokenObject: any) => {
+                  const pushToken: string = pushTokenObject['push_token']
+                  console.log('pushToken:', pushToken)
+                  
+                  // Send notification request to Apple Push Notification service (APNs)
+                  const apnProvider: apn.Provider = new apn.Provider({
+                    cert: `-----BEGIN CERTIFICATE-----\n${config.appleCertificatePEM}\n-----END CERTIFICATE-----`,
+                    key: `-----BEGIN RSA PRIVATE KEY-----\n${config.appleCertificateKey}\n-----END RSA PRIVATE KEY-----`,
+                    production: true
+                  })
+                  const notification: apn.Notification = new apn.Notification();
+                  notification.topic = 'pass.org.passport.nation3'
+                  console.log('Sending notification...')
+                  apnProvider.send(notification, pushToken)
+                      .then((apn_result) => {
+                        console.log('apnProvider then result:\n', apn_result)
+                        if (apn_result.failed.length > 0) {
+                          console.error('apn_result.failed:\n', apn_result.failed)
+                        } else {
+                          console.log('Notification sent!')
+                        }
+                      })
+                })
+                resolve('Sent notification request for ' + result.data.length + ' registered passes')
+              }
+            })
+      } else if (platform == Platform.Google) {
+        // TODO
+        throw new Error('Platform not yet implemented: ' + platform)
+      }
+    })
   }
 }
