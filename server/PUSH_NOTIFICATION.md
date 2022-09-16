@@ -5,7 +5,7 @@ Apple does not automatically fetch updated passes, so we need to push a notifica
 These are the steps for pushing a notification to registered passes:
 
 1. Add a "latest update" as a new table row in Supabase: 
-   - Go to the table editor in Subapase (Nation3 → passports- Add a "latest update" as a new table row
+   - Go to the table editor in Supabase (Nation3 → passports- Add a "latest update" as a new table row
    - Select the `latest_updates` table
    - Click "Insert row"
    - Type a title and content. These two values will appear at the back of the passes
