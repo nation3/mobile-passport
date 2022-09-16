@@ -2,7 +2,7 @@ describe('/api/pushLastUpdate', () => {
 
   it('error when missing username/password', () => {
     cy.request({
-      url: '/api/pushLasthUpdate',
+      url: '/api/pushLastUpdate',
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.eq(401)
