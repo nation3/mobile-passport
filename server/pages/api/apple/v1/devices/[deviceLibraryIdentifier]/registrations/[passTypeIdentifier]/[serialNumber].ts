@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { AppleCryptoUtils } from '../../../../../../../../utils/AppleCryptoUtils'
 import { config } from '../../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
@@ -40,7 +41,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Authenticate the request using a shared secret
-    // TODO
+    const expectedAuthenticationToken: string = AppleCryptoUtils.generateAuthenticationToken(String(serialNumber))
+    console.log('expectedAuthenticationToken:', expectedAuthenticationToken)
+    if (expectedAuthenticationToken != authenticationToken) {
+      throw new Error('Invalid header: Authorization')
+    }
 
     // Extract push token from the request body (application/json)
     // Expected format:

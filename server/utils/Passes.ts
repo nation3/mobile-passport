@@ -5,8 +5,6 @@ import os from 'os'
 import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
-import { ethers } from 'ethers'
-import { SupportedAlgorithm } from 'ethers/lib/utils'
 import { config } from './Config'
 import apn from 'apn'
 import { supabase } from './SupabaseClient'
@@ -93,11 +91,7 @@ export class Passes {
         passJson.webServiceURL = config.appleWebServiceUrl
 
         // Set the shared secret (authentication token) to be used with the web service
-        const hmacAlgorithm : SupportedAlgorithm = SupportedAlgorithm['sha256']
-        const hmacSeed : Uint8Array = ethers.utils.toUtf8Bytes(config.appleAuthTokenHmacSeed)
-        const hmacData : Uint8Array = ethers.utils.toUtf8Bytes(passJson.serialNumber)
-        const hmac : string = ethers.utils.computeHmac(hmacAlgorithm, hmacSeed, hmacData)
-        passJson.authenticationToken = hmac
+        passJson.authenticationToken = AppleCryptoUtils.generateAuthenticationToken(passJson.serialNumber)
 
         if (templateVersion >= 3) {
           // Set "Latest Nation3 Update" (title and content)
