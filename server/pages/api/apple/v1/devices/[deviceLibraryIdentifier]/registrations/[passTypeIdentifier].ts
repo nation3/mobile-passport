@@ -65,12 +65,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                         error: 'Internal Server Error: ' + latest_updates_result.error.message
                       })
                     } else {
-                      // Return matching passes (serial numbers) and their modification time
+                      const passesUpdatedSinceDate: Date = new Date(Number(passesUpdatedSince) * 1000)
+                      console.log('passesUpdatedSinceDate:', passesUpdatedSinceDate)
+                      
                       const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
-                      res.status(200).json({
-                        serialNumbers: serialNumbers,
-                        lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
-                      })
+                      console.log('latestUpdateDate:', latestUpdateDate)
+                      
+                      if (!passesUpdatedSince || (passesUpdatedSinceDate.getTime() > latestUpdateDate.getTime())) {
+                        // Return updatable passes (serial numbers) and their modification time
+                        res.status(200).json({
+                          serialNumbers: serialNumbers,
+                          lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
+                        })
+                      } else {
+                        // There are no updatable passes
+                        res.status(204).end()
+                      }
                     }
                   })
             }
