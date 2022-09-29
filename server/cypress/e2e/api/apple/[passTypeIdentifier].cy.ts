@@ -50,18 +50,29 @@ describe('Get the List of Updatable Passes', () => {
 
   /**
    * When the passesUpdatedSince parameter is included, it is expected that serial numbers 
-   * only be returned if they have not already been updated.
+   * only be returned if the passes have not already been updated.
    * 
-   * Using an epoch timestamp that is far into the future, to prevent this test from failing 
-   * after we add more rows to the `latest_updates` table: 1995161613 (2033-03-23 3:33:33 AM)
+   * Using an epoch timestamp that is far into the future will prevent this test from failing 
+   * in the future once we add more rows to the `latest_updates` table: 1995161613 (2033-03-23 3:33:33 AM)
    */
-  it('204 when existing deviceLibraryIdentifier and passesUpdatedSince=1995161613', () => {
+  it('200 when existing deviceLibraryIdentifier and passesUpdatedSince=1995161613', () => {
     cy.request({
       method: 'GET',
       url: '/api/apple/v1/devices/cypress_b33e3a3dccb3030333e3333da33333a3/registrations/pass.org.passport.nation3?passesUpdatedSince=1995161613',
       failOnStatusCode: false
     }).then((response) => {
-      expect(response.status).to.eq(204)
+      expect(response.status).to.eq(200)
+
+      // Expected format:  "serialNumbers":["333"]
+      expect(JSON.stringify(response.body)).to.contain('serialNumbers')
+      expect(response.body.serialNumbers.length).to.eq(1)
+      expect(response.body.serialNumbers[0]).to.eq('333')
+      
+      // Expected format:  "lastUpdated":"1663899405"
+      expect(JSON.stringify(response.body)).to.contain('lastUpdated')
+      expect(response.body.lastUpdated.length).to.eq(10)
+      const lastUpdated = new Date(response.body.lastUpdated)
+      expect(lastUpdated.getTime() >= 1663899405*1000)  // >= 2022-09-23 02:16:45 AM
     })
   })
 })
