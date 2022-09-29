@@ -35,12 +35,12 @@ describe('Get the List of Updatable Passes', () => {
     }).then((response) => {
       expect(response.status).to.eq(200)
       
-      // Expected JSON response format:  {"serialNumbers":["333"],"lastUpdated":"1663899405"}
-
+      // Expected format:  "serialNumbers":["333"]
       expect(JSON.stringify(response.body)).to.contain('serialNumbers')
       expect(response.body.serialNumbers.length).to.eq(1)
       expect(response.body.serialNumbers[0]).to.eq('333')
       
+      // Expected format:  "lastUpdated":"1663899405"
       expect(JSON.stringify(response.body)).to.contain('lastUpdated')
       expect(response.body.lastUpdated.length).to.eq(10)
       const lastUpdated = new Date(response.body.lastUpdated)
