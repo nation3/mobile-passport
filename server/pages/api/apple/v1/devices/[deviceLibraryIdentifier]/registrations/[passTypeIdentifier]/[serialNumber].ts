@@ -103,7 +103,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           .then((result: any) => {
             console.log('result:', result)
             if (result.error) {
-              // TODO
+              res.status(500).json({
+                error: 'Internal Server Error: ' + result.error.message
+              })
             } else {
               res.status(200).json({
                 message: 'Device Unregistered'
