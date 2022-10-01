@@ -52,66 +52,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (req.method == 'POST') {
-      console.log('Registering the pass...')
-
-      // Extract push token from the request body (application/json)
-      // Expected format:
-      //   {
-      //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
-      //   }
-      const pushToken : string = req.body.pushToken
-      console.log('pushToken:', pushToken)
-      if (!pushToken || String(pushToken).trim().length == 0) {
-        throw new Error('Missing/empty body: pushToken')
-      }
-
-      // Store the registration in the database
-      supabase
-          .from('registrations')
-          .insert([{
-            device_library_identifier: deviceLibraryIdentifier,
-            template_version: config.appleTemplateVersion,
-            serial_number: serialNumber,
-            push_token: pushToken
-          }])
-          .then((result: any) => {
-            console.log('result:', result)
-            if (result.error) {
-              if (result.error.message.includes('duplicate key value violates unique constraint')) {
-                res.status(200).json({
-                  error: 'Serial Number Already Registered for Device'
-                })
-              } else {
-                res.status(500).json({
-                  error: 'Internal Server Error: ' + result.error.message
-                })
-              }
-            } else {
-              res.status(201).json({
-                message: 'Registration Successful'
-              })
-            }
-          })
+      storeRegistrationInDatabase(req, res, String(deviceLibraryIdentifier), String(serialNumber))
     } else if (req.method == 'DELETE') {
-      console.log('Unregistering the pass...')
-
-      // Delete the registration from the database
-      supabase
-          .from('registrations')
-          .delete()
-          .match({ device_library_identifier: deviceLibraryIdentifier })
-          .then((result: any) => {
-            console.log('result:', result)
-            if (result.error) {
-              res.status(500).json({
-                error: 'Internal Server Error: ' + result.error.message
-              })
-            } else {
-              res.status(200).json({
-                message: 'Device Unregistered'
-              })
-            }
-          })
+      deleteRegistrationFromDatabase(res, String(deviceLibraryIdentifier))
     }
   } catch (err: any) {
     console.error('[serialNumber].ts err:\n', err)
@@ -119,4 +62,69 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       error: 'Request Not Authorized: ' + err.message
     })
   }
+}
+
+function storeRegistrationInDatabase(req: NextApiRequest, res: NextApiResponse, deviceLibraryIdentifier: String, serialNumber: String) {
+  console.log('Registering the pass in the database...')
+
+  // Extract push token from the request body (application/json)
+  // Expected format:
+  //   {
+  //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
+  //   }
+  const pushToken : string = req.body.pushToken
+  console.log('pushToken:', pushToken)
+  if (!pushToken || String(pushToken).trim().length == 0) {
+    throw new Error('Missing/empty body: pushToken')
+  }
+
+  // Store the registration in the database
+  supabase
+      .from('registrations')
+      .insert([{
+        device_library_identifier: deviceLibraryIdentifier,
+        template_version: config.appleTemplateVersion,
+        serial_number: serialNumber,
+        push_token: pushToken
+      }])
+      .then((result: any) => {
+        console.log('result:', result)
+        if (result.error) {
+          if (result.error.message.includes('duplicate key value violates unique constraint')) {
+            res.status(200).json({
+              error: 'Serial Number Already Registered for Device'
+            })
+          } else {
+            res.status(500).json({
+              error: 'Internal Server Error: ' + result.error.message
+            })
+          }
+        } else {
+          res.status(201).json({
+            message: 'Registration Successful'
+          })
+        }
+      })
+}
+
+function deleteRegistrationFromDatabase(res: NextApiResponse, deviceLibraryIdentifier: String) {
+  console.log('Deleting the pass registration from the database...')
+
+  // Delete the registration from the database
+  supabase
+      .from('registrations')
+      .delete()
+      .match({ device_library_identifier: deviceLibraryIdentifier })
+      .then((result: any) => {
+        console.log('result:', result)
+        if (result.error) {
+          res.status(500).json({
+            error: 'Internal Server Error: ' + result.error.message
+          })
+        } else {
+          res.status(200).json({
+            message: 'Device Unregistered'
+          })
+        }
+      })
 }
