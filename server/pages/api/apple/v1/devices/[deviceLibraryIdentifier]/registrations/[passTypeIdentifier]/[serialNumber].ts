@@ -20,7 +20,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('req.url:', req.url)
 
   try {
-    // Expected request method:  POST
+    // Expected request method:  POST/DELETE
     console.log('req.method:', req.method)
     if ((req.method != 'POST') && (req.method != 'DELETE')) {
       throw new Error('Wrong request method: ' + req.method)
@@ -65,7 +65,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new Error('Missing/empty body: pushToken')
       }
 
-      // Register the pass
+      // Store the pass in the database
       supabase
           .from('registrations')
           .insert([{
@@ -95,7 +95,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     } else if (req.method == 'DELETE') {
       console.log('Unregistering the pass...')
 
-      // Delete the deviceLibraryIdentifier from the `registrations` table in the database
+      // Delete the pass from the `registrations` table in the database
       supabase
           .from('registrations')
           .delete()
