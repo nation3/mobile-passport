@@ -3,6 +3,8 @@ import { AppleCryptoUtils } from '../../../../../../../../utils/AppleCryptoUtils
 import { config } from '../../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
+let response: NextApiResponse
+
 /**
  * Register a Pass for Update Notifications. Implementation of 
  * https://developer.apple.com/documentation/walletpasses/register_a_pass_for_update_notifications
@@ -13,6 +15,8 @@ import { supabase } from '../../../../../../../../utils/SupabaseClient'
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('[serialNumber].ts')
+
+  response = res
 
   // Expected URL format:
   //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]/[serialNumber]
@@ -63,19 +67,24 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new Error('Missing/empty body: pushToken')
       }
 
-      storeRegistrationInDatabase(res, String(deviceLibraryIdentifier), String(serialNumber), pushToken)
+      storeRegistrationInDatabase(String(deviceLibraryIdentifier), String(serialNumber), pushToken)
     } else if (req.method == 'DELETE') {
-      deleteRegistrationFromDatabase(res, String(deviceLibraryIdentifier))
+      deleteRegistrationFromDatabase(String(deviceLibraryIdentifier))
     }
   } catch (err: any) {
     console.error('[serialNumber].ts err:\n', err)
-    res.status(401).json({
-      error: 'Request Not Authorized: ' + err.message
-    })
+    handleResponse(401, 'Request Not Authorized: ' + err.message)
   }
 }
 
-function storeRegistrationInDatabase(res: NextApiResponse, deviceLibraryIdentifier: String, serialNumber: String, pushToken: String) {
+function handleResponse(statusCode: number, statusMessage: string) {
+  console.log('handleResponse')
+  response.status(statusCode).json({
+    message: statusMessage
+  })
+}
+
+function storeRegistrationInDatabase(deviceLibraryIdentifier: String, serialNumber: String, pushToken: String) {
   console.log('Registering the pass in the database...')
 
   // Store the registration in the database
@@ -91,23 +100,17 @@ function storeRegistrationInDatabase(res: NextApiResponse, deviceLibraryIdentifi
         console.log('result:', result)
         if (result.error) {
           if (result.error.message.includes('duplicate key value violates unique constraint')) {
-            res.status(200).json({
-              error: 'Serial Number Already Registered for Device'
-            })
+            handleResponse(200, 'Serial Number Already Registered for Device')
           } else {
-            res.status(500).json({
-              error: 'Internal Server Error: ' + result.error.message
-            })
+            handleResponse(500, 'Internal Server Error: ' + result.error.message)
           }
         } else {
-          res.status(201).json({
-            message: 'Registration Successful'
-          })
+          handleResponse(201, 'Registration Successful')
         }
       })
 }
 
-function deleteRegistrationFromDatabase(res: NextApiResponse, deviceLibraryIdentifier: String) {
+function deleteRegistrationFromDatabase(deviceLibraryIdentifier: String) {
   console.log('Deleting the pass registration from the database...')
 
   // Delete the registration from the database
@@ -118,13 +121,9 @@ function deleteRegistrationFromDatabase(res: NextApiResponse, deviceLibraryIdent
       .then((result: any) => {
         console.log('result:', result)
         if (result.error) {
-          res.status(500).json({
-            error: 'Internal Server Error: ' + result.error.message
-          })
+          handleResponse(500, 'Internal Server Error: ' + result.error.message)
         } else {
-          res.status(200).json({
-            message: 'Device Unregistered'
-          })
+          handleResponse(200, 'Device Unregistered')
         }
       })
 }
