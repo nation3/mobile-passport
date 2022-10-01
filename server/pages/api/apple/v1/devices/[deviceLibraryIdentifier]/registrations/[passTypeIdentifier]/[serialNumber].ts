@@ -52,7 +52,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (req.method == 'POST') {
-      storeRegistrationInDatabase(req, res, String(deviceLibraryIdentifier), String(serialNumber))
+      // Extract push token from the request body (application/json)
+      // Expected format:
+      //   {
+      //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
+      //   }
+      const pushToken : String = req.body.pushToken
+      console.log('pushToken:', pushToken)
+      if (!pushToken || pushToken.trim().length == 0) {
+        throw new Error('Missing/empty body: pushToken')
+      }
+
+      storeRegistrationInDatabase(res, String(deviceLibraryIdentifier), String(serialNumber), pushToken)
     } else if (req.method == 'DELETE') {
       deleteRegistrationFromDatabase(res, String(deviceLibraryIdentifier))
     }
@@ -64,19 +75,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function storeRegistrationInDatabase(req: NextApiRequest, res: NextApiResponse, deviceLibraryIdentifier: String, serialNumber: String) {
+function storeRegistrationInDatabase(res: NextApiResponse, deviceLibraryIdentifier: String, serialNumber: String, pushToken: String) {
   console.log('Registering the pass in the database...')
-
-  // Extract push token from the request body (application/json)
-  // Expected format:
-  //   {
-  //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
-  //   }
-  const pushToken : string = req.body.pushToken
-  console.log('pushToken:', pushToken)
-  if (!pushToken || String(pushToken).trim().length == 0) {
-    throw new Error('Missing/empty body: pushToken')
-  }
 
   // Store the registration in the database
   supabase
