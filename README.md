@@ -1,7 +1,24 @@
-# Nation3 mobile passport
+# Nation3 Mobile Passport
 
 Take your Nation3 passport everywhere.
 
-## North Star Metric 🌠
+- Keep track of everything Nation3, by receiving push notifications
+- Identify yourself as Nation3 citizens at in-person events
+- Get notified if you are close to a Nation3 embassy
+- Feel really cool about carrying around your passport 😎
 
-Goal (Q4 2022): [Increase Number of Active Citizens to 50](https://vote.nation3.org/#/proposal/0x197406fabfb6f40d964b9e219cb98c1b10fb47c3859b8973399e6fec64e6caf0)
+## How to Download?
+
+First, become a Nation3 citizen at https://app.nation3.org/join
+
+Then, after claiming your NFT passport, download the pass to either Apple Wallet or Google Pay:
+
+### Apple Wallet
+
+Go to https://app.nation3.org/citizen and click "Add to Apple Wallet":
+
+> <img width="480" src="https://user-images.githubusercontent.com/95955389/190090203-954075d3-4854-4039-882b-63893396c068.png">
+
+### Google Pay
+
+Coming soon...
