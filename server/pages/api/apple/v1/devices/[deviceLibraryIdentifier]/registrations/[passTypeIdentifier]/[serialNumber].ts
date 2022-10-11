@@ -3,12 +3,20 @@ import { AppleCryptoUtils } from '../../../../../../../../utils/AppleCryptoUtils
 import { config } from '../../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../../utils/SupabaseClient'
 
+let response: NextApiResponse
+
 /**
  * Register a Pass for Update Notifications. Implementation of 
  * https://developer.apple.com/documentation/walletpasses/register_a_pass_for_update_notifications
+ * 
+ * Also handled by this endpoint:
+ * Unregister a Pass for Update Notifications. Implementation of 
+ * https://developer.apple.com/documentation/walletpasses/unregister_a_pass_for_update_notifications
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('[serialNumber].ts')
+
+  response = res
 
   // Expected URL format:
   //   /api/apple/v1/devices/[deviceLibraryIdentifier]/registrations/[passTypeIdentifier]/[serialNumber]
@@ -16,9 +24,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('req.url:', req.url)
 
   try {
-    // Expected request method:  POST
+    // Expected request method:  POST/DELETE
     console.log('req.method:', req.method)
-    if (req.method != 'POST') {
+    if ((req.method != 'POST') && (req.method != 'DELETE')) {
       throw new Error('Wrong request method: ' + req.method)
     }
 
@@ -47,48 +55,75 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error('Invalid header: Authorization')
     }
 
-    // Extract push token from the request body (application/json)
-    // Expected format:
-    //   {
-    //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
-    //   }
-    const pushToken : string = req.body.pushToken
-    console.log('pushToken:', pushToken)
-    if (!pushToken || String(pushToken).trim().length == 0) {
-      throw new Error('Missing/empty body: pushToken')
-    }
+    if (req.method == 'POST') {
+      // Extract push token from the request body (application/json)
+      // Expected format:
+      //   {
+      //     pushToken: '333d0b3c3f3b3a330f3d0333333b33a3b0f33c33b333a333333ece3ab33333c3'
+      //   }
+      const pushToken : String = req.body.pushToken
+      console.log('pushToken:', pushToken)
+      if (!pushToken || pushToken.trim().length == 0) {
+        throw new Error('Missing/empty body: pushToken')
+      }
 
-    // Register the pass
-    supabase
-        .from('registrations')
-        .insert([{
-          device_library_identifier: deviceLibraryIdentifier,
-          template_version: config.appleTemplateVersion,
-          serial_number: serialNumber,
-          push_token: pushToken
-        }])
-        .then((result: any) => {
-          console.log('result:', result)
-          if (result.error) {
-            if (result.error.message.includes('duplicate key value violates unique constraint')) {
-              res.status(200).json({
-                error: 'Serial Number Already Registered for Device'
-              })
-            } else {
-              res.status(500).json({
-                error: 'Internal Server Error: ' + result.error.message
-              })
-            }
-          } else {
-            res.status(201).json({
-              message: 'Registration Successful'
-            })
-          }
-        })
+      storeRegistrationInDatabase(String(deviceLibraryIdentifier), String(serialNumber), pushToken)
+    } else if (req.method == 'DELETE') {
+      deleteRegistrationFromDatabase(String(deviceLibraryIdentifier))
+    }
   } catch (err: any) {
     console.error('[serialNumber].ts err:\n', err)
-    res.status(401).json({
-      error: 'Request Not Authorized: ' + err.message
-    })
+    handleResponse(401, 'Request Not Authorized: ' + err.message)
   }
+}
+
+function handleResponse(statusCode: number, statusMessage: string) {
+  console.log('handleResponse')
+  response.status(statusCode).json({
+    message: statusMessage
+  })
+}
+
+function storeRegistrationInDatabase(deviceLibraryIdentifier: String, serialNumber: String, pushToken: String) {
+  console.log('Registering the pass in the database...')
+
+  // Store the registration in the database
+  supabase
+      .from('registrations')
+      .insert([{
+        device_library_identifier: deviceLibraryIdentifier,
+        template_version: config.appleTemplateVersion,
+        serial_number: serialNumber,
+        push_token: pushToken
+      }])
+      .then((result: any) => {
+        console.log('result:', result)
+        if (result.error) {
+          if (result.error.message.includes('duplicate key value violates unique constraint')) {
+            handleResponse(200, 'Serial Number Already Registered for Device')
+          } else {
+            handleResponse(500, 'Internal Server Error: ' + result.error.message)
+          }
+        } else {
+          handleResponse(201, 'Registration Successful')
+        }
+      })
+}
+
+function deleteRegistrationFromDatabase(deviceLibraryIdentifier: String) {
+  console.log('Deleting the pass registration from the database...')
+
+  // Delete the registration from the database
+  supabase
+      .from('registrations')
+      .delete()
+      .match({ device_library_identifier: deviceLibraryIdentifier })
+      .then((result: any) => {
+        console.log('result:', result)
+        if (result.error) {
+          handleResponse(500, 'Internal Server Error: ' + result.error.message)
+        } else {
+          handleResponse(200, 'Device Unregistered')
+        }
+      })
 }
