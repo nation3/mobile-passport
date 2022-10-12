@@ -40,6 +40,6 @@
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
     "start-server-and-test": "^1.14.0",
-    "ts-jest": "^29.0.2"
+    "ts-jest": "^29.0.3"
   }
 }
