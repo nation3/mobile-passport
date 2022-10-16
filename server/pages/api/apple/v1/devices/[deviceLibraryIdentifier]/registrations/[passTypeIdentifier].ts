@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { config } from '../../../../../../../utils/Config'
 import { supabase } from '../../../../../../../utils/SupabaseClient'
-import { getDate, getTimeInSeconds } from '../../../../../../../utils/DateUtils'
+import { DateUtils } from '../../../../../../../utils/DateUtils'
 
 /**
  * Get the List of Updatable Passes.  Implementation of 
@@ -74,20 +73,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                         // The passes on this device have not been updated previously, so return all passes.
                         res.status(200).json({
                           serialNumbers: serialNumbers,
-                          lastUpdated: String(getTimeInSeconds(latestUpdateDate))
+                          lastUpdated: String(DateUtils.getTimeInSeconds(latestUpdateDate))
                         })
                       } else {
                         // The passes on this device have been updated previously, so only return passes that 
                         // were updated before the most recent Nation3 update in the `latest_updates` database table.
 
                         // Convert from epoch timestamp string ('1662889385') to Date
-                        const passesUpdatedSinceDate: Date = getDate(Number(passesUpdatedSince))
+                        const passesUpdatedSinceDate: Date = DateUtils.getDate(Number(passesUpdatedSince))
                         console.log('passesUpdatedSinceDate:', passesUpdatedSinceDate)
                         
                         if (passesUpdatedSinceDate.getTime() < latestUpdateDate.getTime()) {
                           res.status(200).json({
                             serialNumbers: serialNumbers,
-                            lastUpdated: String(getTimeInSeconds(latestUpdateDate))
+                            lastUpdated: String(DateUtils.getTimeInSeconds(latestUpdateDate))
                           })
                         } else {
                           res.status(204).end()
