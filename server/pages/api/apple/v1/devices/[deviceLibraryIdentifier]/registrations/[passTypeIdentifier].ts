@@ -65,12 +65,33 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                         error: 'Internal Server Error: ' + latest_updates_result.error.message
                       })
                     } else {
-                      // Return matching passes (serial numbers) and their modification time
+                      // Convert from ISO string to Date
                       const latestUpdateDate: Date = new Date(latest_updates_result.data['time'])
-                      res.status(200).json({
-                        serialNumbers: serialNumbers,
-                        lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
-                      })
+                      console.log('latestUpdateDate:', latestUpdateDate)
+
+                      if (!passesUpdatedSince) {
+                        // The passes on this device have not been updated previously, so return all passes.
+                        res.status(200).json({
+                          serialNumbers: serialNumbers,
+                          lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
+                        })
+                      } else {
+                        // The passes on this device have been updated previously, so only return passes that 
+                        // were updated before the most recent Nation3 update in the `latest_updates` database table.
+
+                        // Convert from epoch timestamp string to Date
+                        const passesUpdatedSinceDate: Date = new Date(Number(passesUpdatedSince) * 1000)
+                        console.log('passesUpdatedSinceDate:', passesUpdatedSinceDate)
+                        
+                        if (passesUpdatedSinceDate.getTime() < latestUpdateDate.getTime()) {
+                          res.status(200).json({
+                            serialNumbers: serialNumbers,
+                            lastUpdated: String(Math.round(latestUpdateDate.getTime() / 1000))
+                          })
+                        } else {
+                          res.status(204).end()
+                        }
+                      }
                     }
                   })
             }
