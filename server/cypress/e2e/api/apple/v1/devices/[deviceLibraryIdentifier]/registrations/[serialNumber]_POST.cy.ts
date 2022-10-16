@@ -52,6 +52,9 @@ describe('Register a Pass for Update Notifications', () => {
     })
   })
 
+  /**
+   * Note:  For this test to work, a matching device_library_identifier must already exist in the database table.
+   */
   it('error when deviceLibraryIdentifier is already registered', () => {
     cy.request({
       method: 'POST',
