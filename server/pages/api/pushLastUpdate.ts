@@ -10,9 +10,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   Passes.notifyPassesAboutLastUpdate(Platform.Apple)
     .then((result: string) => {
       console.log('then, result:', result)
-      res.status(200).json({
-        message: 'OK: ' + result
-      })
+      res.status(200).json(
+        JSON.parse(result)
+      )
     })
     .catch((result: string) => {
       console.log('catch, result:', result)

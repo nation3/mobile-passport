@@ -191,48 +191,57 @@ export class Passes {
    */
   static async notifyPassesAboutLastUpdate(platform: Platform): Promise<string> {
     console.log('notifyPassesAboutLastUpdate')
-    
-    return new Promise<string>((resolve, reject) => {
-      if (platform == Platform.Apple) {
-        // Lookup the push tokens of registered passes
-        supabase
-            .from('distinct_push_token')
-            .select()
-            .then((result: any) => {
-              console.log('supabase then result\n', result)
-              if (result.error) {
-                reject(result.error.message)
-              } else {
-                result.data.map((pushTokenObject: any) => {
-                  const pushToken: string = pushTokenObject['push_token']
-                  console.log('pushToken:', pushToken)
-                  
-                  // Send notification request to Apple Push Notification service (APNs)
-                  const apnProvider: apn.Provider = new apn.Provider({
-                    cert: `-----BEGIN CERTIFICATE-----\n${config.appleCertificatePEM}\n-----END CERTIFICATE-----`,
-                    key: `-----BEGIN RSA PRIVATE KEY-----\n${config.appleCertificateKey}\n-----END RSA PRIVATE KEY-----`,
-                    production: true
-                  })
-                  const notification: apn.Notification = new apn.Notification();
-                  notification.topic = 'pass.org.passport.nation3'
-                  console.log('Sending notification...')
-                  apnProvider.send(notification, pushToken)
-                      .then((apn_result) => {
-                        console.log('apnProvider then result:\n', apn_result)
-                        if (apn_result.failed.length > 0) {
-                          console.error('apn_result.failed:\n', apn_result.failed)
-                        } else {
-                          console.log('Notification sent!')
-                        }
-                      })
-                })
-                resolve('Sent notification request for ' + result.data.length + ' registered passes')
-              }
-            })
-      } else if (platform == Platform.Google) {
-        // TODO
-        throw new Error('Platform not yet implemented: ' + platform)
+
+    if (platform == Platform.Apple) {
+      // Lookup the push tokens of registered passes
+      const { data, error } = await supabase.from('distinct_push_token').select()
+      console.log('data:', data)
+      console.log('error:', error)
+
+      if (error) {
+        return new Promise<string>((reject) => {
+          reject(error.message)
+        })
+      } else {
+        let allSent: any[] = []
+        let allFailed: any[] = []
+        for (let i = 0; i < data.length; i++) {
+          const pushToken: string = data[i]['push_token']
+          console.log('pushToken:', pushToken)
+          
+          // Send notification request to Apple Push Notification service (APNs)
+          const apnProvider: apn.Provider = new apn.Provider({
+            cert: `-----BEGIN CERTIFICATE-----\n${config.appleCertificatePEM}\n-----END CERTIFICATE-----`,
+            key: `-----BEGIN RSA PRIVATE KEY-----\n${config.appleCertificateKey}\n-----END RSA PRIVATE KEY-----`,
+            production: true
+          })
+          const notification: apn.Notification = new apn.Notification();
+          notification.topic = 'pass.org.passport.nation3'
+          console.log('Sending notification...')
+          const { sent, failed } = await apnProvider.send(notification, pushToken)
+          console.log('sent:', sent)
+          console.log('failed:', failed)
+          if (sent.length > 0) {
+            allSent[allSent.length] = sent
+          }
+          if (failed.length > 0) {
+            allFailed[allFailed.length] = failed
+          }
+        }
+        return new Promise<string>((resolve) => {
+          const result = {
+            summary: allSent.length + ' sent, ' + allFailed.length + ' failed',
+            sent: allSent,
+            failed: allFailed
+          }
+          resolve(JSON.stringify(result))
+        })
       }
-    })
+    } else if (platform == Platform.Google) {
+      // TODO
+      return new Promise<string>((reject) => {
+        reject('Platform not yet implemented: ' + platform)
+      })
+    }
   }
 }
