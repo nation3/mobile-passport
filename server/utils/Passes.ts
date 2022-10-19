@@ -189,7 +189,7 @@ export class Passes {
    * @platform platform The platform where the notification will be sent
    * @returns Promise
    */
-  static async notifyPassesAboutLastUpdate(platform: Platform): Promise<string> {
+  static async notifyPassesAboutLastUpdate(platform: Platform): Promise<undefined | string> {
     console.log('notifyPassesAboutLastUpdate')
 
     if (platform == Platform.Apple) {
@@ -202,7 +202,7 @@ export class Passes {
         return new Promise<string>((reject) => {
           reject(error.message)
         })
-      } else {
+      } else if (data) {
         let allSent: any[] = []
         let allFailed: any[] = []
         for (let i = 0; i < data.length; i++) {
@@ -237,8 +237,7 @@ export class Passes {
           resolve(JSON.stringify(result))
         })
       }
-    } else if (platform == Platform.Google) {
-      // TODO
+    } else {
       return new Promise<string>((reject) => {
         reject('Platform not yet implemented: ' + platform)
       })

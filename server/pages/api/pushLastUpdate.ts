@@ -8,13 +8,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('/api/pushLastUpdate')
 
   Passes.notifyPassesAboutLastUpdate(Platform.Apple)
-    .then((result: string) => {
+    .then((result: any) => {
       console.log('then, result:', result)
       res.status(200).json(
         JSON.parse(result)
       )
     })
-    .catch((result: string) => {
+    .catch((result: any) => {
       console.log('catch, result:', result)
       res.status(500).json({
         error: 'Internal Server Error: ' + result
