@@ -18,7 +18,7 @@ export const config = {
   dbSupabaseUrl: getEnvironmentVariable('DB_SUPABASE_URL'),
   dbSupabaseAnonKey: getEnvironmentVariable('DB_SUPABASE_ANON_KEY'),
   
-  appleTemplateVersion: 3,
+  appleTemplateVersion: 4,
   appleAuthTokenHmacSeed: getEnvironmentVariable('APPLE_AUTH_TOKEN_HMAC_SEED'),
   appleWebServiceUrl: getEnvironmentVariable('APPLE_WEB_SERVICE_URL'),
   appleCACertificatePEM: getEnvironmentVariable('APPLE_CA_CERTIFICATE_PEM'),
