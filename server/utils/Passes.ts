@@ -127,7 +127,7 @@ export class Passes {
 
       // Using the updated pass.json file, generate a manifest object of all the files in the template directory
       const manifestObject: JSON =
-        AppleCryptoUtils.generateManifestObject(tmpDirPath)
+        AppleCryptoUtils.generateManifestObject(tmpDirPath, templateVersion)
       console.log('manifestObject:\n', manifestObject)
 
       // Stringify manifest object before storing in JSON file

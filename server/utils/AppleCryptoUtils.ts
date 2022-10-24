@@ -22,7 +22,7 @@ export class AppleCryptoUtils {
    * {
    *   "icon.png" : "2a1625e1e1b3b38573d086b5ec158f72f11283a0",
    *   "icon@2x.png" : "7321a3b7f47d1971910db486330c172a720c3e4b",
-   *   "icon@3x.png" : "7321a3b7f47d1971910db486330c172a720c3e4b",
+   *   "icon@3x.png" : "c76e9ffda4e8a1acb7b7a7a7ce1bfeb64c2375cb",
    *   "pass.json" : "ef3f648e787a16ac49fff2c0daa8615e1fa15df9",
    *   "strip.png" : "25b737727194b5c7b26a86d57e859a054eada240",
    *   "en.lproj\/logo.png" : "cff02680b9041b7bf637960f9f2384738c935347",
@@ -35,10 +35,10 @@ export class AppleCryptoUtils {
    *   "zh-Hans.lproj\/pass.strings" : "b0b4499ba7369e4cc15bad45c251e7b9bbcad6a4",
    * }
    */
-  static generateManifestObject(templateVersionDir: string): JSON {
+  static generateManifestObject(templateVersionDir: string, templateVersion: number): JSON {
     console.log('generateManifestObject')
 
-    const manifest: any = {
+    let manifest: any = {
       'icon.png': this.calculateSha1Hash(
         path.join(templateVersionDir, 'icon.png')
       ),
@@ -65,7 +65,41 @@ export class AppleCryptoUtils {
       ),
       'strip@3x.png': this.calculateSha1Hash(
         path.join(templateVersionDir, 'strip@3x.png')
-      ),
+      )
+    }
+    if (templateVersion >= 4) {
+      manifest = {
+        'icon.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'icon.png')
+        ),
+        'icon@2x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'icon@2x.png')
+        ),
+        'icon@3x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'icon@3x.png')
+        ),
+        'logo.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'logo.png')
+        ),
+        'logo@2x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'logo@2x.png')
+        ),
+        'logo@3x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'logo@3x.png')
+        ),
+        'pass.json': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'pass.json')
+        ),
+        'strip.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'strip.png')
+        ),
+        'strip@2x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'strip@2x.png')
+        ),
+        'strip@3x.png': this.calculateSha1Hash(
+          path.join(templateVersionDir, 'strip@3x.png')
+        )
+      }
     }
 
     return <JSON>manifest
