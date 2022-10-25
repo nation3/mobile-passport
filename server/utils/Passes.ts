@@ -6,8 +6,8 @@ import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
 import { config } from './Config'
-import apn from 'apn'
 import { supabase } from './SupabaseClient'
+import { APNProvider } from './APNProvider'
 
 export class Passes {
   /**
@@ -190,13 +190,13 @@ export class Passes {
    * @returns Promise
    */
   static async notifyPassesAboutLastUpdate(platform: Platform): Promise<undefined | string> {
-    console.log('notifyPassesAboutLastUpdate')
+    console.info('[Passes.ts] notifyPassesAboutLastUpdate')
 
     if (platform == Platform.Apple) {
       // Lookup the push tokens of registered passes
       const { data, error } = await supabase.from('distinct_push_token').select()
-      console.log('data:', data)
-      console.log('error:', error)
+      console.info('[Passes.ts] data:', data)
+      console.info('[Passes.ts] error:', error)
 
       if (error) {
         return new Promise<string>((reject) => {
@@ -207,20 +207,12 @@ export class Passes {
         let allFailed: any[] = []
         for (let i = 0; i < data.length; i++) {
           const pushToken: string = data[i]['push_token']
-          console.log('pushToken:', pushToken)
+          console.info('[Passes.ts] pushToken:', pushToken)
           
           // Send notification request to Apple Push Notification service (APNs)
-          const apnProvider: apn.Provider = new apn.Provider({
-            cert: `-----BEGIN CERTIFICATE-----\n${config.appleCertificatePEM}\n-----END CERTIFICATE-----`,
-            key: `-----BEGIN RSA PRIVATE KEY-----\n${config.appleCertificateKey}\n-----END RSA PRIVATE KEY-----`,
-            production: true
-          })
-          const notification: apn.Notification = new apn.Notification();
-          notification.topic = 'pass.org.passport.nation3'
-          console.log('Sending notification...')
-          const { sent, failed } = await apnProvider.send(notification, pushToken)
-          console.log('sent:', sent)
-          console.log('failed:', failed)
+          const { sent, failed } = await APNProvider.sendNotification(pushToken)
+          console.info('[Passes.ts] sent:', sent)
+          console.info('[Passes.ts] failed:', failed)
           if (sent.length > 0) {
             allSent[allSent.length] = sent
           }
