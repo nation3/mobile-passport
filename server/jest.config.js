@@ -4,7 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   coverageThreshold: {
     global: {
-      lines: 78.00
+      lines: 85.00
     }
   }
 }

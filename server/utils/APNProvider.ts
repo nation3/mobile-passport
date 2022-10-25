@@ -1,5 +1,5 @@
 import apn, { Responses } from 'apn'
-import { config } from './Config';
+import { config } from './Config'
 
 /**
  * Apple Push Notification (APN) provider.
