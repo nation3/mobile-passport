@@ -13,7 +13,14 @@ These are the steps for pushing a notification to registered passes:
 1. Push the latest update to registered passes:
    - Go to https://passports.nation3.org/api/pushLastUpdate
    - Type the username and password
-   - Expect this confirmation message: `{"message":"OK: Sent notification request for <number> registered passes"}`
+   - Expect this confirmation message:
+      ```json
+      {
+          "summary": "1 sent, 3 failed",
+          "sent": [ ... ],
+          "failed": [ ... ]
+      }
+      ``` 
    - Wait a few seconds, and the updates passes (and a push notification) should appear on the iOS device of each citizen
 
 ## FAQ 

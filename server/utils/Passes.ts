@@ -6,8 +6,8 @@ import fs from 'fs'
 import AdmZip from 'adm-zip'
 import console from 'console'
 import { config } from './Config'
-import apn from 'apn'
 import { supabase } from './SupabaseClient'
+import { APNProvider } from './APNProvider'
 
 export class Passes {
   /**
@@ -189,50 +189,50 @@ export class Passes {
    * @platform platform The platform where the notification will be sent
    * @returns Promise
    */
-  static async notifyPassesAboutLastUpdate(platform: Platform): Promise<string> {
-    console.log('notifyPassesAboutLastUpdate')
-    
-    return new Promise<string>((resolve, reject) => {
-      if (platform == Platform.Apple) {
-        // Lookup the push tokens of registered passes
-        supabase
-            .from('distinct_push_token')
-            .select()
-            .then((result: any) => {
-              console.log('supabase then result\n', result)
-              if (result.error) {
-                reject(result.error.message)
-              } else {
-                result.data.map((pushTokenObject: any) => {
-                  const pushToken: string = pushTokenObject['push_token']
-                  console.log('pushToken:', pushToken)
-                  
-                  // Send notification request to Apple Push Notification service (APNs)
-                  const apnProvider: apn.Provider = new apn.Provider({
-                    cert: `-----BEGIN CERTIFICATE-----\n${config.appleCertificatePEM}\n-----END CERTIFICATE-----`,
-                    key: `-----BEGIN RSA PRIVATE KEY-----\n${config.appleCertificateKey}\n-----END RSA PRIVATE KEY-----`,
-                    production: true
-                  })
-                  const notification: apn.Notification = new apn.Notification();
-                  notification.topic = 'pass.org.passport.nation3'
-                  console.log('Sending notification...')
-                  apnProvider.send(notification, pushToken)
-                      .then((apn_result) => {
-                        console.log('apnProvider then result:\n', apn_result)
-                        if (apn_result.failed.length > 0) {
-                          console.error('apn_result.failed:\n', apn_result.failed)
-                        } else {
-                          console.log('Notification sent!')
-                        }
-                      })
-                })
-                resolve('Sent notification request for ' + result.data.length + ' registered passes')
-              }
-            })
-      } else if (platform == Platform.Google) {
-        // TODO
-        throw new Error('Platform not yet implemented: ' + platform)
+  static async notifyPassesAboutLastUpdate(platform: Platform): Promise<undefined | string> {
+    console.info('[Passes.ts] notifyPassesAboutLastUpdate')
+
+    if (platform == Platform.Apple) {
+      // Lookup the push tokens of registered passes
+      const { data, error } = await supabase.from('distinct_push_token').select()
+      console.info('[Passes.ts] data:', data)
+      console.info('[Passes.ts] error:', error)
+
+      if (error) {
+        return new Promise<string>((reject) => {
+          reject(error.message)
+        })
+      } else if (data) {
+        let allSent: any[] = []
+        let allFailed: any[] = []
+        for (let i = 0; i < data.length; i++) {
+          const pushToken: string = data[i]['push_token']
+          console.info('[Passes.ts] pushToken:', pushToken)
+          
+          // Send notification request to Apple Push Notification service (APNs)
+          const { sent, failed } = await APNProvider.sendNotification(pushToken)
+          console.info('[Passes.ts] sent:', sent)
+          console.info('[Passes.ts] failed:', failed)
+          if (sent.length > 0) {
+            allSent[allSent.length] = sent
+          }
+          if (failed.length > 0) {
+            allFailed[allFailed.length] = failed
+          }
+        }
+        return new Promise<string>((resolve) => {
+          const result = {
+            summary: allSent.length + ' sent, ' + allFailed.length + ' failed',
+            sent: allSent,
+            failed: allFailed
+          }
+          resolve(JSON.stringify(result))
+        })
       }
-    })
+    } else {
+      return new Promise<string>((reject) => {
+        reject('Platform not yet implemented: ' + platform)
+      })
+    }
   }
 }
