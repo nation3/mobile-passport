@@ -17,7 +17,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.35.6",
     "@types/adm-zip": "^0.5.0",
-    "@types/node": "^18.7.23",
+    "@types/node": "^18.11.10",
     "@types/react": "^18.0.9",
     "adm-zip": "^0.5.9",
     "apn": "^2.2.0",
